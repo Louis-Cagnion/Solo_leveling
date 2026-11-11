@@ -29,8 +29,7 @@ Plan du projet décrit dans `docs/specification.md`, en suivant la chaîne en 8 
 
 ### Informations manquantes
 
-- Le format exact et la couverture des données de `/professor` par rapport aux métriques des §2 à §8 (feuille P0.1).
-- Le fonctionnement officiel des niveaux et de l'XP à 42, ainsi que le niveau actuel de Louis (feuille P0.2 ; le niveau actuel est à demander à Louis).
+- La table officielle de l'XP par niveau et l'XP par projet : seule l'API de l'intranet les donne, avec l'accès de Louis (`docs/research/42-system.md`).
 - L'usage visé : interface locale seulement, ou déployée.
 
 ### Questions à trancher en P1 (§12)
@@ -45,19 +44,21 @@ Plan du projet décrit dans `docs/specification.md`, en suivant la chaîne en 8 
 8. Architecture technique et modalités d'intégration (local ou déployé, pile, lecture des données).
 9. Modalités de la maquette (Opus `xhigh`, `impeccable`).
 
-## Arbre : P0 Recherche (feuilles validées 0/3)
+## Arbre : P0 Recherche (feuilles validées 3/3)
 
 Statuts : [ ] à faire, [~] en cours, [x] faite, [v] validée, [!] bloquée
-Prochaine feuille prête : P0.1
-Moniteur : opus 5.5/high, réévalué au cadrage
+Prochaine feuille prête : P1, point 1
+Moniteur : opus 5.5/high, réévalué au point de contrôle P0
 
-- P0 [nœud] : réunir les faits nécessaires aux décisions de P1 ; point de contrôle : chaque question de P1 dispose de ses faits ou d'un manque nommé
-  - [~] P0.1 analyst : inventaire des données de `/professor` et de leur couverture des §2 à §8 ; dépend de : - ; niveau pressenti : sonnet/medium
-  - [ ] P0.2 general-purpose (le web est nécessaire, aucun rôle de la grille ne l'a) : système officiel de niveaux et d'XP de 42, sur sources primaires ; dépend de : - ; niveau pressenti : sonnet/medium
-  - [ ] P0.3 moniteur : mécaniques de *Solo Leveling* transposables et leur équivalent fondé sur des preuves ; dépend de : -
+- P0 [nœud] : réunir les faits nécessaires aux décisions de P1 ; point de contrôle : chaque question de P1 dispose de ses faits ou d'un manque nommé (validé par le moniteur ; pas de `checker`, faute de code ou de test à jouer)
+  - [v] P0.1 analyst (`docs/research/professor-data.md`) : inventaire des données de `/professor` ; fait par : sonnet/medium, chiffres vérifiés par sondage, un compte corrigé (6 cartes sans notion suivie, et non 7)
+  - [v] P0.2 general-purpose (`docs/research/42-system.md`) : niveaux officiels de 42 ; fait par : sonnet/medium, une source relue par le moniteur
+  - [v] P0.3 moniteur (`docs/research/mechanics.md`) : mécaniques transposables
 
-Les phases P1 à P5 se détaillent en feuilles une fois P0 validée (construction de l'arbre en deux passes).
+P1 se déroule avec Louis, point par point. Les phases P2 à P5 se détaillent en feuilles une fois P1 close.
 
 ## Faits pour la suite
 
-(aucun pour l'instant)
+- Seules les métriques M1, M2 et M4 ont assez de mesures. Les autres seraient aujourd'hui affichées comme « insuffisant » (`docs/research/professor-data.md`).
+- Projets, XP et part de l'IA par notion n'existent pas dans `/professor` : ils conditionnent l'XP personnelle, les rangs et les titres.
+- Le niveau 25 n'est pas un jalon officiel de 42 : le titre reste un objectif personnel, à calibrer sur la table XP de l'API de l'intranet.
