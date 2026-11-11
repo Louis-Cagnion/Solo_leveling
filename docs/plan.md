@@ -30,9 +30,9 @@ Plan du projet décrit dans `docs/specification.md`, en suivant la chaîne en 8 
 ### Informations manquantes
 
 - La table officielle de l'XP par niveau et l'XP par projet : seule l'API de l'intranet les donne, avec l'accès de Louis (`docs/research/42-system.md`).
-- L'usage visé : interface locale seulement, ou déployée.
+- Le lieu d'exécution : le code est versionné dans le dépôt privé `Louis-Cagnion/Solo_leveling`. J'en déduis une interface locale, mais le déploiement n'est pas tranché.
 
-### Questions à trancher en P1 (§12)
+### Questions à trancher en P1 (§12, points tranchés 2/9)
 
 1. Pertinence et valeur ajoutée pour l'apprentissage.
 2. Fonctionnalités prioritaires et superflues.
@@ -43,6 +43,11 @@ Plan du projet décrit dans `docs/specification.md`, en suivant la chaîne en 8 
 7. Conditions de déblocage de « I AM THE ANSWER » et des autres titres.
 8. Architecture technique et modalités d'intégration (local ou déployé, pile, lecture des données).
 9. Modalités de la maquette (Opus `xhigh`, `impeccable`).
+
+### Décisions de P1
+
+- **Point 1, rôle de l'interface** (Louis, 11/11/2026) : un tableau de bord gamifié dans l'esprit de *Solo Leveling*, pour voir où en est la progression. C'est un affichage des compétences, pas un outil de recommandation.
+- **Point 2, contenu de la V1** (Louis, 11/11/2026) : XP, rangs, titres et trajectoire vers le niveau 25, ainsi que le réseau de compétences. Ce réseau s'appuie sur les paliers des cartes (débutant, intermédiaire, avancé, transcendée) et sur leurs certifications associées. Les statistiques détaillées du §2 et les recommandations du §5 sont hors de la V1.
 
 ## Arbre : P0 Recherche (feuilles validées 3/3)
 
