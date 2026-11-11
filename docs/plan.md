@@ -70,7 +70,7 @@ Plan du projet décrit dans `docs/specification.md`, en suivant la chaîne en 8 
 ## Arbre (phases closes 4/6)
 
 Statuts : [ ] à faire, [~] en cours, [x] faite, [v] validée, [!] bloquée
-Prochaine feuille prête : P5.T2.a, tester (P4.4 à P4.6 faites, à montrer à Louis dans Chrome ; ordre de Louis du 11/11/2026 : P4.4, P4.5, P4.6, puis P5 sans attendre son avis sur les maquettes, montrées dans Chrome à son retour)
+Prochaine feuille prête : P5.T2.b, builder (P4.4 à P4.6 faites, à montrer à Louis dans Chrome ; ordre de Louis du 11/11/2026 : P4.4, P4.5, P4.6, puis P5 sans attendre son avis sur les maquettes, montrées dans Chrome à son retour)
 Moniteur : opus 5.5/high, réévalué à la clôture de P1
 
 - P2 [nœud] : conception, sans code ; point de contrôle : le document de conception couvre les six critères du brief de P2.1
@@ -88,7 +88,7 @@ Moniteur : opus 5.5/high, réévalué à la clôture de P1
   - [v] P3.2 moniteur : `docs/design/implementation.md`, validé par Louis le 11/11/2026 (critères visuels de T11 après la maquette)
 
 - P5 [nœud] : V1, une sous-tâche après l'autre (`docs/design/implementation.md`, section « Ordre d'exécution ») ; point de contrôle : T12 (`checker`). Chaque Tn se déroule en a (tester, tests rouges), b (builder, tests verts), c (analyst, revue VALIDÉ ou À CORRIGER), d (fixer, si à corriger). Niveaux pressentis : section « Niveaux d'agent » du plan, réévalués au lancement.
-  - [x] T1 (a faite par sonnet/low : 37 tests rouges ; b faite par sonnet/medium après une interruption par disque plein : 37 verts ; c faite par sonnet/high : À CORRIGER, 1 critique (fuite de secret), 6 importants, 12 mineurs ; d faite (tests par sonnet/low, correction par sonnet/medium) : 56 verts) ; [ ] T2 ; [ ] T3 ; [ ] T5 ; [ ] T4 ; [ ] T6 ; [ ] T9 ; [ ] T7 ; [ ] T8 ; [ ] T10 ; [ ] T11 (après P4) ; [ ] T12
+  - [x] T1 (a faite par sonnet/low : 37 tests rouges ; b faite par sonnet/medium après une interruption par disque plein : 37 verts ; c faite par sonnet/high : À CORRIGER, 1 critique (fuite de secret), 6 importants, 12 mineurs ; d faite (tests par sonnet/low, correction par sonnet/medium) : 56 verts) ; [~] T2 (a faite par sonnet/medium : 61 tests rouges, schéma des 12 entités fixé par la fixture `state_complete.js` puis complété par le moniteur ; b à lancer) ; [ ] T3 ; [ ] T5 ; [ ] T4 ; [ ] T6 ; [ ] T9 ; [ ] T7 ; [ ] T8 ; [ ] T10 ; [ ] T11 (après P4) ; [ ] T12
   - [>] T0 : formats de `/professor` (session `/professor`, hors dépôt)
 
 ### P0 Recherche (feuilles validées 4/4) et P1 Décisions (points tranchés 9/9)
