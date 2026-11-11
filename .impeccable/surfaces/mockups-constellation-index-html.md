@@ -19,7 +19,7 @@ OWN-WORLD : fond nuit profonde (#05080f), panneaux translucides bleu acier, cadr
 
 STORY : trois niveaux, du général au détail (consigne de Louis du 11/11/2026). Louis voit où il en est, ouvre un domaine, puis un palier, et comprend ce qui manque.
 
-FIRST VIEWPORT : niveau 1, un cercle général : les 16 sections, avec seulement leur titre et leur rang ; au centre, le niveau 42, le niveau Système et le nombre de titres obtenus. Aucun point de notion. Un clic sur une section change d'affichage. Niveau 2, la section sur toute la page : ses paliers, la barre de progression de chacun, et ses notions en points allumés ou non, avec leur nom. Un clic sur un palier ouvre le niveau 3 : le détail des notions du palier (nom, type, niveau), avec « n notions / N » sur la barre. Retour au niveau précédent par un bouton ou par Échap.
+FIRST VIEWPORT : niveau 1, un cercle général : les 16 sections, avec seulement leur titre et leur rang ; au centre, le niveau 42, le niveau Système et le nombre de titres obtenus. Aucun point de notion. Un clic sur une section change d'affichage. Niveau 2, la section sur toute la page : ses paliers, la barre de progression de chacun, et ses notions en points allumés ou non, avec leur nom. Un clic sur un palier ouvre le niveau 3 : le détail des notions du palier (nom, type, niveau), avec « n notions / N » sur la barre. Retour au niveau précédent par un bouton ou par Échap. Un clic sur le centre ouvre la fenêtre de statut : détail des titres, projets qui ont donné de l'XP (42 et Système), progression vers les deux « I AM THE ANSWER » et achievements de l'école.
 
 FORM : constellation, choisie par Louis contre le tirage (n°7 de la première main) ; seed:7278ad7ba83310a4.
 
