@@ -2,7 +2,7 @@
 version: 1
 slug: "mockups-constellation-index-html"
 primary_target: "mockups/constellation/index.html"
-related_targets: ["public/index.html"]
+related_targets: ["public/index.html","mockups/constellation-light/index.html"]
 ---
 
 # Tableau de bord : constellation
@@ -19,7 +19,7 @@ OWN-WORLD : fond nuit profonde (#05080f), panneaux translucides bleu acier, cadr
 
 STORY : Louis voit d'abord où il en est (niveau 42, niveau Système, rangs), puis parcourt un domaine, un palier, une notion, et comprend ce qui manque pour le rang suivant.
 
-FIRST VIEWPORT : fenêtre de statut au centre de la constellation (niveau 42 en chiffre monumental, jauge Système, titres) ; 16 secteurs autour, anneaux débutant, intermédiaire, avancé, transcendée, puis Nation en couronne extérieure ; le rang de chaque domaine en bout de secteur ; panneau de détail à droite ; filtres d'état au-dessus.
+FIRST VIEWPORT : rien d'autre que la constellation et sa fenêtre de statut au centre (niveau 42 en chiffre monumental, jauge Système, titres sur une ligne) ; 16 secteurs, anneaux débutant, intermédiaire, avancé, transcendée, puis Nation en couronne ; rang en bout de secteur. Tout le reste se révèle : panneau du domaine au clic sur un secteur (refermable), noms et fils au survol, statut affiché seulement s'il est estimé ou insuffisant (revue de Louis du 11/11/2026 : trop d'informations et de clics).
 
 FORM : constellation, choisie par Louis contre le tirage (n°7 de la première main) ; seed:7278ad7ba83310a4.
 

@@ -69,7 +69,7 @@ Plan du projet décrit dans `docs/specification.md`, en suivant la chaîne en 8 
 ## Arbre (phases closes 4/6)
 
 Statuts : [ ] à faire, [~] en cours, [x] faite, [v] validée, [!] bloquée
-Prochaine feuille prête : P5.T1.a (tests de T1), dès la fin de P4.2 (un agent à la fois)
+Prochaine feuille prête : montrer les deux maquettes à Louis (P4.3 en cours), puis P5.T1.a
 Moniteur : opus 5.5/high, réévalué à la clôture de P1
 
 - P2 [nœud] : conception, sans code ; point de contrôle : le document de conception couvre les six critères du brief de P2.1
@@ -77,7 +77,8 @@ Moniteur : opus 5.5/high, réévalué à la clôture de P1
   - [v] P2.2 moniteur : `docs/design/conception.md`
 - P4 [nœud] : maquette (§11) ; point de contrôle : rendu montré à Louis dans Chrome, choix validé
   - [v] P4.1 moniteur et Louis : `PRODUCT.md`, direction choisie par Louis (constellation façon Holy Graph de 42, après deux tirages), contrat dans `.impeccable/surfaces/`
-  - [~] P4.2 builder : maquette `mockups/constellation/`, données réelles de `/professor` ; dépend de : P4.1 ; niveau : opus/xhigh (§11)
+  - [x] P4.2 builder : maquette `mockups/constellation/`, données réelles de `/professor` ; dépend de : P4.1 ; niveau : opus/xhigh (§11) ; fait par : opus/xhigh ; avis de Louis : concept intéressant, mais trop d'informations et de clics
+  - [~] P4.3 builder : variante allégée `mockups/constellation-light/` (révélation progressive, fichiers de 750 lignes au plus) ; dépend de : P4.2 ; niveau : opus/high (retouche, pas une conception)
 - P3 [nœud] : plan d'implémentation, validé par Louis ; dépend de : P2 et P4
   - [v] P3.1 analyst : fiches de T1 à T12 ; fait par : sonnet/high, 15 ambiguïtés relevées et arbitrées par le moniteur
   - [v] P3.2 moniteur : `docs/design/implementation.md`, validé par Louis le 11/11/2026 (critères visuels de T11 après la maquette)
