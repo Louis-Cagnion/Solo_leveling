@@ -70,7 +70,7 @@ Plan du projet décrit dans `docs/specification.md`, en suivant la chaîne en 8 
 ## Arbre (phases closes 4/6)
 
 Statuts : [ ] à faire, [~] en cours, [x] faite, [v] validée, [!] bloquée
-Prochaine feuille prête : P5.T2.b, builder (P4.4 à P4.6 faites, à montrer à Louis dans Chrome ; ordre de Louis du 11/11/2026 : P4.4, P4.5, P4.6, puis P5 sans attendre son avis sur les maquettes, montrées dans Chrome à son retour)
+Prochaine feuille prête : aucune, en attente de l'ordre de Louis (P4.7, P4.8, puis P5.T2.b arrêtée sans fichier écrit) (P4.4 à P4.6 faites, à montrer à Louis dans Chrome ; ordre de Louis du 11/11/2026 : P4.4, P4.5, P4.6, puis P5 sans attendre son avis sur les maquettes, montrées dans Chrome à son retour)
 Moniteur : opus 5.5/high, réévalué à la clôture de P1
 
 - P2 [nœud] : conception, sans code ; point de contrôle : le document de conception couvre les six critères du brief de P2.1
@@ -83,12 +83,24 @@ Moniteur : opus 5.5/high, réévalué à la clôture de P1
   - [x] P4.4 builder : navigation en trois niveaux `mockups/constellation-steps/` (cercle des sections, section sur toute la page, détail d'un palier) ; fait par : opus/high, puis fixer sonnet/medium (débordement d'1 px, statut répété sous les sections, une régression) ; « type » du niveau 3 lu comme l'objectif de la notion, à confirmer par Louis ; avis de Louis : à recueillir
   - [x] P4.5 builder : fenêtre de statut détaillée, au clic sur la carte des niveaux et des titres (consigne de Louis du 11/11/2026). Elle montre : le détail des titres ; les projets qui ont donné de l'XP pour atteindre le niveau actuel, sur 42 et sur le Système ; la progression vers les deux « I AM THE ANSWER » (42 et Système) ; les achievements de l'école en détail. Dépend de : P4.4 ; fait par : opus/high dans `mockups/constellation-steps/`, alignement du tableau corrigé par haiku/low ; avis de Louis : à recueillir
   - [x] P4.6 builder : page à part, réseau de neurones 3D des liens entre notions, en particulier les transferts (proposition de Louis du 11/11/2026). 3D par une copie locale de three.js (MIT), choisie par Louis le 11/11/2026, sans aucune ressource externe. Dépend de : P4.4 ; fait par : opus/high dans `mockups/neural-network/` (three.js 0.147.0, dernière version en scripts classiques), puis fixer sonnet/medium (étiquettes superposées, jargon interne, extrémités invisibles) ; avis de Louis : à recueillir
+  - [ ] P4.7 builder : retouches de `mockups/constellation-steps/` d'après la relecture de Louis du 11/11/2026 ; niveau pressenti : opus/high.
+    - Roue (niveau 1) : titre de chaque carte à l'intérieur de sa section, sections agrandies pour qu'il y tienne ; les rangs restent à l'extérieur.
+    - Niveau 2 : titre seul de chaque notion, sans parenthèse ni explication (règle de coupe vérifiée sur les 682 libellés réels).
+    - États des notions : quatre rendus (« comprise » et au-dessus, en dessous, « déclarée », « non rencontrée ») en rareté de couleur, animation réservée aux états hauts, coupée sous `prefers-reduced-motion` ; même code sur la page 3D.
+    - Niveau 3 : infobulle sur « Objectif » (valeurs possibles, d'après `methode.md`) et sur tout intitulé ou valeur obscur ; infobulles existantes relues.
+    - Fenêtre de statut : « Titres » devient la liste des certifications reconnues ; les deux « I AM THE ANSWER » passent dans « Achievements » ; « Projets qui ont donné de l'XP » devient deux blocs, 42 et Système, avec une barre de niveau, le total d'XP et une liste déroulante de l'XP par projet.
+  - [ ] P4.8 builder : refonte de `mockups/neural-network/` (avis de Louis du 11/11/2026 : trop d'informations, panneaux trop longs, termes non expliqués, palette qui ne se démarque pas ; à garder : détail d'un lien, épaisseur selon le statut, rotation et zoom) ; niveau pressenti : opus/high ; plan de refonte :
+    - Premier écran : le réseau complet, dominant ; aucune fiche ouverte.
+    - Un côté : légende compacte des types et statuts de lien, chaque terme avec une infobulle qui le définit (« analogue », « instance de »…) ; cliquer un type filtre le réseau (remplace la case « Transferts seulement »).
+    - L'autre côté : liste déroulante des connexions, groupées par type, en titres courts « A → B ».
+    - Détail seulement au clic sur une connexion (liste ou arête) : A → B, type, statut ; limite et preuve repliées derrière « Voir la preuve ». Le clic sur une notion met en avant ses liens et réduit la liste à ceux-ci.
+    - Identité propre : une couleur franche et contrastée par type de lien (jamais l'or, réservé aux titres), étiquettes des notions au survol seulement, moins d'étiquettes d'amas.
 - P3 [nœud] : plan d'implémentation, validé par Louis ; dépend de : P2 et P4
   - [v] P3.1 analyst : fiches de T1 à T12 ; fait par : sonnet/high, 15 ambiguïtés relevées et arbitrées par le moniteur
   - [v] P3.2 moniteur : `docs/design/implementation.md`, validé par Louis le 11/11/2026 (critères visuels de T11 après la maquette)
 
 - P5 [nœud] : V1, une sous-tâche après l'autre (`docs/design/implementation.md`, section « Ordre d'exécution ») ; point de contrôle : T12 (`checker`). Chaque Tn se déroule en a (tester, tests rouges), b (builder, tests verts), c (analyst, revue VALIDÉ ou À CORRIGER), d (fixer, si à corriger). Niveaux pressentis : section « Niveaux d'agent » du plan, réévalués au lancement.
-  - [x] T1 (a faite par sonnet/low : 37 tests rouges ; b faite par sonnet/medium après une interruption par disque plein : 37 verts ; c faite par sonnet/high : À CORRIGER, 1 critique (fuite de secret), 6 importants, 12 mineurs ; d faite (tests par sonnet/low, correction par sonnet/medium) : 56 verts) ; [~] T2 (a faite par sonnet/medium : 61 tests rouges, schéma des 12 entités fixé par la fixture `state_complete.js` puis complété par le moniteur ; b à lancer) ; [ ] T3 ; [ ] T5 ; [ ] T4 ; [ ] T6 ; [ ] T9 ; [ ] T7 ; [ ] T8 ; [ ] T10 ; [ ] T11 (après P4) ; [ ] T12
+  - [x] T1 (a faite par sonnet/low : 37 tests rouges ; b faite par sonnet/medium après une interruption par disque plein : 37 verts ; c faite par sonnet/high : À CORRIGER, 1 critique (fuite de secret), 6 importants, 12 mineurs ; d faite (tests par sonnet/low, correction par sonnet/medium) : 56 verts) ; [~] T2 (a faite par sonnet/medium : 61 tests rouges, schéma des 12 entités fixé par la fixture `state_complete.js` puis complété par le moniteur ; b arrêtée par Louis sans fichier écrit, en attente de son ordre) ; [ ] T3 ; [ ] T5 ; [ ] T4 ; [ ] T6 ; [ ] T9 ; [ ] T7 ; [ ] T8 ; [ ] T10 ; [ ] T11 (après P4) ; [ ] T12
   - [>] T0 : formats de `/professor` (session `/professor`, hors dépôt)
 
 ### P0 Recherche (feuilles validées 4/4) et P1 Décisions (points tranchés 9/9)
