@@ -134,6 +134,23 @@ tests/                 fixtures fictives, en miroir de source/
 
 Hors V1 : statistiques M1 à M11, recommandations, techniques, transfert par notion, historique recalculé des rangs, formule de note des projets 42, jeton de rafraîchissement, déploiement.
 
+## Décisions de conception
+
+Tranchées par Louis (11/11/2026) :
+- **Rang B** : la moitié des notions avancées au moins « appliquées », affichée comme estimée.
+- **Alternance** : l'XP 42 de l'alternance et celle des projets pro réalisés pendant l'alternance s'additionnent dans le Système.
+- **Titre Système** : une fois obtenu, il reste acquis, même si une carte s'ajoute ensuite.
+- **Tests** : versionnés, avec des fixtures fictives (projet perso en dépôt privé).
+
+Par défaut, modifiables sur simple demande :
+- Le niveau validé s'enregistre comme fait `niveau` dans `evenements.csv` (session `/professor`).
+- L'XP des projets 42 n'est pas réduite par la part de l'IA, qui ne s'applique qu'aux projets perso et pro (point 4 de P1).
+- La part de l'IA d'un projet est la moyenne de ses lignes, `lecture` exclue.
+- La calibration démarre avec `r_initial` = 0 et se recalcule à chaque synchronisation une fois le seuil atteint.
+- La table XP est lue à distance et épinglée.
+- Une notion « déclarée » ne compte pas pour le rang E.
+- Le rang estimé d'après le profil n'est pas affiché.
+
 ## Risques
 
 - **Motivation** : pendant longtemps, la V1 affichera surtout le rang E et « aucun rang ». C'est honnête, mais peu gratifiant tant que les bancs de `/professor` ne sont pas enregistrés.
