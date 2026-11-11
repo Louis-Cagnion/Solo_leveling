@@ -1,0 +1,90 @@
+# Règles du Système : types de rang et de titre en données, sans `if` par instance.
+# Les chemins et les secrets restent dans `.env`, jamais ici.
+
+# Ordre croissant des états d'une notion (`methode.md`, « États d'une notion »).
+# Les états de `excluded` sont ignorés par toutes les comparaisons « au moins X » (A8).
+[states]
+order = [
+    "non rencontrée",
+    "découverte",
+    "en cours",
+    "comprise",
+    "appliquée",
+    "retenue",
+    "transférée",
+    "transcendée",
+    "déclarée",
+]
+excluded = ["déclarée"]
+
+# Rangs d'un domaine, du plus bas au plus haut : le rang affiché est le plus haut
+# dont la condition et toutes les précédentes sont remplies.
+# Un fait `niveau` vaut aussi pour les paliers précédents (A9).
+[ranks.E]
+type = "any_notion"
+
+# Sans fait `niveau`, toutes les notions du palier doivent atteindre `at_least`.
+[ranks.D]
+type = "fact_level"
+level = "débutant"
+fallback_tier = "débutant"
+fallback_at_least = "comprise"
+
+[ranks.C]
+type = "fact_level"
+level = "intermédiaire"
+
+# La moitié vaut le plafond de n/2 ; un palier vide ne valide rien (A9).
+[ranks.B]
+type = "half_tier_at_least"
+tier = "avancé"
+at_least = "appliquée"
+
+[ranks.A]
+type = "fact_level"
+level = "avancé"
+
+[ranks.S]
+type = "fact_level"
+level = "transcendée"
+
+# S suffit si la carte n'a aucune certification retenue (A2).
+[ranks.Nation]
+type = "certifications"
+
+# Part de l'IA par auteur dans `historique-ia.csv` ; `lecture` est ignoré.
+[ia]
+louis = 1.0
+mixte = 0.5
+ia = 0.0
+
+# Table XP de 42calculator (GPL-3.0), lue à distance et jamais copiée dans le dépôt.
+# Épinglée sur le dernier commit touchant `data/experience_21.json` (14/05/2024).
+[xp_table]
+url = """\
+    https://raw.githubusercontent.com/lucas-ht/42calculator/\
+    520b8e938ac8f685a4bc647bba45d0b409282714/data/experience_21.json"""
+commit = "520b8e938ac8f685a4bc647bba45d0b409282714"
+sha256 = "7b98ff202015868ed400f339589e6ca00dc009d436a599c3f2272b5c0e258771"
+
+# Un seul segment, du dernier point d'ancrage au niveau cible (A6).
+# Le facteur r ne s'estime qu'avec les deux seuils atteints.
+[calibration]
+target_level = 25
+r_initial = 0
+min_projects = 3
+min_days = 90
+
+# « I AM THE ANSWER » : version 42 au niveau officiel 25, version Système avec
+# le rang S sur toutes les cartes (P1, point 7).
+[titles.answer_42]
+type = "level_at_least"
+value = 25
+
+[titles.answer_system]
+type = "rank_on_all_cards"
+rank = "S"
+
+# Achievements du profil 42, obtenus ou non.
+[titles.achievements_42]
+type = "school_achievements"
