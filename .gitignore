@@ -1,2 +1,6 @@
 todo.md
 RECAP-*.md
+.env
+data/
+mockups/**/data.js
+.impeccable/decision/

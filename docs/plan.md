@@ -66,18 +66,18 @@ Plan du projet décrit dans `docs/specification.md`, en suivant la chaîne en 8 
 - **Point 8, architecture** (Louis, 11/11/2026) : l'interface tourne en local, sur la machine de Louis. C'est une page en HTML, CSS et JS sans framework, alimentée par un script de synchronisation qui lit `/professor` et l'API 42 et produit le fichier de données affiché. Le secret OAuth reste hors de Git.
 - **Point 9, maquette** (Louis, 11/11/2026) : un agent Opus en effort `xhigh` la construit avec le skill `impeccable`, puis le moniteur la montre dans Chrome.
 
-## Arbre (phases closes 2/6)
+## Arbre (phases closes 3/6)
 
 Statuts : [ ] à faire, [~] en cours, [x] faite, [v] validée, [!] bloquée
-Prochaine feuille prête : P4.1 (direction visuelle, avec Louis) ; P2.1 en cours
+Prochaine feuille prête : questions ouvertes de P2 (Louis) ; P4.2 en cours
 Moniteur : opus 5.5/high, réévalué à la clôture de P1
 
 - P2 [nœud] : conception, sans code ; point de contrôle : le document de conception couvre les six critères du brief de P2.1
-  - [~] P2.1 analyst : modèle de données, règles de calcul, architecture, découpage ; dépend de : P1 ; niveau : opus/high (décision d'architecture)
-  - [ ] P2.2 moniteur : rédaction de `docs/design/conception.md` à partir du rapport ; dépend de : P2.1
+  - [v] P2.1 analyst : modèle de données, règles de calcul, architecture, découpage ; fait par : opus/high, deux affirmations relues par le moniteur
+  - [v] P2.2 moniteur : `docs/design/conception.md`
 - P4 [nœud] : maquette (§11) ; point de contrôle : rendu montré à Louis dans Chrome, choix validé
-  - [~] P4.1 moniteur et Louis : `PRODUCT.md` (fait), puis direction visuelle par le flux `impeccable` (page de décision) ; dépend de : P1
-  - [ ] P4.2 builder : maquette statique de la direction retenue, avec données réelles ou marquées fictives ; dépend de : P4.1 ; niveau : opus/xhigh (§11)
+  - [v] P4.1 moniteur et Louis : `PRODUCT.md`, direction choisie par Louis (constellation façon Holy Graph de 42, après deux tirages), contrat dans `.impeccable/surfaces/`
+  - [~] P4.2 builder : maquette `mockups/constellation/`, données réelles de `/professor` ; dépend de : P4.1 ; niveau : opus/xhigh (§11)
 - P3 [nœud] : plan d'implémentation, validé par Louis ; dépend de : P2 et P4
 
 ### P0 Recherche (feuilles validées 4/4) et P1 Décisions (points tranchés 9/9)
