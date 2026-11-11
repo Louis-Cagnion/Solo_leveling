@@ -32,7 +32,7 @@ Plan du projet décrit dans `docs/specification.md`, en suivant la chaîne en 8 
 - La table officielle de l'XP par niveau et l'XP par projet : seule l'API de l'intranet les donne, avec l'accès de Louis (`docs/research/42-system.md`).
 - Le lieu d'exécution : le code est versionné dans le dépôt privé `Louis-Cagnion/Solo_leveling`. J'en déduis une interface locale, mais le déploiement n'est pas tranché.
 
-### Questions à trancher en P1 (§12, points tranchés 2/9)
+### Questions à trancher en P1 (§12, points tranchés 4/9)
 
 1. Pertinence et valeur ajoutée pour l'apprentissage.
 2. Fonctionnalités prioritaires et superflues.
@@ -48,17 +48,21 @@ Plan du projet décrit dans `docs/specification.md`, en suivant la chaîne en 8 
 
 - **Point 1, rôle de l'interface** (Louis, 11/11/2026) : un tableau de bord gamifié dans l'esprit de *Solo Leveling*, pour voir où en est la progression. C'est un affichage des compétences, pas un outil de recommandation.
 - **Point 2, contenu de la V1** (Louis, 11/11/2026) : XP, rangs, titres et trajectoire vers le niveau 25, ainsi que le réseau de compétences. Ce réseau s'appuie sur les paliers des cartes (débutant, intermédiaire, avancé, transcendée) et sur leurs certifications associées. Les statistiques détaillées du §2 et les recommandations du §5 sont hors de la V1.
+- **Point 3, sources de l'XP** (Louis, 11/11/2026) : l'XP, le niveau et les projets de 42 viennent de l'API de l'intranet, et les projets perso et pro de `/professor`. Si l'API est trop limitée, les règles de calcul et les données générales de 42 (table XP, XP par projet) servent à recalculer. Les achievements du profil 42, obtenus et non obtenus, s'intègrent s'il est possible de les lire (feuille P0.4).
+- **Point 6, niveau affiché** (Louis, 11/11/2026) : deux jauges. Le niveau 42 officiel s'affiche tel quel. Le niveau « Système » compte toutes les sources, et sa courbe est calée pour atteindre 25 en même temps que le niveau 42.
+- **Point 5, rangs** (Louis, 11/11/2026, reformulation à confirmer) : les rangs suivent les paliers des cartes. S correspond au palier transcendée. Le rang « national », le plus haut, est le dernier état d'une carte : son palier transcendée si aucune certification ne vient après, sinon les certifications qui exigent ce palier. Restent à fixer : la place des rangs E à A sur les trois premiers paliers, et le rattachement de chaque certification à un palier, que les cartes ne portent pas encore.
 
-## Arbre : P0 Recherche (feuilles validées 3/3)
+## Arbre : P0 Recherche (feuilles validées 4/4)
 
 Statuts : [ ] à faire, [~] en cours, [x] faite, [v] validée, [!] bloquée
-Prochaine feuille prête : P1, point 1
+Prochaine feuille prête : P1, point 5 (rangs E à A, précision demandée par Louis)
 Moniteur : opus 5.5/high, réévalué au point de contrôle P0
 
 - P0 [nœud] : réunir les faits nécessaires aux décisions de P1 ; point de contrôle : chaque question de P1 dispose de ses faits ou d'un manque nommé (validé par le moniteur ; pas de `checker`, faute de code ou de test à jouer)
   - [v] P0.1 analyst (`docs/research/professor-data.md`) : inventaire des données de `/professor` ; fait par : sonnet/medium, chiffres vérifiés par sondage, un compte corrigé (6 cartes sans notion suivie, et non 7)
   - [v] P0.2 general-purpose (`docs/research/42-system.md`) : niveaux officiels de 42 ; fait par : sonnet/medium, une source relue par le moniteur
   - [v] P0.3 moniteur (`docs/research/mechanics.md`) : mécaniques transposables
+  - [v] P0.4 general-purpose (`docs/research/42-api.md`) : API de l'intranet 42 (authentification, endpoints, achievements, quotas) et source de repli des règles de calcul (42calculator) ; fait par : sonnet/medium, table XP relue par le moniteur
 
 P1 se déroule avec Louis, point par point. Les phases P2 à P5 se détaillent en feuilles une fois P1 close.
 
