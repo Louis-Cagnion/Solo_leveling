@@ -5,3 +5,4 @@ data/
 mockups/**/data.js
 .impeccable/decision/
 tools/mockup_data.py
+__pycache__/
