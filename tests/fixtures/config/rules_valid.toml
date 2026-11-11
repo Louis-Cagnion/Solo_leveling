@@ -15,8 +15,8 @@ mixte = 0.5
 ia = 0.0
 
 [xp_table]
-url = "https://example.invalid/raw/abc123/experience.json"
-commit = "abc123"
+url = "https://example.invalid/raw/0123456789abcdef0123456789abcdef01234567/experience.json"
+commit = "0123456789abcdef0123456789abcdef01234567"
 sha256 = "0000000000000000000000000000000000000000000000000000000000000000"
 
 [calibration]

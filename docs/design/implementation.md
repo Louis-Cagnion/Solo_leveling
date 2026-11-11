@@ -124,7 +124,7 @@ Ordre : T1, T2, T3, T5, T4, T6, T9, T7, T8, T10, T11 (après validation de la ma
 |---|---|---|---|---|
 | 1 | Tests T1 | `PYTHONPATH=source python3 -m unittest tests.test_architecture tests.system_sync.test_config -v` | `Ran` ≥ 25, `OK` | c:122 |
 | 2 | Paquet importable | `PYTHONPATH=source python3 -c "import system_sync, system_sync.sources, system_sync.rules"` | code 0, aucune sortie | c:99-110 |
-| 3 | Familles de règles | `python3 -c "import tomllib; print(sorted(tomllib.load(open('config/rules.toml','rb'))))"` | `['calibration', 'states', 'ia', 'ranks', 'xp_table', 'titles']` (noms proposés) | c:39 |
+| 3 | Familles de règles | `python3 -c "import tomllib; print(sorted(tomllib.load(open('config/rules.toml','rb'))))"` | `['calibration', 'ia', 'ranks', 'states', 'titles', 'xp_table']` (ordre trié par la commande) | c:39 |
 | 4 | Taux d'IA | `python3 -c "import tomllib; print(tomllib.load(open('config/rules.toml','rb'))['ia'])"` | `{'louis': 1.0, 'mixte': 0.5, 'ia': 0.0}` | c:39 |
 | 5 | Épingle de la table XP | `grep -c "7b98ff202015868ed400f339589e6ca00dc009d436a599c3f2272b5c0e258771" config/rules.toml` | `1` | c:115, c:150 |
 | 6 | Git | `grep -cE '^(\.env\|data/\|__pycache__/)$' .gitignore` puis `grep -cE '^/?tests' .gitignore` | `3` puis `0` (tests versionnés, décision de Louis qui prime sur `bp:228`) | c:143 |
@@ -159,7 +159,7 @@ Ordre : T1, T2, T3, T5, T4, T6, T9, T7, T8, T10, T11 (après validation de la ma
   - L10 : clé en doublon dans `.env`.
   - L11 : chemin `PROFESSOR_SUIVI_DIR` inexistant, puis fichier au lieu de dossier (deux messages distincts).
   - L12 : port non numérique ou hors 1024-65535, message avec la valeur.
-- **Pré-mortem** : `.env` en CRLF ou avec BOM ; valeur contenant `=`, `#` ou des espaces ; `~` et chemins relatifs ; `rules.toml` avec BOM ; locale non UTF-8 (`LANG=C`) ; `.env` lisible par tous (avertir si le mode dépasse 600) ; empreinte qui change avec les fins de ligne.
+- **Pré-mortem** : `.env` en CRLF ou avec BOM ; valeur contenant `=`, `#` ou des espaces ; `~` et chemins relatifs ; `rules.toml` avec BOM ; locale non UTF-8 (`LANG=C`) ; `.env` lisible par tous (avertir si le mode dépasse 600, documenté en V1 par `chmod 600` dans le README) ; empreinte qui change avec les fins de ligne ; caractère de contrôle (NUL, BEL) dans une valeur du `.env`.
 - **Niveau** : tester sonnet/low ; builder sonnet/medium. Structure et configuration, le point délicat est le contenu de `rules.toml`.
 
 ### T2 : modèle, schéma de sortie, validateur
