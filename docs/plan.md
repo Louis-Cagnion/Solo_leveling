@@ -65,11 +65,12 @@ Plan du projet décrit dans `docs/specification.md`, en suivant la chaîne en 8 
 - **Point 7, « I AM THE ANSWER »** (Louis, 11/11/2026) : deux titres distincts. La version 42 se débloque au niveau 42 officiel 25 ; c'est un écart assumé au §7.2, qui voulait des preuves en plus du seuil. La version « Système » se débloque avec le rang S sur toutes les cartes, quel que soit leur nombre.
 - **Point 8, architecture** (Louis, 11/11/2026) : l'interface tourne en local, sur la machine de Louis. C'est une page en HTML, CSS et JS sans framework, alimentée par un script de synchronisation qui lit `/professor` et l'API 42 et produit le fichier de données affiché. Le secret OAuth reste hors de Git.
 - **Point 9, maquette** (Louis, 11/11/2026) : un agent Opus en effort `xhigh` la construit avec le skill `impeccable`, puis le moniteur la montre dans Chrome.
+- **Données réelles** (Louis, 11/11/2026) : la lecture seule du suivi de `/professor` est autorisée pour les maquettes et les tests sur données réelles de P5 ; l'API 42 attend son consentement.
 
 ## Arbre (phases closes 4/6)
 
 Statuts : [ ] à faire, [~] en cours, [x] faite, [v] validée, [!] bloquée
-Prochaine feuille prête : aucune, en attente de l'ordre de Louis (P4.4, P4.5, P4.6, puis P5.T1.a)
+Prochaine feuille prête : P4.4 (ordre de Louis du 11/11/2026 : P4.4, P4.5, P4.6, puis P5 sans attendre son avis sur les maquettes, montrées dans Chrome à son retour)
 Moniteur : opus 5.5/high, réévalué à la clôture de P1
 
 - P2 [nœud] : conception, sans code ; point de contrôle : le document de conception couvre les six critères du brief de P2.1
@@ -79,9 +80,9 @@ Moniteur : opus 5.5/high, réévalué à la clôture de P1
   - [v] P4.1 moniteur et Louis : `PRODUCT.md`, direction choisie par Louis (constellation façon Holy Graph de 42, après deux tirages), contrat dans `.impeccable/surfaces/`
   - [x] P4.2 builder : maquette `mockups/constellation/`, données réelles de `/professor` ; dépend de : P4.1 ; niveau : opus/xhigh (§11) ; fait par : opus/xhigh ; avis de Louis : concept intéressant, mais trop d'informations et de clics
   - [x] P4.3 builder : variante allégée `mockups/constellation-light/` (révélation progressive, fichiers de 750 lignes au plus) ; dépend de : P4.2 ; niveau : opus/high (retouche, pas une conception) ; fait par : opus/high ; avis de Louis : mieux, mais encore trop fourni
-  - [ ] P4.4 builder : navigation en trois niveaux `mockups/constellation-steps/` (cercle des sections, section sur toute la page, détail d'un palier) ; niveau : opus/high ; arrêté sans fichier écrit, à relancer seulement sur ordre de Louis
+  - [ ] P4.4 builder : navigation en trois niveaux `mockups/constellation-steps/` (cercle des sections, section sur toute la page, détail d'un palier) ; niveau : opus/high ; relancé sur ordre de Louis du 11/11/2026
   - [ ] P4.5 builder : fenêtre de statut détaillée, au clic sur la carte des niveaux et des titres (consigne de Louis du 11/11/2026). Elle montre : le détail des titres ; les projets qui ont donné de l'XP pour atteindre le niveau actuel, sur 42 et sur le Système ; la progression vers les deux « I AM THE ANSWER » (42 et Système) ; les achievements de l'école en détail. Dépend de : P4.4
-  - [ ] P4.6 builder : page à part, réseau de neurones 3D des liens entre notions, en particulier les transferts (proposition de Louis du 11/11/2026). La 3D sans ressource externe, par exemple une copie locale de three.js sous MIT, est à trancher avec Louis avant le brief. Dépend de : P4.4
+  - [ ] P4.6 builder : page à part, réseau de neurones 3D des liens entre notions, en particulier les transferts (proposition de Louis du 11/11/2026). 3D par une copie locale de three.js (MIT), choisie par Louis le 11/11/2026, sans aucune ressource externe. Dépend de : P4.4
 - P3 [nœud] : plan d'implémentation, validé par Louis ; dépend de : P2 et P4
   - [v] P3.1 analyst : fiches de T1 à T12 ; fait par : sonnet/high, 15 ambiguïtés relevées et arbitrées par le moniteur
   - [v] P3.2 moniteur : `docs/design/implementation.md`, validé par Louis le 11/11/2026 (critères visuels de T11 après la maquette)
