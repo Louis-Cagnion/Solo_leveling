@@ -69,7 +69,7 @@ Plan du projet décrit dans `docs/specification.md`, en suivant la chaîne en 8 
 ## Arbre (phases closes 3/6)
 
 Statuts : [ ] à faire, [~] en cours, [x] faite, [v] validée, [!] bloquée
-Prochaine feuille prête : relecture de la maquette dans Chrome (P4.2) ; P3.1 en cours
+Prochaine feuille prête : validation du plan P3 par Louis, puis relecture de la maquette (P4.2 en cours)
 Moniteur : opus 5.5/high, réévalué à la clôture de P1
 
 - P2 [nœud] : conception, sans code ; point de contrôle : le document de conception couvre les six critères du brief de P2.1
@@ -79,8 +79,8 @@ Moniteur : opus 5.5/high, réévalué à la clôture de P1
   - [v] P4.1 moniteur et Louis : `PRODUCT.md`, direction choisie par Louis (constellation façon Holy Graph de 42, après deux tirages), contrat dans `.impeccable/surfaces/`
   - [~] P4.2 builder : maquette `mockups/constellation/`, données réelles de `/professor` ; dépend de : P4.1 ; niveau : opus/xhigh (§11)
 - P3 [nœud] : plan d'implémentation, validé par Louis ; dépend de : P2 et P4
-  - [~] P3.1 analyst : entrées, sorties, fichiers, critères et cas de test de T1 à T12 ; niveau : sonnet/high
-  - [ ] P3.2 moniteur : `docs/design/implementation.md`, puis validation de Louis ; dépend de : P3.1 et P4.2
+  - [v] P3.1 analyst : fiches de T1 à T12 ; fait par : sonnet/high, 15 ambiguïtés relevées et arbitrées par le moniteur
+  - [x] P3.2 moniteur : `docs/design/implementation.md` ; en attente de la validation de Louis (critères visuels de T11 après la maquette)
 
 ### P0 Recherche (feuilles validées 4/4) et P1 Décisions (points tranchés 9/9)
 

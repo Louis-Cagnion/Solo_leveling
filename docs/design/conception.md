@@ -6,27 +6,27 @@ Ce document est la conception de la V1, tirée du rapport de P2.1 (11/11/2026) e
 
 ### Valeur statuée
 
-Toute valeur prend la forme `{valeur, statut, sources[], raison}` :
-- **`observe`** : la valeur est lue telle quelle dans une source.
-- **`estime`** : la valeur sort d'une règle qui contient une hypothèse (interpolation, table tierce, équivalence, taux de l'IA, calibration, règle du rang B).
-- **`insuffisant`** : une entrée manque ou est invalide, ou les seuils de prudence ne sont pas atteints (`metriques.md:65`). La valeur vaut alors `null` et `raison` est obligatoire.
+Toute valeur prend la forme `{value, status, sources[], reason}` :
+- **`observed`** : la valeur est lue telle quelle dans une source.
+- **`estimated`** : la valeur sort d'une règle qui contient une hypothèse (interpolation, table tierce, équivalence, taux de l'IA, calibration, règle du rang B).
+- **`insufficient`** : une entrée manque ou est invalide, ou les seuils de prudence ne sont pas atteints (`metriques.md:65`). La valeur vaut alors `null` et `raison` est obligatoire.
 
-### Fichier produit : `data/etat.js`
+### Fichier produit : `data/state.js`
 
-Le fichier contient `window.SYSTEME = {...}`, du JSON validé, pour que la page s'ouvre en `file://` sans serveur.
+Le fichier contient `window.SYSTEM_STATE = {...}`, du JSON validé, pour que la page s'ouvre en `file://` sans serveur.
 
 | Entité | Contenu |
 |---|---|
 | `meta` | version du schéma, date de génération, empreinte des règles |
 | `sources[]` | état de chaque source (ok, cache, indisponible), lignes lues et rejetées |
-| `niveau42` | niveau (observé), XP (estimée), projets 42 validés et leur XP de base |
-| `systeme` | XP, niveau, détail par origine, calibration |
-| `trajectoire[]` | une ligne par synchronisation : date, niveau 42, niveau Système |
-| `cartes[]` | paliers, notions, certifications, rang, manques pour le rang suivant |
+| `level42` | niveau (observé), XP (estimée), projets 42 validés et leur XP de base |
+| `system` | XP, niveau, détail par origine, calibration |
+| `trajectory[]` | une ligne par synchronisation : date, niveau 42, niveau Système |
+| `cards[]` | paliers, notions, certifications, rang, manques pour le rang suivant |
 | `notions{}` | état, objectif, carte et palier, dernière pratique |
 | `relations[]` | liens de `relations.csv` ; la dernière ligne d'un triplet fait foi |
-| `projets[]` | projets perso et pro, équivalent 42, facteur de l'IA, XP |
-| `titres[]` | titres du Système et achievements 42, obtenus ou non, avec leur progression |
+| `projects[]` | projets perso et pro, équivalent 42, facteur de l'IA, XP |
+| `titles[]` | titres du Système et achievements 42, obtenus ou non, avec leur progression |
 | `anomalies[]` | lignes rejetées ou suspectes, avec `fichier:ligne` |
 
 Trois règles s'appliquent à l'export :
@@ -34,7 +34,7 @@ Trois règles s'appliquent à l'export :
 - la colonne « Solidité » de `notions.md`, en texte libre, n'est pas exportée ;
 - les tableaux Markdown se lisent par nom de colonne et se découpent sur les `|` non échappés.
 
-### Règles configurables : `config/regles.toml`
+### Règles configurables : `config/rules.toml`
 
 Le fichier est versionné et commenté. On y trouve l'ordre des états, les conditions des rangs, les taux de la part de l'IA (`louis` 1,0, `mixte` 0,5, `ia` 0,0, `lecture` ignorée), la table XP épinglée (URL et sha256), les paramètres de calibration et les titres. Les types de rang et de titre sont des données, sans `if` par instance. Les chemins et les secrets vont dans `.env`, ignoré par Git.
 
@@ -97,15 +97,15 @@ Ce dépôt ne crée aucun suivi propre (§9). Ces ajouts se font dans une sessio
 ## Architecture
 
 ```
-config/regles.toml     règles (versionné)
+config/rules.toml      règles (versionné)
 .env.example           chemins et identifiants OAuth à remplir (versionné)
-source/synchro/        package Python 3.12, bibliothèque standard seulement
-  sources/             professor.py, api42.py, table_xp.py
-  modele.py            valeur statuée, anomalies
-  regles/              rangs, xp, calibration, titres, reseau (fonctions pures)
-  sortie.py            validation du schéma, écriture atomique
+source/system_sync/    package Python 3.12, bibliothèque standard seulement
+  sources/             professor.py, api42.py, xp_table.py
+  model.py             valeur statuée, anomalies
+  rules/               ranks, xp, calibration, titles, network (fonctions pures)
+  output.py            validation du schéma, écriture atomique
 public/                index.html, css/, js/ : rendu seul, textContent, aucune ressource externe
-data/                  généré, ignoré par Git (etat.js, historique/, cache/)
+data/                  généré, ignoré par Git (state.js, history/, cache/)
 tests/                 fixtures fictives, en miroir de source/
 ```
 
@@ -119,7 +119,7 @@ tests/                 fixtures fictives, en miroir de source/
 | # | Sous-tâche | Dépend de |
 |---|---|---|
 | T0 | Formats de `/professor` (session `/professor`, hors dépôt) | - |
-| T1 | Squelette, `.gitignore` (`.env`, `data/`), `.env.example`, `regles.toml` | P2 |
+| T1 | Squelette, `.gitignore` (`.env`, `data/`), `.env.example`, `rules.toml` | P2 |
 | T2 | Modèle, schéma de sortie et validateur | T1 |
 | T3 | Lecteurs de `/professor` | T2 |
 | T4 | Client de l'API 42 (OAuth, cache, 2 requêtes par seconde) | T2 |
