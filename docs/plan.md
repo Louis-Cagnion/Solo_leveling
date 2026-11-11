@@ -66,10 +66,10 @@ Plan du projet décrit dans `docs/specification.md`, en suivant la chaîne en 8 
 - **Point 8, architecture** (Louis, 11/11/2026) : l'interface tourne en local, sur la machine de Louis. C'est une page en HTML, CSS et JS sans framework, alimentée par un script de synchronisation qui lit `/professor` et l'API 42 et produit le fichier de données affiché. Le secret OAuth reste hors de Git.
 - **Point 9, maquette** (Louis, 11/11/2026) : un agent Opus en effort `xhigh` la construit avec le skill `impeccable`, puis le moniteur la montre dans Chrome.
 
-## Arbre (phases closes 3/6)
+## Arbre (phases closes 4/6)
 
 Statuts : [ ] à faire, [~] en cours, [x] faite, [v] validée, [!] bloquée
-Prochaine feuille prête : validation du plan P3 par Louis, puis relecture de la maquette (P4.2 en cours)
+Prochaine feuille prête : P5.T1.a (tests de T1), dès la fin de P4.2 (un agent à la fois)
 Moniteur : opus 5.5/high, réévalué à la clôture de P1
 
 - P2 [nœud] : conception, sans code ; point de contrôle : le document de conception couvre les six critères du brief de P2.1
@@ -80,7 +80,11 @@ Moniteur : opus 5.5/high, réévalué à la clôture de P1
   - [~] P4.2 builder : maquette `mockups/constellation/`, données réelles de `/professor` ; dépend de : P4.1 ; niveau : opus/xhigh (§11)
 - P3 [nœud] : plan d'implémentation, validé par Louis ; dépend de : P2 et P4
   - [v] P3.1 analyst : fiches de T1 à T12 ; fait par : sonnet/high, 15 ambiguïtés relevées et arbitrées par le moniteur
-  - [x] P3.2 moniteur : `docs/design/implementation.md` ; en attente de la validation de Louis (critères visuels de T11 après la maquette)
+  - [v] P3.2 moniteur : `docs/design/implementation.md`, validé par Louis le 11/11/2026 (critères visuels de T11 après la maquette)
+
+- P5 [nœud] : V1, une sous-tâche après l'autre (`docs/design/implementation.md`, section « Ordre d'exécution ») ; point de contrôle : T12 (`checker`). Chaque Tn se déroule en a (tester, tests rouges), b (builder, tests verts), c (analyst, revue VALIDÉ ou À CORRIGER), d (fixer, si à corriger). Niveaux pressentis : section « Niveaux d'agent » du plan, réévalués au lancement.
+  - [ ] T1 ; [ ] T2 ; [ ] T3 ; [ ] T5 ; [ ] T4 ; [ ] T6 ; [ ] T9 ; [ ] T7 ; [ ] T8 ; [ ] T10 ; [ ] T11 (après P4) ; [ ] T12
+  - [>] T0 : formats de `/professor` (session `/professor`, hors dépôt)
 
 ### P0 Recherche (feuilles validées 4/4) et P1 Décisions (points tranchés 9/9)
 
