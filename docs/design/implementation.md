@@ -66,6 +66,7 @@ Les noms qui viennent de `/professor` (`cartes/`, `notions.md`, `relations.csv`,
   - l'URI de redirection et l'écoute utilisent toutes deux `127.0.0.1` ;
   - chaque synchronisation redemande le consentement dans le navigateur (pas de jeton de rafraîchissement en V1) ;
   - le cache de l'API s'affiche « observé au <date> », sans limite d'âge en V1.
+- **A16, API de `config.py`** (moniteur, 11/11/2026) : `ConfigError`, `load_rules(path)`, `rules_fingerprint(path)`, `load_env(path)` et `check_env(env)` ; contrat détaillé dans la docstring de `tests/system_sync/test_config.py`, écrite en T1.a.
 
 ## Ordre d'exécution
 

@@ -1,0 +1,30 @@
+# Règles fictives pour les tests du chargeur.
+[states]
+order = ["non rencontrée", "déclarée", "comprise", "appliquée"]
+
+[ranks.E]
+type = "any_notion"
+
+[ranks.D]
+type = "fact_level"
+level = "débutant"
+
+[ia]
+louis = 1.0
+mixte = 1.5
+ia = 0.0
+
+[xp_table]
+url = "https://example.invalid/raw/abc123/experience.json"
+commit = "abc123"
+sha256 = "0000000000000000000000000000000000000000000000000000000000000000"
+
+[calibration]
+target_level = 25
+r_initial = 0
+min_projects = 3
+min_days = 90
+
+[titles.answer_42]
+type = "level_at_least"
+value = 25
