@@ -47,7 +47,7 @@ C'est la seule catégorie qu'on débloque en choisissant des projets. XP et dur�
 | I'm reliable ! | pedagogy | easy | 21 soutenances d'affilée sans absence | 11/11/2024 |
 | It's a rich man's world 1 à 3 | social | none | 100, 200, 500 wallet points | 07/04/2025 au 17/09/2025 |
 
-### Non obtenus (51)
+### Non obtenus et suivis (24)
 
 | Achievement | Catégorie | Difficulté | Condition |
 |---|---|---|---|
@@ -62,17 +62,22 @@ C'est la seule catégorie qu'on débloque en choisissant des projets. XP et dur�
 | Shellcode for dummies | project | medium | `snow-crash`, `rainfall`, `override` à 100 au moins |
 | I found the answer | pedagogy | none | niveau 21 |
 | I am the answer | pedagogy | none | niveau 25 |
-| Beta Rookie, Beta Explorer, Certified Beta Voyager | pedagogy | none | 1, 3, 5 projets en bêta |
 | Hackerman | pedagogy | medium | trouver une faille de sécurité majeure (infra ou intra) |
 | Serial examiner | pedagogy | easy | 10 soutenances en un jour comme correcteur |
+| It's a rich man's world 4 | social | none | 1 000 wallet points |
+| Magic Load Balancer 1 | social | none | engagement dans la vie du campus (tâches quotidiennes, entraide) |
+| Shopaholic 1 à 5 | scolarity | none à hard | 1, 3, 10, 21, 42 produits du shop de l'intranet |
+
+### Exclus du suivi (27)
+
+Décision de Louis du 12/11/2026 : il ne les fera probablement pas. Ils restent listés pour reconnaître leurs intitulés quand l'API renverra la liste complète ; la page ne les affiche pas comme objectifs. Un achievement exclu qui serait obtenu quand même s'affiche normalement.
+
+| Achievement | Catégorie | Difficulté | Condition |
+|---|---|---|---|
+| Beta Rookie, Beta Explorer, Certified Beta Voyager | pedagogy | none | 1, 3, 5 projets en bêta |
 | Typo Hunter (3 paliers) | pedagogy | easy, medium, hard | 1, 5, 15 coquilles trouvées (événement Typo Hunt Central) |
 | Coming back from the future (3 paliers) | social | easy, medium, hard | bêta-testeur de 1, 5, 15 tests R&D de 42 |
 | COMMs Slayer 1 à 3 | social | easy, medium, hard | défis de communication (newsletter) : 1, 5, puis tous |
-| It's a rich man's world 4 | social | none | 1 000 wallet points |
-| Magic Load Balancer 1 | social | none | engagement dans la vie du campus (tâches quotidiennes, entraide) |
-| Hello, Welcome ! | social | none | visiter 42 Bangkok |
 | Come to the dark side, we have cookies | scolarity | none | devenir membre du bocal |
-| Shopaholic 1 à 5 | scolarity | none à hard | 1, 3, 10, 21, 42 produits du shop de l'intranet |
+| Hello, Welcome ! | social | none | visiter 42 Bangkok |
 | Visites de campus (13) | scolarity | none (easy : Vienne ; hard : Codam) | London (Chewsday innit), Séoul (Do you know KIMCHI), Berlin (I didn't get into Berghain), Codam Amsterdam (I got hit by a bike), Mulhouse (Je voudrais un bretzel), Paris (Je voudrais un croissant), Lausanne (Je voudrais une fondue), Nice (Je voudrais une socca), Penang (Keep it PG!), Heilbronn (Nett hier!), Vienne (That schnitzel was really good! 1), Amman, Irbid |
-
-(La ligne « Visites de campus » regroupe 13 achievements, Bangkok étant classé en `social`.)
