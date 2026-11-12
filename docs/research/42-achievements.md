@@ -10,6 +10,8 @@ Champs relevés sur chaque carte : catégorie (`kind`), difficulté (`tier` : no
 - **Le niveau 21 aussi** : « I found the answer ».
 - **Wallet** : 35 achievements sur 79 rapportent des ₳. Le solde de Louis (650 ₳ au 12/11/2026) vient entièrement des achievements : Bonus Hunter 1 à 4 (635 ₳), 404 - Sleep not found, I'm reliable ! et Rigorous Basterd 2 (5 ₳ chacun).
 - **It's a rich man's world 4** affiche « 650 / 1000 », égal au solde : rien n'a encore été dépensé, on ne sait donc pas s'il compte le cumul ou le solde. Choix de Louis : Shopaholic seulement après cet achievement.
+- **Titres** : 12 achievements en donnent un (info-bulles relues le 12/11/2026) : Bill Gates 4 « Philanthropist » et Bonus Hunter 4 « Mastermind » (obtenus), Awake, Meet the pentester, I am the answer, Grand Master of all things, Hackerman, Magic Load Balancer 1, et quatre visites de campus (London, Berlin, Heilbronn, Vienne). Dans une série, seul le dernier palier donne le titre (Bill Gates 4, confirmé par Louis).
+- **Shop** (`shop.intra.42.fr`, 12/11/2026) : trois produits seulement, tous des services du campus : option d'enregistrement de l'Holodeck (50 ₳, en complément d'une location), location de l'Atlantide (100 ₳ l'heure), location de l'Holodeck (200 ₳ l'heure), à réserver 15 jours à l'avance. **Shopaholic n'est pas rentable** : 10 achats coûtent au moins 500 ₳ (1 000 ₳ sans l'option, qui suppose une location) pour 5 ₳ rendus ; 42 achats coûtent au moins 2 100 ₳ pour 135 ₳ rendus en tout.
 - **Trous dans les séries** : `Rigorous Basterd 3` et `Perfectionist 4` n'apparaissent pas dans la liste, et « Grand Master of all things » exige un achievement « Advanced Master » absent lui aussi. Ils ne sont peut-être pas proposés à ce campus ; non vérifié.
 
 ## Achievements liés à des projets
@@ -82,6 +84,6 @@ Décision de Louis du 12/11/2026 : il ne les fera probablement pas. Ils restent 
 | COMMs Slayer 1 à 3 | social | easy, medium, hard | 5, 30, 100 ₳ | défis de communication (newsletter) : 1, 5, puis tous |
 | Come to the dark side, we have cookies | scolarity | none | | devenir membre du bocal |
 | Hello, Welcome ! | social | none | | visiter 42 Bangkok |
-| Visites de campus (13) | scolarity | none (easy : Vienne ; hard : Codam) | Codam : 100 ₳ ; Vienne : 5 ₳ ; London : titre « 'Ello gov'na » | London (Chewsday innit), Séoul (Do you know KIMCHI), Berlin (I didn't get into Berghain), Codam Amsterdam (I got hit by a bike), Mulhouse (Je voudrais un bretzel), Paris (Je voudrais un croissant), Lausanne (Je voudrais une fondue), Nice (Je voudrais une socca), Penang (Keep it PG!), Heilbronn (Nett hier!), Vienne (That schnitzel was really good! 1), Amman, Irbid |
+| Visites de campus (13) | scolarity | none (easy : Vienne ; hard : Codam) | Codam : 100 ₳ ; Vienne : 5 ₳ et titre « ist anders » ; titres London « 'Ello gov'na », Berlin « Heute nicht », Heilbronn « lohnt sich » | London (Chewsday innit), Séoul (Do you know KIMCHI), Berlin (I didn't get into Berghain), Codam Amsterdam (I got hit by a bike), Mulhouse (Je voudrais un bretzel), Paris (Je voudrais un croissant), Lausanne (Je voudrais une fondue), Nice (Je voudrais une socca), Penang (Keep it PG!), Heilbronn (Nett hier!), Vienne (That schnitzel was really good! 1), Amman, Irbid |
 
-Titres : relevés dans les info-bulles quand l'intranet les affiche ; un achievement sans titre indiqué peut en donner un sans le montrer.
+Titres : relevés dans les info-bulles des 79 cartes ; le titre « Philanthropist », obtenu avec Bill Gates 4, confirme que l'info-bulle l'indique bien.
