@@ -16,7 +16,7 @@ Ce document rassemble ce que les sources officielles disent des niveaux de 42, a
 
 - **Table XP et niveau** : `objectifs-louis.md` reprend `experience_21.json` de 42calculator, présenté comme issu de l'API 42 : niveau 17 = 263 508 XP, 20 = 399 672, 25 = 777 756. C'est une source tierce. La source primaire serait l'API de l'intranet, interrogée par Louis avec son propre accès.
 - **XP par projet et bonus** : connus seulement par 42calculator et l'intranet de Louis.
-- **Niveau 25** : aucune source officielle ne le mentionne. Le compteur dépasse 21 (la table tierce va jusqu'à 25), mais aucun titre ni aucun jalon ne s'y rattache. « I AM THE ANSWER » est donc un objectif personnel au-delà du cursus certifié.
+- **Niveau 25** : aucun titre RNCP ne s'y rattache, mais l'intranet a un achievement officiel « I am the answer » (« valider le niveau 25 », relevé le 12/11/2026, cf. `42-achievements.md`). « I AM THE ANSWER » est donc un objectif au-delà du cursus certifié, reconnu par l'école.
 - **Blackhole** : il n'est décrit que par des sources communautaires (77 jours au départ, jours gagnés par projet). Ces règles ont pu changer.
 
 ## Repères pour la calibration
