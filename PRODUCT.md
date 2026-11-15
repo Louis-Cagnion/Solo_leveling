@@ -20,7 +20,7 @@ Afficher sa progression en programmation sous une forme gamifiée, dans l'esprit
 
 ## Positioning
 
-Les données viennent du suivi pédagogique réel de Louis (`/professor`) et de son profil 42. Rien n'est saisi à la main dans l'interface, et chaque valeur peut être observée, estimée ou insuffisante : une donnée insuffisante s'affiche comme telle, sans valeur inventée.
+Les données viennent du suivi pédagogique réel de Louis (`/professor`) et de son profil 42. Rien n'est saisi à la main dans l'interface, et chaque valeur peut être observée, estimée, insuffisante ou non mesurable : elle s'affiche comme telle, sans valeur inventée.
 
 ## Operating Context
 
@@ -50,7 +50,7 @@ Les données viennent du suivi pédagogique réel de Louis (`/professor`) et de 
 
 ## Product Principles
 
-1. Une valeur sans preuve s'affiche « insuffisant », jamais estimée en silence.
+1. Un libellé dit l'état réel : « insuffisant » quand des conditions existent et ne sont pas remplies, « non mesurable » quand aucune mesure ne permet de comparer. Une valeur sans preuve n'est jamais estimée en silence.
 2. Le niveau (le parcours accumulé) et le rang (la maîtrise démontrée) restent visuellement distincts.
 3. La gamification met en scène des données vraies : elle ne remplace pas la lisibilité.
 4. Le réseau de compétences doit se parcourir : lacunes, prérequis et transferts doivent être visibles.
