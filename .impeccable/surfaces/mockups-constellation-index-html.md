@@ -25,4 +25,4 @@ FORM : constellation, choisie par Louis contre le tirage (n°7 de la première m
 
 FINISH : unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
 
-Signature : l'entrée dans une section prolonge le cercle (la section s'agrandit depuis sa place). Les liens entre notions sont dans une page à part, en 3D : arbre autour d'une notion racine (défaut), couches façon réseau de neurones, ou amas par domaine.
+Signature : l'entrée dans une section prolonge le cercle (la section s'agrandit depuis sa place). Les liens entre notions sont dans une page à part, en 3D : amas par domaine (défaut) ou arbre autour d'une notion racine.
