@@ -67,16 +67,16 @@ Plan du projet décrit dans `docs/specification.md`, en suivant la chaîne en 8 
 - **Point 9, maquette** (Louis, 11/11/2026) : un agent Opus en effort `xhigh` la construit avec le skill `impeccable`, puis le moniteur la montre dans Chrome.
 - **Données réelles** (Louis, 11/11/2026) : la lecture seule du suivi de `/professor` est autorisée pour les maquettes et les tests sur données réelles de P5 ; l'API 42 attend son consentement.
 
-## Arbre (phases closes 4/6)
+## Arbre (phases closes 5/6)
 
 Statuts : [ ] à faire, [~] en cours, [x] faite, [v] validée, [!] bloquée
-Prochaine feuille prête : aucune, en attente de l'avis de Louis sur `mockups/system/` (P4.7 et P4.8), puis de son ordre pour P5.T2.b, arrêtée sans fichier écrit
-Moniteur : opus 5.5/high, réévalué à la clôture de P1 ; P4.7 et P4.8 : fable 5.2, effort par défaut, session choisie par Louis, sans agent
+Prochaine feuille prête : P5.0 (en cours), puis amendement du plan par le moniteur et T2
+Moniteur : opus 5.5/high jusqu'à P3 ; depuis P4.7 : fable 5.2, effort par défaut de la session (aucun réglage pour ce modèle dans `settings.json`), session choisie par Louis ; agents en sonnet ou opus seulement
 
 - P2 [nœud] : conception, sans code ; point de contrôle : le document de conception couvre les six critères du brief de P2.1
   - [v] P2.1 analyst : modèle de données, règles de calcul, architecture, découpage ; fait par : opus/high, deux affirmations relues par le moniteur
   - [v] P2.2 moniteur : `docs/design/conception.md`
-- P4 [nœud] : maquette (§11) ; point de contrôle : rendu montré à Louis dans Chrome, choix validé
+- P4 [nœud] : maquette (§11), validée par Louis le 15/11/2026 (`mockups/system/`, sons compris) ; point de contrôle : rendu montré à Louis dans Chrome, choix validé
   - [v] P4.1 moniteur et Louis : `PRODUCT.md`, direction choisie par Louis (constellation façon Holy Graph de 42, après deux tirages), contrat dans `.impeccable/surfaces/`
   - [x] P4.2 builder : maquette `mockups/constellation/`, données réelles de `/professor` ; dépend de : P4.1 ; niveau : opus/xhigh (§11) ; fait par : opus/xhigh ; avis de Louis : concept intéressant, mais trop d'informations et de clics
   - [x] P4.3 builder : variante allégée `mockups/constellation-light/` (révélation progressive, fichiers de 750 lignes au plus) ; dépend de : P4.2 ; niveau : opus/high (retouche, pas une conception) ; fait par : opus/high ; avis de Louis : mieux, mais encore trop fourni
@@ -99,8 +99,9 @@ Moniteur : opus 5.5/high, réévalué à la clôture de P1 ; P4.7 et P4.8 : fabl
   - [v] P3.1 analyst : fiches de T1 à T12 ; fait par : sonnet/high, 15 ambiguïtés relevées et arbitrées par le moniteur
   - [v] P3.2 moniteur : `docs/design/implementation.md`, validé par Louis le 11/11/2026 (critères visuels de T11 après la maquette)
 
-- P5 [nœud] : V1, une sous-tâche après l'autre (`docs/design/implementation.md`, section « Ordre d'exécution ») ; point de contrôle : T12 (`checker`). Chaque Tn se déroule en a (tester, tests rouges), b (builder, tests verts), c (analyst, revue VALIDÉ ou À CORRIGER), d (fixer, si à corriger). Niveaux pressentis : section « Niveaux d'agent » du plan, réévalués au lancement.
+- P5 [nœud] : V1, construite en entier sur ordre de Louis du 15/11/2026 (« avec tous les choix validés jusqu'ici, commit et push »), une sous-tâche après l'autre (`docs/design/implementation.md`, section « Ordre d'exécution ») ; point de contrôle : T12 (`checker`). Chaque Tn se déroule en a (tester, tests rouges), b (builder, tests verts), c (analyst, revue VALIDÉ ou À CORRIGER), d (fixer, si à corriger). Niveaux pressentis : section « Niveaux d'agent » du plan, réévalués au lancement.
   - [x] T1 (a faite par sonnet/low : 37 tests rouges ; b faite par sonnet/medium après une interruption par disque plein : 37 verts ; c faite par sonnet/high : À CORRIGER, 1 critique (fuite de secret), 6 importants, 12 mineurs ; d faite (tests par sonnet/low, correction par sonnet/medium) : 56 verts) ; [~] T2 (a faite par sonnet/medium : 61 tests rouges, schéma des 12 entités fixé par la fixture `state_complete.js` puis complété par le moniteur ; b arrêtée par Louis sans fichier écrit, en attente de son ordre) ; [ ] T3 ; [ ] T5 ; [ ] T4 ; [ ] T6 ; [ ] T9 ; [ ] T7 ; [ ] T8 ; [ ] T10 ; [ ] T11 (après P4) ; [ ] T12
+  - [~] P5.0 analyst : écarts entre la maquette validée `mockups/system/` et le contrat de données du plan (schéma, fiches T2 à T11), avant de relancer T2 ; niveau : opus/high (décision de contrat, une erreur se paie sur toute la chaîne)
   - [>] T0 : formats de `/professor` (session `/professor`, hors dépôt)
 
 ### P0 Recherche (feuilles validées 4/4) et P1 Décisions (points tranchés 9/9)
