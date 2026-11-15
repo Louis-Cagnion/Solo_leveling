@@ -71,7 +71,7 @@ Plan du projet décrit dans `docs/specification.md`, en suivant la chaîne en 8 
 
 Statuts : [ ] à faire, [~] en cours, [x] faite, [v] validée, [!] bloquée
 Reprise (moniteur Sonnet/high au moins, jamais Fable ; consigne de Louis du 15/11/2026) : activer `/best-practice`, lire `todo.md` puis cet arbre, et reprendre à « Prochaine feuille prête ». Feuilles à garder en Opus/high, revue comprise : T4 (OAuth), T7 (calibration), T11 (page).
-Prochaine feuille prête : validation par Louis des amendements A17 à A30 (`docs/design/implementation.md`, « Amendements du 15/11/2026 »), puis T2.a2
+Prochaine feuille prête : T2.a2 (amendements A17 à A30 de `docs/design/implementation.md` validés par Louis le 15/11/2026)
 Moniteur : opus 5.5/high jusqu'à P3 ; depuis P4.7 : fable 5.2, effort par défaut de la session (aucun réglage pour ce modèle dans `settings.json`), session choisie par Louis ; agents en sonnet ou opus seulement
 
 - P2 [nœud] : conception, sans code ; point de contrôle : le document de conception couvre les six critères du brief de P2.1
@@ -103,7 +103,7 @@ Moniteur : opus 5.5/high jusqu'à P3 ; depuis P4.7 : fable 5.2, effort par défa
 - P5 [nœud] : V1, construite en entier sur ordre de Louis du 15/11/2026 (« avec tous les choix validés jusqu'ici, commit et push »), une sous-tâche après l'autre (`docs/design/implementation.md`, section « Ordre d'exécution ») ; point de contrôle : T12 (`checker`). Chaque Tn se déroule en a (tester, tests rouges), b (builder, tests verts), c (analyst, revue VALIDÉ ou À CORRIGER), d (fixer, si à corriger). Niveaux pressentis : section « Niveaux d'agent » du plan, réévalués au lancement.
   - [x] T1 (a faite par sonnet/low : 37 tests rouges ; b faite par sonnet/medium après une interruption par disque plein : 37 verts ; c faite par sonnet/high : À CORRIGER, 1 critique (fuite de secret), 6 importants, 12 mineurs ; d faite (tests par sonnet/low, correction par sonnet/medium) : 56 verts) ; [~] T2 (a faite par sonnet/medium : 61 tests rouges, schéma des 12 entités fixé par la fixture `state_complete.js` puis complété par le moniteur ; b arrêtée par Louis sans fichier écrit, en attente de son ordre) ; [ ] T3 ; [ ] T5 ; [ ] T4 ; [ ] T6 ; [ ] T9 ; [ ] T7 ; [ ] T8 ; [ ] T10 ; [ ] T11 (après P4) ; [ ] T12
   - [v] P5.0 analyst : écarts entre la maquette validée `mockups/system/` et le contrat de données du plan ; fait par : opus/high, 17 écarts (E1 à E17), repris par le moniteur dans les amendements A17 à A30
-  - [ ] T2.a2 tester : fixtures `tests/fixtures/state/*.js` et tests `test_model.py`, `test_output.py` portés au contrat amendé (A17 à A25 et entité `names` de A27, 14 entités), toujours rouges ; dépend de : validation des amendements par Louis ; niveau pressenti : sonnet/medium ; puis T2.b (sonnet/high), c, d
+  - [ ] T2.a2 tester : fixtures `tests/fixtures/state/*.js` et tests `test_model.py`, `test_output.py` portés au contrat amendé (A17 à A25 et entité `names` de A27, 14 entités), toujours rouges ; niveau pressenti : sonnet/medium ; puis T2.b (sonnet/high), c, d
   - [ ] T1.e tester puis builder : `cert_ready_at_least` dans `config/rules.toml` et `config.py` (A22) ; avant T6 ; niveau pressenti : sonnet/low
   - [ ] T13 (après T10) : synchronisation lancée à la clôture d'une session `/professor` et formats de T0 (A29) ; dépôt des commandes, commit isolé ; niveau pressenti : sonnet/medium
   - [ ] T14 (après T3, avant T10) : table `config/names-en.toml` des noms de `/professor` en anglais, lue par `sync`, avec le test « aucun identifiant sans traduction » (A27) ; niveau pressenti : sonnet/medium pour le lecteur et le test, haiku/medium pour remplir la table par carte
@@ -130,13 +130,3 @@ Moniteur : opus 5.5/high jusqu'à P3 ; depuis P4.7 : fable 5.2, effort par défa
   - T7 : A7 place les points d'ancrage dans `config/rules.toml`, mais leur schéma (`[[calibration.anchors]]`) et son contrôle restent à ajouter.
   - T3 : `check_env` ne contrôle pas `IA_HISTORY_CSV` (existence, fichier ordinaire).
 - Le niveau 25 n'est pas un jalon officiel de 42 : le titre reste un objectif personnel, à calibrer sur la table XP de l'API de l'intranet.
-
-## Décisions ouvertes (15/11/2026)
-
-À confirmer par Louis avant T2.a2 ; sans réponse contraire, le défaut des amendements s'applique.
-
-1. **Réseau (A25)** : l'entité `network` et les prérequis fragiles mis en évidence ne sont affichés nulle part dans la maquette validée. Défaut : entité retirée, T9 réduite. Sinon : ajouter leur affichage à T11.
-2. **Niveau Système (A26)** : le niveau affiché reste celui de la calibration sur 42 (point 6 de P1), et la « moyenne des rangs » ne donne que le rang du bloc, comme dans la maquette. Sinon : la moyenne remplace le niveau, et la calibration de T7 disparaît.
-3. **Traduction (A27)** : tranchée par Louis le 15/11/2026 : la page en français et en anglais, noms de `/professor` compris, par une table versionnée du projet (jamais dans les fiches du skill).
-4. **Accessibilité d'une certification (A21)** : calculée par `sync` plutôt que par la page, pour garder `public/` en rendu seul.
-5. **Son du passage de niveau** : consigne mise de côté par Louis (`todo.md`), hors de la V1 tant qu'il ne la relance pas.
