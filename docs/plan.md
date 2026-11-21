@@ -74,7 +74,7 @@ Plan du projet décrit dans `docs/specification.md`, en suivant la chaîne en 8 
 Statuts : [ ] à faire, [~] en cours, [x] faite, [v] validée, [!] bloquée
 Reprise (moniteur Sonnet/high au moins, jamais Fable ; consigne de Louis du 15/11/2026) : activer `/best-practice`, lire `todo.md` puis cet arbre, et reprendre à « Prochaine feuille prête ». Feuilles à garder en Opus/high, revue comprise : T4 (OAuth), T7 (calibration), T11 (page), W8 (revue de la vitrine).
 Ordre (Louis, 21/11/2026) : W (vitrine), puis P5 à partir de T2.a2, puis PM (pré-mortem).
-Prochaine feuille prête : W8 (revue indépendante, opus/high)
+Prochaine feuille prête : W10 (après W9)
 Moniteur : opus 5.5/high jusqu'à P3 ; depuis P4.7 : fable 5.2, effort par défaut de la session (aucun réglage pour ce modèle dans `settings.json`), session choisie par Louis ; plan de la vitrine : opus 5.5/high ; à partir de W1 : sonnet 5.5/high recommandé ; agents en sonnet ou opus seulement
 
 - W [nœud] : vitrine sur GitHub Pages (`docs/design/vitrine.md`, fiches W0 à W13) ; point de contrôle : W12 (`checker`), 15 lignes de « Restrictions et secours » jugées ; un agent à la fois
@@ -86,8 +86,8 @@ Moniteur : opus 5.5/high jusqu'à P3 ; depuis P4.7 : fable 5.2, effort par défa
   - [x] W5 builder : politique de sécurité, `noindex`, icône, `404.html`, replis ; fait par : sonnet/high, 27 tests verts, 0 violation de la politique (Chrome sans interface et Chrome de l'extension, `file://` compris), replis joués ; commit `dec8bba`
   - [x] W6 builder : `tools/sound_partials.py` versionné, sortie dans `public/js/` ; fait par : sonnet/low ; `sound-data.js` identique après régénération (22 s sous plafond) ; commit `6057ed9`
   - [x] W7 builder : `.github/workflows/pages.yml`, actions épinglées par SHA ; fait par : sonnet/medium, 5 tests verts, SHA rejoués par le moniteur ; fichier NON commité jusqu'à W11 (son push déclenche un déploiement)
-  - [ ] W8 analyst : revue indépendante, VALIDÉ ou À CORRIGER ; dépend de : W2 à W7 ; niveau pressenti : opus/high
-  - [ ] W9 fixer : une feuille par problème CRITIQUE ou IMPORTANT de W8 ; dépend de : W8
+  - [x] W8 analyst : revue indépendante, VALIDÉ ou À CORRIGER ; fait par : opus/high, À CORRIGER : 0 critique, 1 important (I1 : `test_workflow.py` ne voyait pas une permission en trop ni une injection), 13 mineurs au pré-mortem (`todo.md`), lignes 1, 2, 7, 8 et 12 tenues par preuve, ligne 3 tenue par lecture et essai local
+  - [x] W9 : une feuille par problème CRITIQUE ou IMPORTANT de W8 ; I1 faite par tester sonnet/medium (renforcer un test, pas de code testé à corriger) : `test_workflow.py` éprouvé sur 3 fixtures fautives et 1 conforme, 28 tests verts ; commit `e6ecd84`
   - [ ] W10 moniteur : rendu comparé à la maquette dans Chrome, validé par Louis ; dépend de : W9
   - [ ] W11 moniteur : workflow commité et poussé, site en ligne vérifié ; dépend de : W0, W10
   - [ ] W12 checker : point de contrôle ; dépend de : W11 ; niveau pressenti : sonnet/high
