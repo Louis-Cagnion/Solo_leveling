@@ -74,13 +74,13 @@ Plan du projet décrit dans `docs/specification.md`, en suivant la chaîne en 8 
 Statuts : [ ] à faire, [~] en cours, [x] faite, [v] validée, [!] bloquée
 Reprise (moniteur Sonnet/high au moins, jamais Fable ; consigne de Louis du 15/11/2026) : activer `/best-practice`, lire `todo.md` puis cet arbre, et reprendre à « Prochaine feuille prête ». Feuilles à garder en Opus/high, revue comprise : T4 (OAuth), T7 (calibration), T11 (page), W8 (revue de la vitrine).
 Ordre (Louis, 21/11/2026) : W (vitrine), puis P5 à partir de T2.a2, puis PM (pré-mortem).
-Prochaine feuille prête : W0 (Louis, demandée au début de la phase) et W1
+Prochaine feuille prête : W1 (W0 attend la connexion de Louis à GitHub dans Chrome)
 Moniteur : opus 5.5/high jusqu'à P3 ; depuis P4.7 : fable 5.2, effort par défaut de la session (aucun réglage pour ce modèle dans `settings.json`), session choisie par Louis ; plan de la vitrine : opus 5.5/high ; à partir de W1 : sonnet 5.5/high recommandé ; agents en sonnet ou opus seulement
 
 - W [nœud] : vitrine sur GitHub Pages (`docs/design/vitrine.md`, fiches W0 à W13) ; point de contrôle : W12 (`checker`), 15 lignes de « Restrictions et secours » jugées ; un agent à la fois
-  - [ ] W0 Louis : source de GitHub Pages sur « GitHub Actions » ; dépend de : - ; demandée au début de la phase, attendue avant W11
+  - [ ] W0 moniteur dans Chrome, sur ordre de Louis : source de GitHub Pages sur « GitHub Actions » ; dépend de : connexion de Louis à GitHub dans ce Chrome (essai du 21/11 : déconnecté) ; attendue avant W11
   - [ ] W1 tester : tests rouges du site, du déploiement et de l'instantané ; dépend de : - ; niveau pressenti : sonnet/medium
-  - [ ] W2 builder : `public/` copié de la maquette, démonstration gardée (`?demo` ou `#demo` selon Louis) ; dépend de : W1 ; niveau pressenti : sonnet/medium
+  - [ ] W2 builder : `public/` copié de la maquette, démonstration gardée (`?demo` tel quel) ; dépend de : W1 ; niveau pressenti : sonnet/medium
   - [ ] W3 builder : `tools/snapshot.py` et `public/data.js` ; dépend de : W2 ; niveau pressenti : sonnet/medium
   - [ ] W4 builder : `public/` aux conventions de la PARTIE B, rendu inchangé ; dépend de : W2 ; niveau pressenti : sonnet/high
   - [ ] W5 builder : politique de sécurité, `noindex`, icône, `404.html`, replis ; dépend de : W4 ; niveau pressenti : sonnet/high

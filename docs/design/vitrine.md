@@ -19,7 +19,8 @@ Le 21/11/2026, à ne pas redemander :
 - Public : Louis seul, en ligne, sur ordinateur. Pas de version téléphone ni de présentation du projet ; page en français (l'anglais vient avec la V1, A27).
 - Hébergement : le dépôt `Louis-Cagnion/Solo_leveling`, rendu public par Louis le 20/11/2026 (vérifié le 21/11 : `"private": false`). Adresse : `https://louis-cagnion.github.io/Solo_leveling/`.
 - Sons : publiés tels quels (`js/sound-data.js`), risque de droits assumé par Louis. Les bruits d'origine (`sound effects/`) restent exclus de Git.
-- Démonstration gardée (`js/demo.js` porté, A28 amendé par A31) : données fictives activées par l'adresse, Louis a écrit « en écrivant dans l'url #demo ». La maquette lit `?demo` (`?demo`, `?demo=over#/status`, `?demo=events`, `?demo=red`, `?demo=red-all`) et le `#` porte déjà les vues (`#/status`) : un `#demo` seul se perdrait au premier changement de vue, sauf à écrire les vues `#demo/status`. Question posée à Louis au début de la phase, avec W0, avant W1 : garder `?demo` tel quel (recommandé, aucun code à changer) ou passer à `#demo` avec les vues préfixées. Sa réponse fixe S6 et W2.
+- Démonstration gardée (`js/demo.js` porté, A28 amendé par A31) : données fictives activées par l'adresse. Louis garde `?demo` tel quel (réponse du 21/11/2026 à la question de début de phase) : `?demo`, `?demo=over#/status`, `?demo=events`, `?demo=red`, `?demo=red-all`, aucun code de routage à changer ; le `#` reste aux vues (`#/status`).
+- Source de GitHub Pages : Louis charge le moniteur de la basculer sur « GitHub Actions » dans Chrome (réponse du 21/11/2026). Le Chrome de l'extension n'est pas connecté à GitHub (essai du 21/11/2026 : la page des réglages donne 404 et propose « Sign in ») : Louis s'y connecte lui-même, jamais de mot de passe saisi par le moniteur.
 
 Décidé par le moniteur, modifiable par Louis à la validation : le site n'est pas indexé par les moteurs de recherche (`<meta name="robots" content="noindex">`), puisqu'il ne sert qu'à Louis.
 
@@ -78,9 +79,9 @@ Conventions : celles de `docs/design/implementation.md` §0 (95 caractères par 
 
 ### W0 Louis : source de GitHub Pages
 
-- Action de Louis, demandée par le moniteur au début de la phase (une notification, une question) : sur GitHub, « Settings », « Pages », « Build and deployment », « Source » : « GitHub Actions ».
-- Constat : après W11, ligne 15 de la liste ci-dessus ; un échec `deploy-pages` « Pages not enabled » veut dire que W0 n'est pas fait.
-- Même fenêtre de questions : le marqueur de la démonstration, `?demo` ou `#demo` (cf. « Décisions de Louis »), dont la réponse s'écrit dans « Décisions de Louis » avant W1.
+- Action du moniteur dans Chrome (onglet à lui, fermé ensuite), sur ordre de Louis : sur GitHub, « Settings », « Pages », « Build and deployment », « Source » : « GitHub Actions ». Prérequis : Louis connecté à GitHub dans ce Chrome ; l'essai du 21/11/2026 l'a trouvé déconnecté, donc W0 reste à faire.
+- Constat : `https://louis-cagnion.github.io/Solo_leveling/network.html` ne sert plus le README Jekyll ; puis, après W11, ligne 15 de la liste ci-dessus ; un échec `deploy-pages` « Pages not enabled » veut dire que W0 n'est pas fait.
+- Marqueur de la démonstration : tranché (`?demo`, cf. « Décisions de Louis »).
 
 ### W1 tester : tests rouges
 
@@ -91,7 +92,7 @@ Conventions : celles de `docs/design/implementation.md` §0 (95 caractères par 
   - S3 : aucune correspondance de `innerHTML|outerHTML|insertAdjacentHTML|document\.write|eval\(|new Function` hors `vendor/`.
   - S4 : aucune correspondance de `type="module"|fetch\(|XMLHttpRequest|^import ` hors `vendor/`.
   - S5 : chaque `src` et `href` local des pages et chaque `url(...)` des CSS est relatif et désigne un fichier qui existe sous `public/`.
-  - S6 : `js/demo.js` présent, chargé par `index.html` avec `defer` avant `js/app.js` ; `data.js` ne contient aucun identifiant `demo-` ; avec `#demo` retenu par Louis, `app.js` ne lit plus `?demo` (aucune correspondance de `params\.(has|get)\('demo'\)`).
+  - S6 : `js/demo.js` présent, chargé par `index.html` avec `defer` avant `js/app.js` ; `data.js` ne contient aucun identifiant `demo-` ; `app.js` lit toujours `?demo` (au moins une correspondance de `params\.(has|get)\('demo'\)`).
   - S7 : au moins une occurrence de `prefers-reduced-motion` dans `public/css/`.
   - S8 : aucun `tabindex="[1-9]`.
   - S9 : aucune ligne de plus de 95 caractères (comptés en caractères, pas en octets) dans les `.html`, `.css`, `.js`, fichiers exemptés à part.
@@ -110,7 +111,7 @@ Conventions : celles de `docs/design/implementation.md` §0 (95 caractères par 
 
 - But : copier `mockups/system/` dans `public/`, démonstration comprise, sans changement de rendu.
 - Fichiers autorisés : `public/**` ; lus seulement : `mockups/system/**`.
-- Contenu : copie de `index.html`, `network.html`, `css/`, `js/`, `fonts/`, `vendor/` (copie binaire, `cp -p`). Si Louis retient `#demo` : `js/app.js` lit le marqueur dans le fragment (`#demo`, `#demo=over`, `#demo=events`, `#demo=red`, `#demo=red-all`) et le routeur garde ce préfixe d'une vue à l'autre (`#demo=over/status`) ; sinon aucune ligne de démonstration ne change. La mémoire de visite réelle (`progression-system:visit`) et celle de la démonstration (`:demo`) restent séparées.
+- Contenu : copie de `index.html`, `network.html`, `css/`, `js/`, `fonts/`, `vendor/` (copie binaire, `cp -p`). Aucune ligne de démonstration ne change (`?demo` gardé). La mémoire de visite réelle (`progression-system:visit`) et celle de la démonstration (`:demo`) restent séparées.
 - Critères : S5, S6, S15 verts ; `diff -rq mockups/system/vendor public/vendor` sans sortie ; servi par le moniteur, les deux pages s'affichent sans erreur de console (contrôle du moniteur à la relecture, sur `public/data.js` copié provisoirement de la maquette, jamais commité avant W3).
 - Niveau pressenti : sonnet/medium.
 
