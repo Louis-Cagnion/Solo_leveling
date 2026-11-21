@@ -41,9 +41,7 @@ function cssPalette() {
   const palette = {};
   for (const token of PALETTE_TOKENS) {
     const value = style.getPropertyValue(token).trim();
-    if (!value) {
-      throw new Error(`Jeton CSS ${token} absent : css/base.css n’est pas chargé.`);
-    }
+    if (!value) throw new Error(`Jeton CSS ${token} absent : css/base.css n’est pas chargé.`);
     palette[token] = value;
   }
   return palette;

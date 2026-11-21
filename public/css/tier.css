@@ -1,0 +1,125 @@
+/*
+ * Vue d'un palier (niveau 3) : en-tête du palier et tableau de ses notions.
+ *
+ * Suite de certs.css dans la cascade : à spécificité égale, la dernière règle gagne.
+ */
+
+/* ───── Niveau 3 : tableau des notions d'un palier ───── */
+
+.tier-head {
+  display: grid;
+  gap: var(--s2);
+  margin-bottom: var(--s6);
+}
+
+.tier-head .tier-count {
+  color: var(--text-dim);
+}
+
+.tier-head .bar {
+  max-width: 480px;
+}
+
+.table-window {
+  container-type: inline-size;
+}
+
+.notion-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 var(--s1);
+  font-size: var(--fs-sm);
+}
+
+.notion-table th,
+.notion-table td {
+  padding: var(--s2) var(--s3);
+  border-bottom: 1px solid var(--flux-faint);
+  text-align: center;
+  vertical-align: middle;
+}
+
+.notion-table thead th {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--flux-bright);
+  white-space: nowrap;
+}
+
+.notion-table th:first-child {
+  text-align: left;
+}
+
+.notion-table tbody th {
+  font-weight: 400;
+  overflow-wrap: anywhere;
+}
+
+.notion-table tbody tr:last-child > * {
+  border-bottom: 0;
+}
+
+.notion-table tr[data-tone] > * {
+  border-top: 1px solid color-mix(in oklab, var(--tone) 75%, transparent);
+  border-bottom-color: transparent;
+  background: color-mix(in oklab, var(--tone) 11%, transparent);
+}
+
+.notion-table tr[data-tone] > :last-child {
+  border-right: 1px solid color-mix(in oklab, var(--tone) 75%, transparent);
+}
+
+.notion-table tr[data-group="unmet"] {
+  color: var(--text-faint);
+}
+
+.notion-table tr[data-group="high"] th {
+  font-weight: 600;
+  color: var(--bright);
+}
+
+.state {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2);
+  white-space: nowrap;
+  cursor: help;
+}
+
+@container (max-width: 640px) {
+  .notion-table thead {
+    display: none;
+  }
+
+  .notion-table tr {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s1) var(--s4);
+    margin-bottom: var(--s1);
+    padding: var(--s3);
+    border-bottom: 1px solid var(--flux-faint);
+  }
+
+  .notion-table tr[data-tone] {
+    border-top: 1px solid color-mix(in oklab, var(--tone) 75%, transparent);
+    border-right: 1px solid color-mix(in oklab, var(--tone) 75%, transparent);
+    border-bottom-color: transparent;
+    background: color-mix(in oklab, var(--tone) 11%, transparent);
+  }
+
+  .notion-table tr[data-tone] > * {
+    background: none;
+  }
+
+  .notion-table tbody th,
+  .notion-table td {
+    padding: 0;
+    border: 0;
+    text-align: left;
+  }
+
+  .notion-table tbody th {
+    flex: 1 1 100%;
+  }
+}

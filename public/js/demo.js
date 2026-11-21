@@ -13,8 +13,7 @@
 
 const DEMO_REASON = 'valeur fictive de la démonstration';
 /*
- * Cartes aux notions toutes au moins rouges, par rang dans la roue : des voisines et des
- * isolées sous « ?demo=red », toutes sous « ?demo=red-all ».
+ * Cartes au moins rouges : voisines et isolées sous ?demo=red, toutes sous ?demo=red-all.
  */
 const DEMO_RED = {red: index => [0, 1, 3].includes(index % 5), 'red-all': () => true};
 /* Rapport du niveau 42 fictif à sa cible sous « ?demo=over ». */
@@ -117,9 +116,7 @@ function demoPastVisit(snapshot) {
     }
     if (index % 2 === 0) card.certs = card.certs.map(cert => ({...cert, state: 'locked'}));
   });
-  for (const title of Object.values(past.titles)) {
-    if (title.ratio !== null) title.ratio /= 2;
-  }
+  for (const title of Object.values(past.titles)) if (title.ratio !== null) title.ratio /= 2;
   const [achieved] = Object.values(past.achievements).filter(item => item.obtained);
   if (achieved) achieved.obtained = false;
   return past;

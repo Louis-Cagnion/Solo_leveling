@@ -243,9 +243,7 @@ function announce(parts, fresh) {
   arm();
   const leveled = fresh.filter(event => event.family === 'levels').length;
   playSoundOnGesture(leveled ? 'unlock' : 'notify', () => open);
-  if (leveled > 1) {
-    setTimeout(() => playSoundOnGesture('unlock', () => open), UNLOCK_ECHO_MS);
-  }
+  if (leveled > 1) setTimeout(() => playSoundOnGesture('unlock', () => open), UNLOCK_ECHO_MS);
   return dismiss;
 }
 

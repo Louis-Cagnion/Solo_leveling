@@ -1,0 +1,183 @@
+/*
+ * Vue d'un domaine (niveau 2) : en-tête, une fenêtre par palier, ouverture depuis la roue.
+ *
+ * L'entrée dans un domaine prolonge la roue : la vue se dévoile en cercle depuis le
+ * secteur cliqué (--ox, --oy posés par section.js, dans le repère de la vue). Les autres
+ * vues déplient leurs fenêtres (window.css). Les couleurs d'état viennent du ton de rareté
+ * (--tone, window.css). Les vues se suivent dans cet ordre : section, certs, tier, status.
+ */
+
+.back {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  margin-bottom: var(--s5);
+}
+
+.section-view,
+.tier-view,
+.status-view {
+  max-width: 1480px;
+  margin: 0 auto;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .section-view.from-sector {
+    animation: from-sector var(--t-travel) var(--ease-out);
+  }
+
+  .section-view.from-sector .unfold {
+    animation: none;
+  }
+
+  @keyframes from-sector {
+    from {
+      clip-path: circle(4% at var(--ox) var(--oy));
+      opacity: 0.4;
+    }
+
+    to {
+      clip-path: circle(150% at var(--ox) var(--oy));
+      opacity: 1;
+    }
+  }
+}
+
+/* ───── En-tête d'un domaine ou d'un palier ───── */
+
+.section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s3) var(--s5);
+  margin-bottom: var(--s4);
+}
+
+.section-head .rank {
+  font-size: var(--fs-xl);
+}
+
+.section-name {
+  font-size: var(--fs-2xl);
+  letter-spacing: 0.01em;
+  color: var(--bright);
+  text-shadow: var(--glow-soft);
+}
+
+.section-rank {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  color: var(--text-dim);
+}
+
+.section-next {
+  flex: 1 1 320px;
+  color: var(--text-dim);
+  text-align: right;
+}
+
+.state-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s2) var(--s5);
+  margin-bottom: var(--s5);
+  font-size: var(--fs-sm);
+  color: var(--text-dim);
+}
+
+.state-legend li {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+}
+
+.state-legend .info {
+  margin-left: calc(var(--s2) * -1);
+}
+
+/* ───── Niveau 2 : une fenêtre par palier ───── */
+
+.tiers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--s6) var(--s5);
+  align-items: start;
+}
+
+.tier-window {
+  padding: var(--s4);
+}
+
+.tier-open {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--s2) var(--s3);
+  align-items: center;
+  margin: 0 calc(var(--s2) * -1) var(--s3);
+  padding: var(--s2);
+  transition: background-color var(--t-fast) var(--ease-out);
+}
+
+.tier-open .bar {
+  grid-column: 1 / -1;
+}
+
+.tier-count {
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+.tier-more {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s1);
+  font-size: var(--fs-sm);
+  color: var(--flux-bright);
+}
+
+@media (hover: hover) {
+  .tier-open:hover {
+    background: rgb(64 150 255 / 0.18);
+  }
+}
+
+.notion {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s3);
+  padding: var(--s1) 0;
+  font-size: var(--fs-sm);
+  line-height: 1.3;
+  color: var(--text-faint);
+}
+
+.notion .glyph {
+  margin-top: 3px;
+}
+
+.notion-title {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.notion[data-group="declared"] {
+  color: var(--text-dim);
+}
+
+.notion[data-group="low"] {
+  color: var(--text);
+}
+
+.notion[data-group="high"] {
+  font-weight: 600;
+  color: var(--bright);
+}
+
+.section-certs {
+  margin-top: var(--s7);
+  font-size: var(--fs-sm);
+  color: var(--text-dim);
+}

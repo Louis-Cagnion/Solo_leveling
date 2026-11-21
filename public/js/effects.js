@@ -16,10 +16,7 @@
  */
 
 /*
- * Puissance par rang : éclairs par salve, pause entre salves (ms), portée et trait (px) ;
- * stable : part du temps où le courant tient entre deux salves. La pause se resserre
- * jusqu'à la durée d'un éclair (FLASH_MS) : au rang S, les salves s'enchaînent presque
- * sans répit, à l'approche des éclairs continus du rang Nation.
+ * Par rang : éclairs par salve, pause (ms), portée et trait (px), part de temps stable.
  */
 const RANK_POWER = {
   D: {bolts: 1, pause: 1500, reach: 13, width: 1.2, stable: 0.15},
@@ -190,9 +187,7 @@ function closedPath(vertices) {
 }
 
 /*
- * Par tracé : éclair des rangs D à S, courant, puis rang Nation : contour, nombre et
- * allure (longueur en px, vitesse en px/s) des éclairs continus, bien plus rapides que
- * les impulsions du courant.
+ * Par tracé : éclair (rangs D à S), courant, puis éclairs continus du rang Nation.
  */
 const CHARGES = {
   badge: {

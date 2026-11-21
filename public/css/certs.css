@@ -1,0 +1,184 @@
+/*
+ * Certifications : cartes d'un domaine, cellules du statut, dialogue d'une certification.
+ *
+ * Suite de section.css dans la cascade : à spécificité égale, la dernière règle gagne.
+ */
+
+/* ───── Certifications : cartes d'un domaine, cellules du statut, premier plan ───── */
+
+.group-title {
+  margin-bottom: var(--s4);
+  font-size: var(--fs-md);
+  letter-spacing: 0.04em;
+  color: var(--flux-bright);
+}
+
+.cert-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: var(--s6) var(--s5);
+  align-items: start;
+}
+
+.cert-window,
+.cert-dialog-window {
+  display: grid;
+  gap: var(--s3);
+  padding: var(--s4);
+  color: var(--text);
+}
+
+.cert-window > .window-head,
+.cert-dialog-window > .window-head {
+  margin-bottom: 0;
+}
+
+.cert-window .window-title,
+.cert-dialog-window .window-title {
+  letter-spacing: 0.06em;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.cert-state {
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  font-weight: 600;
+  color: var(--bright);
+}
+
+[data-tone] > .cert-state {
+  color: color-mix(in oklab, var(--tone) 55%, white);
+}
+
+.cert-conditions {
+  color: var(--text-dim);
+}
+
+.cert-gauge {
+  display: grid;
+  gap: var(--s2);
+  color: var(--text-dim);
+}
+
+.cert-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s2);
+}
+
+.cert-note {
+  margin-left: var(--s2);
+  font-family: var(--font-body);
+  font-size: var(--fs-sm);
+  font-weight: 400;
+  color: var(--text-dim);
+}
+
+.cert-tiers {
+  display: grid;
+  gap: var(--s2);
+}
+
+.cert-tier summary {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: var(--s1) var(--s2);
+  align-items: center;
+  padding: var(--s1) 0;
+  list-style: none;
+  cursor: pointer;
+}
+
+.cert-tier summary::-webkit-details-marker {
+  display: none;
+}
+
+.cert-tier summary .bar {
+  grid-column: 1 / -1;
+}
+
+.cert-tier summary .icon {
+  color: var(--flux-bright);
+  transition: rotate var(--t-fast) var(--ease-out);
+}
+
+.cert-tier[open] summary .icon {
+  rotate: 90deg;
+}
+
+.cert-tier .notions {
+  max-height: min(220px, 30dvh);
+  margin-top: var(--s2);
+  padding-left: var(--s4);
+  overflow-y: auto;
+  scrollbar-color: rgb(120 196 255 / 0.4) transparent;
+  scrollbar-width: thin;
+}
+
+.cert-dialog {
+  width: min(560px, calc(100vw - 2 * var(--s5)));
+  padding: var(--s3);
+  border: 0;
+  color: var(--text);
+  background: transparent;
+  overflow: visible;
+}
+
+.cert-dialog::backdrop {
+  background: rgb(3 8 20 / 0.55);
+  backdrop-filter: blur(5px);
+}
+
+.cert-dialog-window .group-title {
+  margin: var(--s2) 0 0;
+}
+
+.cert-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  padding-top: var(--s3);
+  border-top: 1px solid var(--flux-faint);
+  font-family: var(--font-display);
+  color: var(--text-dim);
+}
+
+.cert-nav > :last-child {
+  margin-left: auto;
+}
+
+.cert-arrow {
+  padding: var(--s2);
+  min-width: 40px;
+  justify-content: center;
+}
+
+.cert-arrow.is-flipped .icon {
+  rotate: 180deg;
+}
+
+.cert-arrow[aria-disabled="true"] {
+  border-style: dashed;
+  color: var(--text-faint);
+  opacity: 0.5;
+  cursor: default;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .cert-dialog[open] {
+    animation: dialog-in var(--t-panel) var(--ease-out);
+  }
+
+  .cert-dialog-window {
+    animation: none;
+  }
+
+  @keyframes dialog-in {
+    from {
+      opacity: 0;
+      scale: 0.94;
+    }
+  }
+}
