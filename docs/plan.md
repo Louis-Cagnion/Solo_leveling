@@ -74,18 +74,18 @@ Plan du projet décrit dans `docs/specification.md`, en suivant la chaîne en 8 
 Statuts : [ ] à faire, [~] en cours, [x] faite, [v] validée, [!] bloquée
 Reprise (moniteur Sonnet/high au moins, jamais Fable ; consigne de Louis du 15/11/2026) : activer `/best-practice`, lire `todo.md` puis cet arbre, et reprendre à « Prochaine feuille prête ». Feuilles à garder en Opus/high, revue comprise : T4 (OAuth), T7 (calibration), T11 (page), W8 (revue de la vitrine).
 Ordre (Louis, 21/11/2026) : W (vitrine), puis P5 à partir de T2.a2, puis PM (pré-mortem).
-Prochaine feuille prête : W2 (W7 l'est aussi ; W3 et W6 attendent W2 ; un agent à la fois)
+Prochaine feuille prête : W4 (W5 attend W4 ; W8 attend W4 et W5)
 Moniteur : opus 5.5/high jusqu'à P3 ; depuis P4.7 : fable 5.2, effort par défaut de la session (aucun réglage pour ce modèle dans `settings.json`), session choisie par Louis ; plan de la vitrine : opus 5.5/high ; à partir de W1 : sonnet 5.5/high recommandé ; agents en sonnet ou opus seulement
 
 - W [nœud] : vitrine sur GitHub Pages (`docs/design/vitrine.md`, fiches W0 à W13) ; point de contrôle : W12 (`checker`), 15 lignes de « Restrictions et secours » jugées ; un agent à la fois
   - [x] W0 moniteur dans Chrome, sur ordre de Louis : source de GitHub Pages sur « GitHub Actions » ; fait le 21/11/2026 après la connexion de Louis, relu après rechargement de la page des réglages
   - [x] W1 tester : tests rouges du site, du déploiement et de l'instantané ; fait par : sonnet/medium, 27 tests, 29 échecs, 0 erreur, T1 verte (56)
   - [x] W2 builder : `public/` copié de la maquette, démonstration gardée (`?demo` tel quel) ; fait par : sonnet/low ; copie identique, pages relues dans Chrome (console vide, requêtes en 200) ; `public/data.js` copie provisoire, non commitée avant W3 (commit `ef34ac2`)
-  - [ ] W3 builder : `tools/snapshot.py` et `public/data.js` ; dépend de : W2 ; niveau pressenti : sonnet/medium
+  - [x] W3 builder : `tools/snapshot.py` et `public/data.js` ; fait par : sonnet/medium, 8 tests verts, confidentialité de `data.js` contrôlée par le moniteur, rendu relu dans Chrome (19 cartes, console vide) ; commit `2b5098a`
   - [ ] W4 builder : `public/` aux conventions de la PARTIE B, rendu inchangé ; dépend de : W2 ; niveau pressenti : sonnet/high
   - [ ] W5 builder : politique de sécurité, `noindex`, icône, `404.html`, replis ; dépend de : W4 ; niveau pressenti : sonnet/high
-  - [ ] W6 builder : `tools/sound_partials.py` versionné, sortie dans `public/js/` ; dépend de : W2 ; niveau pressenti : sonnet/low
-  - [ ] W7 builder : `.github/workflows/pages.yml`, actions épinglées par SHA ; dépend de : W1 ; niveau pressenti : sonnet/medium
+  - [x] W6 builder : `tools/sound_partials.py` versionné, sortie dans `public/js/` ; fait par : sonnet/low ; `sound-data.js` identique après régénération (22 s sous plafond) ; commit `6057ed9`
+  - [x] W7 builder : `.github/workflows/pages.yml`, actions épinglées par SHA ; fait par : sonnet/medium, 5 tests verts, SHA rejoués par le moniteur ; fichier NON commité jusqu'à W11 (son push déclenche un déploiement)
   - [ ] W8 analyst : revue indépendante, VALIDÉ ou À CORRIGER ; dépend de : W2 à W7 ; niveau pressenti : opus/high
   - [ ] W9 fixer : une feuille par problème CRITIQUE ou IMPORTANT de W8 ; dépend de : W8
   - [ ] W10 moniteur : rendu comparé à la maquette dans Chrome, validé par Louis ; dépend de : W9
@@ -148,6 +148,7 @@ Moniteur : opus 5.5/high jusqu'à P3 ; depuis P4.7 : fable 5.2, effort par défa
   - `tools/snapshot.py` sort `window.SYSTEME = ` suivi du JSON, avec `meta.generatedAt`, `counts.cards`, `counts.relationsRejected` et `anomalies[{file,line,reason,rejected}]` ; noms de fichier d'anomalie relatifs ; les tests le lancent par `sys.executable -I`.
   - `pages.yml` : `branches: [main]` ou `- main`, `paths` exactement `- 'public/**'` et `- '.github/workflows/pages.yml'`, bloc `permissions:` à la racine avec exactement 3 clés, chaque `uses: x@<40 hex> # version` sur une seule ligne (W1 à W5).
   - `404.html` : lien `./` ou `index.html` exact, pas `./index.html` (S13).
+  - `.github/workflows/pages.yml` (W7) : tags légers (pas de ligne `^{}`), checkout v7.0.1, configure-pages v6.0.0, upload-pages-artifact v5.0.0, deploy-pages v5.0.1 (relevés le 21/11/2026) ; tant qu'il n'est pas commité, aucun push ne déploie ; le premier push qui le porte déploie `public/` tel quel (W11).
 - Seules les métriques M1, M2 et M4 ont assez de mesures. Les autres seraient aujourd'hui affichées comme « insuffisant » (`docs/research/professor-data.md`).
 - Projets, XP et part de l'IA par notion n'existent pas dans `/professor` : ils conditionnent l'XP personnelle, les rangs et les titres.
 - Revue de T1 (11/11/2026), pour les sous-tâches suivantes :
