@@ -69,31 +69,26 @@ Plan du projet décrit dans `docs/specification.md`, en suivant la chaîne en 8 
 - **Point 9, maquette** (Louis, 11/11/2026) : un agent Opus en effort `xhigh` la construit avec le skill `impeccable`, puis le moniteur la montre dans Chrome.
 - **Données réelles** (Louis, 11/11/2026) : la lecture seule du suivi de `/professor` est autorisée pour les maquettes et les tests sur données réelles de P5 ; l'API 42 attend son consentement.
 
-## Arbre (phases closes 5/7)
+## Arbre (phases closes 6/7)
 
 Statuts : [ ] à faire, [~] en cours, [x] faite, [v] validée, [!] bloquée
 Reprise (moniteur Sonnet/high au moins, jamais Fable ; consigne de Louis du 15/11/2026) : activer `/best-practice`, lire `todo.md` puis cet arbre, et reprendre à « Prochaine feuille prête ». Feuilles à garder en Opus/high, revue comprise : T4 (OAuth), T7 (calibration), T11 (page), W8 (revue de la vitrine).
-Ordre (Louis, 21/11/2026) : W (vitrine), puis P5 à partir de T2.a2, puis PM (pré-mortem).
-Prochaine feuille prête : W12 (point de contrôle, checker sonnet/high), puis W13
+Ordre (Louis, 21/11/2026) : W (vitrine, close), puis P5 à partir de T2.a2, puis PM (pré-mortem).
+Prochaine feuille prête : T2.a2 (tester sonnet/medium)
 Moniteur : opus 5.5/high jusqu'à P3 ; depuis P4.7 : fable 5.2, effort par défaut de la session (aucun réglage pour ce modèle dans `settings.json`), session choisie par Louis ; plan de la vitrine : opus 5.5/high ; à partir de W1 : sonnet 5.5/high recommandé ; agents en sonnet ou opus seulement
 
-- W [nœud] : vitrine sur GitHub Pages (`docs/design/vitrine.md`, fiches W0 à W13) ; point de contrôle : W12 (`checker`), 15 lignes de « Restrictions et secours » jugées ; un agent à la fois
-  - [x] W0 moniteur dans Chrome, sur ordre de Louis : source de GitHub Pages sur « GitHub Actions » ; fait le 21/11/2026 après la connexion de Louis, relu après rechargement de la page des réglages
-  - [x] W1 tester : tests rouges du site, du déploiement et de l'instantané ; fait par : sonnet/medium, 27 tests, 29 échecs, 0 erreur, T1 verte (56)
-  - [x] W2 builder : `public/` copié de la maquette, démonstration gardée (`?demo` tel quel) ; fait par : sonnet/low ; copie identique, pages relues dans Chrome (console vide, requêtes en 200) ; `public/data.js` copie provisoire, non commitée avant W3 (commit `2bdb4b0`)
-  - [x] W3 builder : `tools/snapshot.py` et `public/data.js` ; fait par : sonnet/medium, 8 tests verts, confidentialité de `data.js` contrôlée par le moniteur, rendu relu dans Chrome (19 cartes, console vide) ; commit `f5ab1b8`
-  - [x] W4 builder : `public/` aux conventions de la PARTIE B, rendu inchangé ; fait par : sonnet/high, `views.css` scindé en 4 fichiers (CSS égal à l'ancien, règles CSSOM égales à la maquette dans Chrome), 6 corrections mécaniques ; écarts non corrigés au pré-mortem ; commit `a1daf7f`
-  - [x] W5 builder : politique de sécurité, `noindex`, icône, `404.html`, replis ; fait par : sonnet/high, 27 tests verts, 0 violation de la politique (Chrome sans interface et Chrome de l'extension, `file://` compris), replis joués ; commit `6a2b563`
-  - [x] W6 builder : `tools/sound_partials.py` versionné, sortie dans `public/js/` ; fait par : sonnet/low ; `sound-data.js` identique après régénération (22 s sous plafond) ; commit `df3225a`
-  - [x] W7 builder : `.github/workflows/pages.yml`, actions épinglées par SHA ; fait par : sonnet/medium, 5 tests verts, SHA rejoués par le moniteur ; fichier NON commité jusqu'à W11 (son push déclenche un déploiement)
-  - [x] W8 analyst : revue indépendante, VALIDÉ ou À CORRIGER ; fait par : opus/high, À CORRIGER : 0 critique, 1 important (I1 : `test_workflow.py` ne voyait pas une permission en trop ni une injection), 13 mineurs au pré-mortem (`todo.md`), lignes 1, 2, 7, 8 et 12 tenues par preuve, ligne 3 tenue par lecture et essai local
-  - [x] W9 : une feuille par problème CRITIQUE ou IMPORTANT de W8 ; I1 faite par tester sonnet/medium (renforcer un test, pas de code testé à corriger) : `test_workflow.py` éprouvé sur 3 fixtures fautives et 1 conforme, 28 tests verts ; commit `aa6ca82`
-  - [x] W9.2 demande de Louis du 21/11/2026 : masquer son identifiant 42 dans l'instantané ; a tester sonnet/low (4 tests rouges), b builder sonnet/low puis scission du code dans `tools/snapshot_mask.py` pour tenir 750 lignes ; `--mask` et fichier local `tools/snapshot-mask.txt` ignoré par Git ; l'identifiant est aussi retiré de tout l'historique (réécriture et push forcé du 21/11/2026, toutes les empreintes depuis le 12/11 ont changé) ; commit `3a575af`
-  - [x] W9.3 demande de Louis du 21/11/2026, précisée par lui : l'anneau rouge autour du badge qui le relie aux voisins du même cas s'affiche aussi sous `?demo` seul ; builder sonnet/low sur `public/js/demo.js` ; 21 éléments couronnés sous `?demo` comme sous `?demo=red`, aucun ailleurs ; commit `4e0f591`
-  - [v] W10 moniteur : rendu comparé à la maquette dans Chrome, validé par Louis le 21/11/2026 (« c'est bien », retouche faite en W9.3, puis « Oui, mets en ligne ») ; lignes 3, 5, 9, 10 et 14 jouées (règles CSSOM égales à la maquette sur les deux pages, aucune barre horizontale à 1280, 1536 et 1920 px, clavier, liens directs, Web Audio coupé)
-  - [x] W11 moniteur : workflow commité et poussé (`262e6a7`), site en ligne vérifié le 21/11/2026 : déploiement `completed success`, pages, `data.js`, `favicon.svg` en 200, `/inconnue` en 404 avec la page « Adresse introuvable », `index.html` (33 requêtes) et `network.html` (22) tous en 200 sur `louis-cagnion.github.io`, console vide, scène 3D dessinée, identifiant 42 absent de `data.js` en ligne
-  - [ ] W12 checker : point de contrôle ; dépend de : W11 ; niveau pressenti : sonnet/high
-  - [ ] W13 moniteur : README, contexte des agents, arbre condensé, reprise sur T2.a2 ; dépend de : W12
+- W [nœud] : vitrine sur GitHub Pages, en ligne depuis le 21/11/2026 (`docs/design/vitrine.md`) ; point de contrôle W12 validé : 15 lignes de « Restrictions et secours » tenues sur 15 (9 rejouées, 6 relevées du moniteur), suite complète 88 verts et 61 erreurs, toutes dans les tests rouges de T2.a attendus
+  - [v] W0 moniteur : source de Pages sur « GitHub Actions », réglée dans Chrome après la connexion de Louis
+  - [v] W1 tester : 27 tests rouges du site, du workflow et de l'instantané (`f1f1e35`)
+  - [v] W2 builder (sonnet/low) : `public/` copié de la maquette, `?demo` gardé (`2bdb4b0`)
+  - [v] W3 builder (sonnet/medium) : `tools/snapshot.py` et `public/data.js` (`f5ab1b8`)
+  - [v] W4 builder (sonnet/high) : `views.css` scindé en quatre fichiers, rendu identique (`a1daf7f`)
+  - [v] W5 builder (sonnet/high) : politique de sécurité, `noindex`, icône, `404.html`, replis (`6a2b563`)
+  - [v] W6 builder (sonnet/low) : `tools/sound_partials.py` versionné (`df3225a`)
+  - [v] W7 builder (sonnet/medium) : `.github/workflows/pages.yml`, actions épinglées par SHA (`262e6a7`)
+  - [v] W8 analyst (opus/high) : revue À CORRIGER, 0 critique, 1 important, 13 mineurs au pré-mortem (`todo.md`)
+  - [v] W9 tester (sonnet/medium) : test du workflow renforcé (`aa6ca82`) ; W9.2 masquage de l'identifiant 42, `--mask` et `tools/snapshot_mask.py` (`3a575af`), identifiant retiré de tout l'historique public (réécriture et push forcé du 21/11/2026, empreintes changées) ; W9.3 anneau rouge sous `?demo` (`4e0f591`)
+  - [v] W10 moniteur : rendu validé par Louis le 21/11/2026 ; W11 moniteur : mise en ligne et constats sur l'adresse publique ; W12 checker (sonnet/medium) : point de contrôle ; W13 moniteur : README, contexte des agents, arbre condensé, reprise sur T2.a2
 
 - P2 [nœud] : conception, sans code ; point de contrôle : le document de conception couvre les six critères du brief de P2.1
   - [v] P2.1 analyst : modèle de données, règles de calcul, architecture, découpage ; fait par : opus/high, deux affirmations relues par le moniteur
@@ -144,14 +139,7 @@ Moniteur : opus 5.5/high jusqu'à P3 ; depuis P4.7 : fable 5.2, effort par défa
 
 ## Faits pour la suite
 
-- Vitrine, faits de W1 pour W2 à W7 :
-  - Les pages mettent chaque `<script src defer>` après `</head>` et avant `<body` (S12) ; la maquette les laisse peut-être dans `<head>`.
-  - Licences attendues par S15 : `fonts/LICENSE-barlow.txt`, `fonts/LICENSE-chakra-petch.txt`, `vendor/LICENSE`.
-  - `tools/snapshot.py` sort `window.SYSTEME = ` suivi du JSON, avec `meta.generatedAt`, `counts.cards`, `counts.relationsRejected` et `anomalies[{file,line,reason,rejected}]` ; noms de fichier d'anomalie relatifs ; les tests le lancent par `sys.executable -I`.
-  - `pages.yml` : `branches: [main]` ou `- main`, `paths` exactement `- 'public/**'` et `- '.github/workflows/pages.yml'`, bloc `permissions:` à la racine avec exactement 3 clés, chaque `uses: x@<40 hex> # version` sur une seule ligne (W1 à W5).
-  - `public/css/` : `views.css` n'existe plus ; `index.html` lie base, window, wheel, section, certs, tier, status, effects, inbox, wheel-fx dans cet ordre (la cascade en dépend).
-  - `404.html` : lien `./` ou `index.html` exact, pas `./index.html` (S13).
-  - `.github/workflows/pages.yml` (W7) : tags légers (pas de ligne `^{}`), checkout v7.0.1, configure-pages v6.0.0, upload-pages-artifact v5.0.0, deploy-pages v5.0.1 (relevés le 21/11/2026) ; tant qu'il n'est pas commité, aucun push ne déploie ; le premier push qui le porte déploie `public/` tel quel (W11).
+- Vitrine, pour T15 (V1) : `pages.yml` déploie `public/` ; son test exige exactement deux chemins sous `paths` et les fixtures `tests/fixtures/workflow/` en sont des copies figées à régénérer si le fichier change ; `tools/snapshot-mask.txt` (local, ignoré par Git) doit exister sur toute machine qui génère `public/data.js` ; `python3 -m http.server` ne sert pas `404.html` ; sous `python3 -I`, un module frère de `tools/snapshot.py` demande un `sys.path.insert`.
 - Seules les métriques M1, M2 et M4 ont assez de mesures. Les autres seraient aujourd'hui affichées comme « insuffisant » (`docs/research/professor-data.md`).
 - Projets, XP et part de l'IA par notion n'existent pas dans `/professor` : ils conditionnent l'XP personnelle, les rangs et les titres.
 - Revue de T1 (11/11/2026), pour les sous-tâches suivantes :
