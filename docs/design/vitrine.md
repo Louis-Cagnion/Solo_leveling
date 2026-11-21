@@ -22,6 +22,9 @@ Le 21/11/2026, à ne pas redemander :
 - Démonstration gardée (`js/demo.js` porté, A28 amendé par A31) : données fictives activées par l'adresse. Louis garde `?demo` tel quel (réponse du 21/11/2026 à la question de début de phase) : `?demo`, `?demo=over#/status`, `?demo=events`, `?demo=red`, `?demo=red-all`, aucun code de routage à changer ; le `#` reste aux vues (`#/status`).
 - Source de GitHub Pages : Louis charge le moniteur de la basculer sur « GitHub Actions » dans Chrome (réponse du 21/11/2026). Le Chrome de l'extension n'est pas connecté à GitHub (essai du 21/11/2026 : la page des réglages donne 404 et propose « Sign in ») : Louis s'y connecte lui-même, jamais de mot de passe saisi par le moniteur.
 
+- Identifiant 42 de Louis (21/11/2026, à ne pas redemander) : masqué dans les instantanés (fichier local `tools/snapshot-mask.txt`, ignoré par Git) et retiré de tout l'historique du dépôt public (réécriture et push forcé du 21/11/2026 : toutes les empreintes depuis le 12/11 ont changé, les anciennes restent lisibles par adresse chez GitHub jusqu'à son nettoyage ; 0 fork, 0 étoile au moment du push).
+- Rendu validé par Louis le 21/11/2026 (« c'est bien »), avec une retouche à faire avant la mise en ligne : un effet des badges à étendre à certaines catégories du cercle (W9.3, à préciser).
+
 Décidé par le moniteur, modifiable par Louis à la validation : le site n'est pas indexé par les moteurs de recherche (`<meta name="robots" content="noindex">`), puisqu'il ne sert qu'à Louis.
 
 ## Architecture
