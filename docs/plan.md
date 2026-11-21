@@ -74,7 +74,7 @@ Plan du projet décrit dans `docs/specification.md`, en suivant la chaîne en 8 
 Statuts : [ ] à faire, [~] en cours, [x] faite, [v] validée, [!] bloquée
 Reprise (moniteur Sonnet/high au moins, jamais Fable ; consigne de Louis du 15/11/2026) : activer `/best-practice`, lire `todo.md` puis cet arbre, et reprendre à « Prochaine feuille prête ». Feuilles à garder en Opus/high, revue comprise : T4 (OAuth), T7 (calibration), T11 (page), W8 (revue de la vitrine).
 Ordre (Louis, 21/11/2026) : W (vitrine), puis P5 à partir de T2.a2, puis PM (pré-mortem).
-Prochaine feuille prête : W10 (après W9)
+Prochaine feuille prête : W12 (point de contrôle, checker sonnet/high), puis W13
 Moniteur : opus 5.5/high jusqu'à P3 ; depuis P4.7 : fable 5.2, effort par défaut de la session (aucun réglage pour ce modèle dans `settings.json`), session choisie par Louis ; plan de la vitrine : opus 5.5/high ; à partir de W1 : sonnet 5.5/high recommandé ; agents en sonnet ou opus seulement
 
 - W [nœud] : vitrine sur GitHub Pages (`docs/design/vitrine.md`, fiches W0 à W13) ; point de contrôle : W12 (`checker`), 15 lignes de « Restrictions et secours » jugées ; un agent à la fois
@@ -90,8 +90,8 @@ Moniteur : opus 5.5/high jusqu'à P3 ; depuis P4.7 : fable 5.2, effort par défa
   - [x] W9 : une feuille par problème CRITIQUE ou IMPORTANT de W8 ; I1 faite par tester sonnet/medium (renforcer un test, pas de code testé à corriger) : `test_workflow.py` éprouvé sur 3 fixtures fautives et 1 conforme, 28 tests verts ; commit `aa6ca82`
   - [x] W9.2 demande de Louis du 21/11/2026 : masquer son identifiant 42 dans l'instantané ; a tester sonnet/low (4 tests rouges), b builder sonnet/low puis scission du code dans `tools/snapshot_mask.py` pour tenir 750 lignes ; `--mask` et fichier local `tools/snapshot-mask.txt` ignoré par Git ; l'identifiant est aussi retiré de tout l'historique (réécriture et push forcé du 21/11/2026, toutes les empreintes depuis le 12/11 ont changé) ; commit `3a575af`
   - [x] W9.3 demande de Louis du 21/11/2026, précisée par lui : l'anneau rouge autour du badge qui le relie aux voisins du même cas s'affiche aussi sous `?demo` seul ; builder sonnet/low sur `public/js/demo.js` ; 21 éléments couronnés sous `?demo` comme sous `?demo=red`, aucun ailleurs ; commit `4e0f591`
-  - [~] W10 moniteur : rendu comparé à la maquette dans Chrome, validé par Louis ; dépend de : W9 ; lignes 3, 5, 9, 10 et 14 jouées le 21/11/2026 (règles CSSOM égales à la maquette, aucune barre horizontale à 1280, 1536 et 1920 px, clavier, liens directs, Web Audio coupé) ; Louis : « c'est bien », avec une retouche (W9.3) ; reste à lui remontrer le rendu après W9.2 et W9.3
-  - [ ] W11 moniteur : workflow commité et poussé, site en ligne vérifié ; dépend de : W0, W10
+  - [v] W10 moniteur : rendu comparé à la maquette dans Chrome, validé par Louis le 21/11/2026 (« c'est bien », retouche faite en W9.3, puis « Oui, mets en ligne ») ; lignes 3, 5, 9, 10 et 14 jouées (règles CSSOM égales à la maquette sur les deux pages, aucune barre horizontale à 1280, 1536 et 1920 px, clavier, liens directs, Web Audio coupé)
+  - [x] W11 moniteur : workflow commité et poussé (`262e6a7`), site en ligne vérifié le 21/11/2026 : déploiement `completed success`, pages, `data.js`, `favicon.svg` en 200, `/inconnue` en 404 avec la page « Adresse introuvable », `index.html` (33 requêtes) et `network.html` (22) tous en 200 sur `louis-cagnion.github.io`, console vide, scène 3D dessinée, identifiant 42 absent de `data.js` en ligne
   - [ ] W12 checker : point de contrôle ; dépend de : W11 ; niveau pressenti : sonnet/high
   - [ ] W13 moniteur : README, contexte des agents, arbre condensé, reprise sur T2.a2 ; dépend de : W12
 
