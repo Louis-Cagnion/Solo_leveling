@@ -1,0 +1,5 @@
+date,source,relation,cible,statut,limite,preuve
+02/01/2026,alpha-base,prerequis,alpha-suite,demontree,,S1/alpha-base/M1
+03/01/2026,alpha-suite,prerequis,alpha-avancee,theorique,,
+04/01/2026,alpha-base,transfert,beta-base,reconnue,,"S2 (fictif, entre guillemets)"
+05/01/2026,beta-base,prerequis,beta-outil,demontree,,S3 (fictif, virgule hors guillemets)
