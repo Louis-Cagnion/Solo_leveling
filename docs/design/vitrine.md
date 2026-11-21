@@ -77,10 +77,10 @@ Types retenus : interface web, script en ligne de commande. Chaque ligne : état
 
 Conventions : celles de `docs/design/implementation.md` §0 (95 caractères par ligne, 750 lignes par fichier, aucun tiret cadratin, une erreur par cause). Exemptés : `public/vendor/`, les licences des polices, les fichiers générés `public/data.js` et `public/js/sound-data.js`. Tout agent d'interface lit `~/.claude/references/best-practice/frontend.md` et `interface.md`, et le brief nomme les skills `frontend-design` et `impeccable`. Commandes lourdes (Chrome sans interface) : `systemd-run --user --scope -q -p MemoryMax=2G -p MemorySwapMax=0 -p CPUQuota=200% nice -n 19 timeout 90 …`, appelé « plafond » ci-dessous.
 
-### W0 Louis : source de GitHub Pages
+### W0 moniteur : source de GitHub Pages
 
-- Action du moniteur dans Chrome (onglet à lui, fermé ensuite), sur ordre de Louis : sur GitHub, « Settings », « Pages », « Build and deployment », « Source » : « GitHub Actions ». Prérequis : Louis connecté à GitHub dans ce Chrome ; l'essai du 21/11/2026 l'a trouvé déconnecté, donc W0 reste à faire.
-- Constat : `https://louis-cagnion.github.io/Solo_leveling/network.html` ne sert plus le README Jekyll ; puis, après W11, ligne 15 de la liste ci-dessus ; un échec `deploy-pages` « Pages not enabled » veut dire que W0 n'est pas fait.
+- Action du moniteur dans Chrome (onglet à lui, fermé ensuite), sur ordre de Louis : sur GitHub, « Settings », « Pages », « Build and deployment », « Source » : « GitHub Actions ». Fait le 21/11/2026, après la connexion de Louis à GitHub dans ce Chrome ; réglage relu après rechargement de la page.
+- Constat : `https://louis-cagnion.github.io/Solo_leveling/network.html` ne sert plus le README Jekyll ; puis, après W11, ligne 15 de la liste ci-dessus ; un échec `deploy-pages` « Pages not enabled » veut dire que le réglage de W0 a été perdu.
 - Marqueur de la démonstration : tranché (`?demo`, cf. « Décisions de Louis »).
 
 ### W1 tester : tests rouges
