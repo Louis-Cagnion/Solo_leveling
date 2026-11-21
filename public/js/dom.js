@@ -228,8 +228,8 @@ function backLink(href, label) {
 }
 
 /**
- * Fenêtre de repli quand window.SYSTEME est absent ou illisible : la cause, la commande
- * qui régénère les données et un bouton « Réessayer » qui recharge la page.
+ * Fenêtre de repli quand window.SYSTEME est absent ou illisible : la cause (le fichier de
+ * données du site) et un bouton « Réessayer » qui recharge la page.
  *
  * @returns {HTMLElement}
  */
@@ -243,9 +243,8 @@ function dataFailureWindow() {
   return systemWindow(
     {title: 'Chargement impossible', className: 'fatal'},
     el('p', {
-      text: 'Les données sont absentes ou illisibles : le fichier '
-        + 'mockups/constellation/data.js n’a pas pu être lu. Générez-le depuis la racine '
-        + 'du dépôt avec « python3 -I tools/mockup_data.py », puis réessayez.',
+      text: 'Le fichier de données du site est absent ou illisible, la page ne peut '
+        + 'pas s’afficher. « Réessayer » recharge la page.',
     }),
     retry,
   );

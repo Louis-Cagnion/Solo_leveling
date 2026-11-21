@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta
+    http-equiv="Content-Security-Policy"
+    content="default-src 'none';
+      script-src 'self';
+      style-src 'self';
+      img-src 'self' data:;
+      font-src 'self';
+      connect-src 'self';
+      base-uri 'none';
+      form-action 'none';
+      object-src 'none'"
+  >
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#030814">
+  <meta name="robots" content="noindex">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <title>Adresse introuvable, Système de progression</title>
+  <link
+    rel="preload"
+    href="fonts/chakra-petch-latin-600-normal.woff2"
+    as="font"
+    type="font/woff2"
+    crossorigin
+  >
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/window.css">
+</head>
+<body>
+  <a class="skip-link" href="#view">Aller au contenu</a>
+  <header class="topbar">
+    <h1 class="brand"><a href="./">Système de progression</a></h1>
+  </header>
+  <main id="view" tabindex="-1">
+    <section class="window unfold fatal">
+      <header class="window-head">
+        <h2 class="window-title">Adresse introuvable</h2>
+      </header>
+      <p>
+        Cette adresse n’existe pas sur le site. Elle a peut-être été mal saisie : l’accueil
+        donne accès à toutes les pages.
+      </p>
+      <a class="button" href="./">Retour à l’accueil</a>
+    </section>
+  </main>
+</body>
+</html>
