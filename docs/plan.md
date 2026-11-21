@@ -74,12 +74,12 @@ Plan du projet décrit dans `docs/specification.md`, en suivant la chaîne en 8 
 Statuts : [ ] à faire, [~] en cours, [x] faite, [v] validée, [!] bloquée
 Reprise (moniteur Sonnet/high au moins, jamais Fable ; consigne de Louis du 15/11/2026) : activer `/best-practice`, lire `todo.md` puis cet arbre, et reprendre à « Prochaine feuille prête ». Feuilles à garder en Opus/high, revue comprise : T4 (OAuth), T7 (calibration), T11 (page), W8 (revue de la vitrine).
 Ordre (Louis, 21/11/2026) : W (vitrine), puis P5 à partir de T2.a2, puis PM (pré-mortem).
-Prochaine feuille prête : W1
+Prochaine feuille prête : W2 (W7 l'est aussi ; W3 et W6 attendent W2 ; un agent à la fois)
 Moniteur : opus 5.5/high jusqu'à P3 ; depuis P4.7 : fable 5.2, effort par défaut de la session (aucun réglage pour ce modèle dans `settings.json`), session choisie par Louis ; plan de la vitrine : opus 5.5/high ; à partir de W1 : sonnet 5.5/high recommandé ; agents en sonnet ou opus seulement
 
 - W [nœud] : vitrine sur GitHub Pages (`docs/design/vitrine.md`, fiches W0 à W13) ; point de contrôle : W12 (`checker`), 15 lignes de « Restrictions et secours » jugées ; un agent à la fois
   - [x] W0 moniteur dans Chrome, sur ordre de Louis : source de GitHub Pages sur « GitHub Actions » ; fait le 21/11/2026 après la connexion de Louis, relu après rechargement de la page des réglages
-  - [ ] W1 tester : tests rouges du site, du déploiement et de l'instantané ; dépend de : - ; niveau pressenti : sonnet/medium
+  - [x] W1 tester : tests rouges du site, du déploiement et de l'instantané ; fait par : sonnet/medium, 27 tests, 29 échecs, 0 erreur, T1 verte (56)
   - [ ] W2 builder : `public/` copié de la maquette, démonstration gardée (`?demo` tel quel) ; dépend de : W1 ; niveau pressenti : sonnet/medium
   - [ ] W3 builder : `tools/snapshot.py` et `public/data.js` ; dépend de : W2 ; niveau pressenti : sonnet/medium
   - [ ] W4 builder : `public/` aux conventions de la PARTIE B, rendu inchangé ; dépend de : W2 ; niveau pressenti : sonnet/high
@@ -142,6 +142,12 @@ Moniteur : opus 5.5/high jusqu'à P3 ; depuis P4.7 : fable 5.2, effort par défa
 
 ## Faits pour la suite
 
+- Vitrine, faits de W1 pour W2 à W7 :
+  - Les pages mettent chaque `<script src defer>` après `</head>` et avant `<body` (S12) ; la maquette les laisse peut-être dans `<head>`.
+  - Licences attendues par S15 : `fonts/LICENSE-barlow.txt`, `fonts/LICENSE-chakra-petch.txt`, `vendor/LICENSE`.
+  - `tools/snapshot.py` sort `window.SYSTEME = ` suivi du JSON, avec `meta.generatedAt`, `counts.cards`, `counts.relationsRejected` et `anomalies[{file,line,reason,rejected}]` ; noms de fichier d'anomalie relatifs ; les tests le lancent par `sys.executable -I`.
+  - `pages.yml` : `branches: [main]` ou `- main`, `paths` exactement `- 'public/**'` et `- '.github/workflows/pages.yml'`, bloc `permissions:` à la racine avec exactement 3 clés, chaque `uses: x@<40 hex> # version` sur une seule ligne (W1 à W5).
+  - `404.html` : lien `./` ou `index.html` exact, pas `./index.html` (S13).
 - Seules les métriques M1, M2 et M4 ont assez de mesures. Les autres seraient aujourd'hui affichées comme « insuffisant » (`docs/research/professor-data.md`).
 - Projets, XP et part de l'IA par notion n'existent pas dans `/professor` : ils conditionnent l'XP personnelle, les rangs et les titres.
 - Revue de T1 (11/11/2026), pour les sous-tâches suivantes :

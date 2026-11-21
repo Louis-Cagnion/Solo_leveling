@@ -87,7 +87,7 @@ Conventions : celles de `docs/design/implementation.md` §0 (95 caractères par 
 
 - Fichiers autorisés : `tests/public/__init__.py`, `tests/public/test_site_static.py`, `tests/public/test_workflow.py`, `tests/tools/__init__.py`, `tests/tools/test_snapshot.py`, `tests/fixtures/snapshot/` (suivi fictif : `cartes/alpha.md`, `cartes/beta.md`, `notions.md`, `relations.csv` avec une ligne mal formée, au format des fichiers réels de `~/claude_custom_commands/references/professor/suivi/`, lus en lecture seule).
 - `test_site_static.py` (bibliothèque standard, lit `public/`) :
-  - S1 : `index.html`, `network.html`, `404.html` existent ; chacun a `<html lang="fr">`, un `<title>` non vide, la balise `viewport`, la politique de sécurité exacte de « Architecture », `noindex` et un lien vers `favicon.svg`.
+  - S1 : `index.html`, `network.html`, `404.html` existent ; chacun a `<html lang="fr">`, un `<title>` non vide, la balise `viewport`, la politique de sécurité de « Architecture », mêmes mots dans le même ordre (la valeur dépasse 95 caractères et se coupe sur plusieurs lignes à cause de S9 : comparaison après normalisation des espaces et des retours à la ligne), `noindex` et un lien vers `favicon.svg`.
   - S2 : aucune correspondance de `https?://|//[a-z0-9.-]+\.[a-z]{2,}|@import` dans les `.html`, `.css`, `.js` hors `vendor/`, l'espace de noms `http://www.w3.org/2000/svg` excepté.
   - S3 : aucune correspondance de `innerHTML|outerHTML|insertAdjacentHTML|document\.write|eval\(|new Function` hors `vendor/`.
   - S4 : aucune correspondance de `type="module"|fetch\(|XMLHttpRequest|^import ` hors `vendor/`.
