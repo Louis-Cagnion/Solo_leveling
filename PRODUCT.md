@@ -24,7 +24,7 @@ Les données viennent du suivi pédagogique réel de Louis (`/professor`) et de 
 
 ## Operating Context
 
-- Exécution locale uniquement. Les données sont rafraîchies par un script, puis la page est ouverte dans le navigateur.
+- Les données sont rafraîchies par un script lancé en local, puis publiées sur GitHub Pages (site public, non indexé, consulté par Louis seul) ; la page s'ouvre aussi en local.
 - Les sources sont les fichiers `/professor` du dépôt `claude_custom_commands` (cartes, notions, relations, événements, `historique-ia.csv`) et l'API de l'intranet 42 (niveau, projets, achievements).
 
 ## Capabilities and Constraints

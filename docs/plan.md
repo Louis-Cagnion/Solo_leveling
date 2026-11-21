@@ -11,7 +11,8 @@ Plan du projet décrit dans `docs/specification.md`, en suivant la chaîne en 8 
 | P2 Conception | Modèle de données, règles de calcul, architecture | 2 | non |
 | P3 Plan d'implémentation | Sous-tâches, fichiers, critères de réussite | 3 | oui |
 | P4 Maquette | Opus `xhigh`, skill `impeccable`, rendu montré dans Chrome (§11) | avant 4 | oui, rendu visuel |
-| P5 V1 puis pré-mortem | Tests, réalisation, revue, correction, finalisation | 4 à 8 | tests sur les données |
+| W Vitrine | Maquette publiée sur GitHub Pages avec un instantané des données (`docs/design/vitrine.md`), avant la V1 | 4 à 8 | oui, rendu visuel |
+| P5 V1 puis pré-mortem | Tests, réalisation, revue, correction, finalisation, publication | 4 à 8 | tests sur les données |
 
 ## Cadrage (étape 1)
 
@@ -24,13 +25,13 @@ Plan du projet décrit dans `docs/specification.md`, en suivant la chaîne en 8 
 - **Autonomie surestimée** (§8) : ce qui a été réalisé avec l'IA n'est pas une preuve d'autonomie. `historique-ia.csv` distingue déjà `louis`, `mixte`, `ia` et `lecture`.
 - **Gadget plutôt qu'outil** (§12.1) : un tableau de bord motivant, mais qui n'aide à aucune décision d'apprentissage, ne justifie pas le projet.
 - **Propriété intellectuelle** : on s'inspire des mécaniques et de l'ambiance (fenêtres « Système », rangs E à S, titres), sans reprendre de logo, d'illustration, de police ni de visuel officiel de *Solo Leveling*.
-- **Confidentialité** : le suivi mentionne des projets professionnels anonymisés. Si l'interface est un jour publiée, elle ne doit rien exposer de plus que ce qui est versionné.
+- **Confidentialité** : le suivi mentionne des projets professionnels anonymisés, et le site publié est public. Les données publiées passent le contrôle de confidentialité du dépôt des commandes avant chaque push (ligne 2 de « Restrictions et secours », `docs/design/vitrine.md`).
 - **AI Act** : il s'agit d'une auto-évaluation personnelle, sans décision sur un tiers, donc d'un risque minimal. Le niveau serait à revoir si les scores servaient un jour à un recrutement.
 
 ### Informations manquantes
 
 - La table officielle de l'XP par niveau et l'XP par projet : seule l'API de l'intranet les donne, avec l'accès de Louis (`docs/research/42-system.md`).
-- Le lieu d'exécution : le code est versionné dans le dépôt privé `Louis-Cagnion/Solo_leveling`. J'en déduis une interface locale, mais le déploiement n'est pas tranché.
+- Le lieu d'exécution : tranché au point 8 (synchronisation locale, site publié sur GitHub Pages).
 
 ### Questions à trancher en P1 (§12, points tranchés 9/9)
 
@@ -64,15 +65,33 @@ Plan du projet décrit dans `docs/specification.md`, en suivant la chaîne en 8 
 - **Point 4, XP d'un projet perso ou pro** (Louis, 11/11/2026) : le projet rapporte l'XP du projet 42 de taille et de difficulté proches. Cette XP baisse avec la part de l'IA, d'après la colonne `auteur` de `historique-ia.csv` (par exemple 100 % pour `louis`, 50 % pour `mixte`, 0 % pour `ia`, taux à fixer en P2).
 - **Point 7, « I AM THE ANSWER »** (Louis, 11/11/2026) : deux titres distincts. La version 42 se débloque au niveau 42 officiel 25 ; c'est un écart assumé au §7.2, qui voulait des preuves en plus du seuil. La version « Système » se débloque avec le rang S sur toutes les cartes, quel que soit leur nombre.
 - **Point 8, architecture** (Louis, 11/11/2026) : l'interface tourne en local, sur la machine de Louis. C'est une page en HTML, CSS et JS sans framework, alimentée par un script de synchronisation qui lit `/professor` et l'API 42 et produit le fichier de données affiché. Le secret OAuth reste hors de Git.
+- **Point 8 amendé, publication** (Louis, 21/11/2026) : le site est publié sur GitHub Pages depuis ce dépôt, rendu public le 20/11/2026, pour Louis seul et sur ordinateur ; vitrine d'abord avec un instantané des données, puis la V1, puis le pré-mortem (A31 de `docs/design/implementation.md`, décisions détaillées dans `docs/design/vitrine.md`).
 - **Point 9, maquette** (Louis, 11/11/2026) : un agent Opus en effort `xhigh` la construit avec le skill `impeccable`, puis le moniteur la montre dans Chrome.
 - **Données réelles** (Louis, 11/11/2026) : la lecture seule du suivi de `/professor` est autorisée pour les maquettes et les tests sur données réelles de P5 ; l'API 42 attend son consentement.
 
-## Arbre (phases closes 5/6)
+## Arbre (phases closes 5/7)
 
 Statuts : [ ] à faire, [~] en cours, [x] faite, [v] validée, [!] bloquée
-Reprise (moniteur Sonnet/high au moins, jamais Fable ; consigne de Louis du 15/11/2026) : activer `/best-practice`, lire `todo.md` puis cet arbre, et reprendre à « Prochaine feuille prête ». Feuilles à garder en Opus/high, revue comprise : T4 (OAuth), T7 (calibration), T11 (page).
-Prochaine feuille prête : T2.a2 (amendements A17 à A30 de `docs/design/implementation.md` validés par Louis le 15/11/2026)
-Moniteur : opus 5.5/high jusqu'à P3 ; depuis P4.7 : fable 5.2, effort par défaut de la session (aucun réglage pour ce modèle dans `settings.json`), session choisie par Louis ; agents en sonnet ou opus seulement
+Reprise (moniteur Sonnet/high au moins, jamais Fable ; consigne de Louis du 15/11/2026) : activer `/best-practice`, lire `todo.md` puis cet arbre, et reprendre à « Prochaine feuille prête ». Feuilles à garder en Opus/high, revue comprise : T4 (OAuth), T7 (calibration), T11 (page), W8 (revue de la vitrine).
+Ordre (Louis, 21/11/2026) : W (vitrine), puis P5 à partir de T2.a2, puis PM (pré-mortem).
+Prochaine feuille prête : W0 (Louis, demandée au début de la phase) et W1
+Moniteur : opus 5.5/high jusqu'à P3 ; depuis P4.7 : fable 5.2, effort par défaut de la session (aucun réglage pour ce modèle dans `settings.json`), session choisie par Louis ; plan de la vitrine : opus 5.5/high ; à partir de W1 : sonnet 5.5/high recommandé ; agents en sonnet ou opus seulement
+
+- W [nœud] : vitrine sur GitHub Pages (`docs/design/vitrine.md`, fiches W0 à W13) ; point de contrôle : W12 (`checker`), 15 lignes de « Restrictions et secours » jugées ; un agent à la fois
+  - [ ] W0 Louis : source de GitHub Pages sur « GitHub Actions » ; dépend de : - ; demandée au début de la phase, attendue avant W11
+  - [ ] W1 tester : tests rouges du site, du déploiement et de l'instantané ; dépend de : - ; niveau pressenti : sonnet/medium
+  - [ ] W2 builder : `public/` copié de la maquette, démonstration gardée (`?demo` ou `#demo` selon Louis) ; dépend de : W1 ; niveau pressenti : sonnet/medium
+  - [ ] W3 builder : `tools/snapshot.py` et `public/data.js` ; dépend de : W2 ; niveau pressenti : sonnet/medium
+  - [ ] W4 builder : `public/` aux conventions de la PARTIE B, rendu inchangé ; dépend de : W2 ; niveau pressenti : sonnet/high
+  - [ ] W5 builder : politique de sécurité, `noindex`, icône, `404.html`, replis ; dépend de : W4 ; niveau pressenti : sonnet/high
+  - [ ] W6 builder : `tools/sound_partials.py` versionné, sortie dans `public/js/` ; dépend de : W2 ; niveau pressenti : sonnet/low
+  - [ ] W7 builder : `.github/workflows/pages.yml`, actions épinglées par SHA ; dépend de : W1 ; niveau pressenti : sonnet/medium
+  - [ ] W8 analyst : revue indépendante, VALIDÉ ou À CORRIGER ; dépend de : W2 à W7 ; niveau pressenti : opus/high
+  - [ ] W9 fixer : une feuille par problème CRITIQUE ou IMPORTANT de W8 ; dépend de : W8
+  - [ ] W10 moniteur : rendu comparé à la maquette dans Chrome, validé par Louis ; dépend de : W9
+  - [ ] W11 moniteur : workflow commité et poussé, site en ligne vérifié ; dépend de : W0, W10
+  - [ ] W12 checker : point de contrôle ; dépend de : W11 ; niveau pressenti : sonnet/high
+  - [ ] W13 moniteur : README, contexte des agents, arbre condensé, reprise sur T2.a2 ; dépend de : W12
 
 - P2 [nœud] : conception, sans code ; point de contrôle : le document de conception couvre les six critères du brief de P2.1
   - [v] P2.1 analyst : modèle de données, règles de calcul, architecture, découpage ; fait par : opus/high, deux affirmations relues par le moniteur
@@ -108,7 +127,9 @@ Moniteur : opus 5.5/high jusqu'à P3 ; depuis P4.7 : fable 5.2, effort par défa
   - [ ] T13 (après T10) : synchronisation lancée à la clôture d'une session `/professor` et formats de T0 (A29) ; dépôt des commandes, commit isolé ; niveau pressenti : sonnet/medium
   - [ ] T14 (après T3, avant T10) : table `config/names-en.toml` des noms de `/professor` en anglais, lue par `sync`, avec le test « aucun identifiant sans traduction » (A27) ; niveau pressenti : sonnet/medium pour le lecteur et le test, haiku/medium pour remplir la table par carte
   - T11 se découpe au lancement (A26 à A28) : adaptateur et fonctions pures avec `node --test`, page `index.html`, page `network.html`, textes en deux langues et leur test ; opus/high pour les deux pages
+  - [ ] T15 (après T12) : publication de la V1 sur GitHub Pages à la place de l'instantané (A31) ; niveau pressenti : sonnet/high
   - [>] T0 : formats de `/professor`, fondue dans T13 (A29)
+- PM [nœud] : pré-mortem, après T15 : une feuille en lecture seule par axe de « Phases d'un projet destiné à un public » (`~/.claude/references/best-practice/arborescence-taches.md`), ordinateur seulement, puis les constats de `todo.md` triés en arbre de correction
 
 ### P0 Recherche (feuilles validées 4/4) et P1 Décisions (points tranchés 9/9)
 

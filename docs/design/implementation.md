@@ -90,11 +90,17 @@ La maquette `mockups/system/`, validée par Louis le 15/11/2026, lit des donnée
 - **A29, synchronisation depuis `/professor`** (consigne de Louis du 15/11/2026) : aucune copie statique du suivi ; `sync` lit les fichiers de `/professor` et régénère `data/state.js`. Feuille T13, après T10 : la clôture d'une session `/professor` lance `sync` sans l'API 42 (cache relu), par une règle du dépôt des commandes ; T0 (faits `niveau`, `certification`, `titre`, `projets.csv`) se fait dans la même feuille, les formats étant ceux de A1, A5 et A21.
 - **A30, comptes** : les comptes réels des fiches datent du 11/11/2026 (16 cartes ; 19 au 15/11). Chaque testeur les remesure au lancement de sa feuille et épingle les empreintes du jour. Les comptes de tests par fiche et le total « ≥ 269 » sont des planchers à recalculer en T12 ; le critère 4 de T2 attend 14 entités (`rules`, `achievements`, `names` ajoutées, `network` retirée) ; le critère 3 de T12 lit `d['cards']`.
 
+## Amendement du 21/11/2026 (publication)
+
+- **A31, vitrine puis V1** (Louis, 21/11/2026) : la phase W (`docs/design/vitrine.md`) publie d'abord la maquette sur GitHub Pages dans `public/`, avec un instantané `public/data.js` (`window.SYSTEME`) produit par `tools/snapshot.py`. A29 (« aucune copie statique du suivi ») est suspendu pour cet instantané seulement, jusqu'à T15. `js/demo.js` est porté et gardé (Louis, 21/11/2026), contrairement à A28. Conséquences sur la V1 :
+  - T11 part du `public/` de la vitrine (aucun nouveau portage depuis `mockups/system/`) : adaptateur vers `window.SYSTEM_STATE`, deux langues (A27), contrôle de `schema_version` ; le critère 2 de T11 exclut `public/vendor/` et les licences `.txt` ; les tests S1 à S15 de `tests/public/test_site_static.py` restent verts.
+  - T15, après T12 : la page publiée lit l'état produit par `sync`, copié dans `public/` sans les champs internes (anomalies, chemins des sources) ; `tools/snapshot.py` et `public/data.js` sont retirés ; la procédure « Rafraîchir la vitrine » devient celle de la publication de la V1. T13 ne pousse jamais seul : publier reste une action demandée par Louis, sauf décision contraire de sa part à T13.
+
 ## Ordre d'exécution
 
 Un seul agent à la fois (consigne de Louis du 11/11/2026), donc sans worktree. Chaque sous-tâche passe par l'étape 4 (un `tester` écrit ses tests, rouges), puis l'étape 5 (un `builder` les fait passer au vert), puis la revue de l'étape 6 et la correction de l'étape 7.
 
-Ordre : T1, T2, T3, T5, T4, T6, T9, T7, T8, T10, T11 (après validation de la maquette), puis T12 (`checker`). T0 se fait en session `/professor`, à n'importe quel moment : la V1 fonctionne sans T0, avec des valeurs « insuffisant ».
+Ordre (A31) : la vitrine (W0 à W13), puis T1, T2, T3, T5, T4, T6, T9, T7, T8, T10, T11, T12 (`checker`), T15, puis le pré-mortem. T0 se fait en session `/professor`, à n'importe quel moment : la V1 fonctionne sans T0, avec des valeurs « insuffisant ».
 
 ## 0. Conventions communes
 
