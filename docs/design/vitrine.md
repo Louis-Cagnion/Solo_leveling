@@ -112,7 +112,7 @@ Conventions : celles de `docs/design/implementation.md` §0 (95 caractères par 
 - But : copier `mockups/system/` dans `public/`, démonstration comprise, sans changement de rendu.
 - Fichiers autorisés : `public/**` ; lus seulement : `mockups/system/**`.
 - Contenu : copie de `index.html`, `network.html`, `css/`, `js/`, `fonts/`, `vendor/` (copie binaire, `cp -p`). Aucune ligne de démonstration ne change (`?demo` gardé). La mémoire de visite réelle (`progression-system:visit`) et celle de la démonstration (`:demo`) restent séparées.
-- Critères : S5, S6, S15 verts ; `diff -rq mockups/system/vendor public/vendor` sans sortie ; servi par le moniteur, les deux pages s'affichent sans erreur de console (contrôle du moniteur à la relecture, sur `public/data.js` copié provisoirement de la maquette, jamais commité avant W3).
+- Critères : S6 et S15 verts (S5 lit aussi `404.html`, créée à W5 : il passe alors) ; `diff -rq mockups/system/vendor public/vendor` sans sortie ; servi par le moniteur, les deux pages s'affichent sans erreur de console (contrôle du moniteur à la relecture, sur `public/data.js` copié provisoirement de la maquette, jamais commité avant W3).
 - Niveau pressenti : sonnet/medium.
 
 ### W3 builder : `tools/snapshot.py`
@@ -135,7 +135,7 @@ Conventions : celles de `docs/design/implementation.md` §0 (95 caractères par 
 
 - Fichiers autorisés : `public/*.html`, `public/404.html`, `public/favicon.svg`, `public/js/dom.js`, `public/js/app.js`, `public/js/network-ui.js`, tout fichier `public/js/` qui lit `localStorage`.
 - Contenu : balises de S1 dans chaque page (politique de sécurité, `noindex`, icône) ; `404.html` dans le style des fenêtres du Système, mêmes polices et CSS, lien « Retour à l'accueil » vers `./` ; `favicon.svg` repris de l'hexagone de l'icône « Événements » (`index.html`), aux couleurs de la charte ; texte de `dataFailureWindow` (`js/dom.js`) qui dit que le fichier de données du site est absent ou illisible, sans commande à taper ; chaque accès à `localStorage` dans un `try`, la page fonctionnant sans mémoire de visite.
-- Critères : S1, S13 verts ; puis, au plafond :
+- Critères : S1, S5, S12, S13 verts ; puis, au plafond :
   - « Repli des données » : `d=$(mktemp -d) && cp -r public/. "$d" && rm "$d/data.js"` puis `google-chrome --headless=new --disable-gpu --no-first-run --user-data-dir="$(mktemp -d)" --virtual-time-budget=8000 --dump-dom "file://$d/index.html" | grep -c "Chargement impossible"` : au moins 1 ;
   - « Repli WebGL » : même commande avec `--disable-webgl --disable-3d-apis` sur `file://$PWD/public/network.html`, `grep -c "WebGL"` : au moins 1.
 - Niveau pressenti : sonnet/high.

@@ -80,7 +80,7 @@ Moniteur : opus 5.5/high jusqu'à P3 ; depuis P4.7 : fable 5.2, effort par défa
 - W [nœud] : vitrine sur GitHub Pages (`docs/design/vitrine.md`, fiches W0 à W13) ; point de contrôle : W12 (`checker`), 15 lignes de « Restrictions et secours » jugées ; un agent à la fois
   - [x] W0 moniteur dans Chrome, sur ordre de Louis : source de GitHub Pages sur « GitHub Actions » ; fait le 21/11/2026 après la connexion de Louis, relu après rechargement de la page des réglages
   - [x] W1 tester : tests rouges du site, du déploiement et de l'instantané ; fait par : sonnet/medium, 27 tests, 29 échecs, 0 erreur, T1 verte (56)
-  - [ ] W2 builder : `public/` copié de la maquette, démonstration gardée (`?demo` tel quel) ; dépend de : W1 ; niveau pressenti : sonnet/medium
+  - [x] W2 builder : `public/` copié de la maquette, démonstration gardée (`?demo` tel quel) ; fait par : sonnet/low ; copie identique, pages relues dans Chrome (console vide, requêtes en 200) ; `public/data.js` copie provisoire, non commitée avant W3 (commit `ef34ac2`)
   - [ ] W3 builder : `tools/snapshot.py` et `public/data.js` ; dépend de : W2 ; niveau pressenti : sonnet/medium
   - [ ] W4 builder : `public/` aux conventions de la PARTIE B, rendu inchangé ; dépend de : W2 ; niveau pressenti : sonnet/high
   - [ ] W5 builder : politique de sécurité, `noindex`, icône, `404.html`, replis ; dépend de : W4 ; niveau pressenti : sonnet/high
