@@ -6,16 +6,19 @@
  *
  * Rangs à tour de rôle sur les cartes, premiers paliers portés à un même état,
  * certifications dans chacun de leurs états et achievements de 42 inventés ; avec
- * « ?demo=over », le niveau 42 dépasse aussi sa cible ; avec « ?demo=red » ou
- * « ?demo=red-all », des cartes ou toutes ont leurs notions au moins rouges. Rien de ce
- * fichier ne s'affiche hors de « ?demo », et la barre du haut le signale (app.js).
+ * « ?demo=over », le niveau 42 dépasse aussi sa cible ; avec « ?demo » seul ou
+ * « ?demo=red », des cartes voisines et isolées ont leurs notions au moins rouges, avec
+ * « ?demo=red-all » toutes. Rien de ce fichier ne s'affiche hors de « ?demo », et la
+ * barre du haut le signale (app.js).
  */
 
 const DEMO_REASON = 'valeur fictive de la démonstration';
 /*
- * Cartes au moins rouges : voisines et isolées sous ?demo=red, toutes sous ?demo=red-all.
+ * Cartes au moins rouges : voisines et isolées sous ?demo et ?demo=red, toutes sous
+ * ?demo=red-all.
  */
-const DEMO_RED = {red: index => [0, 1, 3].includes(index % 5), 'red-all': () => true};
+const DEMO_RED_SOME = index => [0, 1, 3].includes(index % 5);
+const DEMO_RED = {'': DEMO_RED_SOME, red: DEMO_RED_SOME, 'red-all': () => true};
 /* Rapport du niveau 42 fictif à sa cible sous « ?demo=over ». */
 const DEMO_OVER = 1.0924;
 const DEMO_CONDITIONS = 'examen en ligne surveillé, 40 questions en 65 minutes, 70 % de '
@@ -128,7 +131,8 @@ function demoPastVisit(snapshot) {
  *
  * @param {Object} data objet window.SYSTEME
  * @param {string|null} mode valeur de « ?demo » : « over », le niveau 42 dépasse sa
- *   cible ; clé de DEMO_RED, des cartes ont toutes leurs notions au moins rouges
+ *   cible ; clé de DEMO_RED (dont « » pour « ?demo » seul), des cartes ont toutes leurs
+ *   notions au moins rouges
  * @returns {Object} data n'est pas modifié
  */
 function withDemoData(data, mode) {
