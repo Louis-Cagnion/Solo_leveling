@@ -1,0 +1,469 @@
+/*
+ * Maquette « Système » : niveau 1, la roue des domaines.
+ *
+ * La roue occupe la hauteur libre de l'écran ; ses tailles suivent --size, texte du
+ * centre compris, pour qu'il tienne à toute taille et à tout zoom. Sous 620 px de large
+ * ou 600 px de haut, la liste des domaines la remplace. L'allumage en cascade
+ * des secteurs ne joue qu'au premier affichage (.is-intro).
+ */
+
+.wheel-stage {
+  --size: min(100vw - 2 * var(--s5), 100dvh - var(--topbar) - 72px);
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.wheel {
+  position: relative;
+  width: var(--size);
+  aspect-ratio: 1;
+}
+
+.wheel-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.domain-list {
+  display: none;
+}
+
+/* ───── Secteurs ───── */
+
+.sector {
+  cursor: pointer;
+  outline: none;
+}
+
+.sector-shape {
+  fill: rgb(44 116 230 / 0.16);
+  stroke: var(--flux-line);
+  stroke-width: 1.5;
+  transition:
+    fill var(--t-fast) var(--ease-out),
+    stroke var(--t-fast) var(--ease-out);
+}
+
+.sector[data-ranked="no"] .sector-shape {
+  fill: rgb(44 116 230 / 0.06);
+  stroke: var(--flux-faint);
+  stroke-dasharray: 5 5;
+}
+
+.sector[data-rank="E"] {
+  --sector-color: var(--rank-e);
+}
+
+.sector[data-rank="D"] {
+  --sector-color: var(--rank-d);
+}
+
+.sector[data-rank="C"] {
+  --sector-color: var(--rank-c);
+}
+
+.sector[data-rank="B"] {
+  --sector-color: var(--rank-b);
+}
+
+.sector[data-rank="A"] {
+  --sector-color: var(--rank-a);
+}
+
+.sector[data-rank="S"] {
+  --sector-color: var(--rank-s);
+}
+
+.sector[data-rank="Nation"] {
+  --sector-color: var(--rank-nation);
+}
+
+.sector[data-rank] .sector-shape {
+  fill: color-mix(in srgb, var(--sector-color) 20%, transparent);
+  stroke: color-mix(in srgb, var(--sector-color) 75%, transparent);
+}
+
+.sector[data-rank] .tier-fill {
+  stroke: var(--sector-color);
+  filter: drop-shadow(0 0 5px var(--sector-color));
+}
+
+.sector[data-rank="S"] .sector-shape,
+.sector[data-rank="Nation"] .sector-shape {
+  stroke: var(--sector-color);
+  stroke-width: 2.5;
+  filter: drop-shadow(0 0 8px var(--sector-color));
+}
+
+.sector[data-rank="S"] .sector-name,
+.sector[data-rank="Nation"] .sector-name {
+  fill: var(--sector-color);
+}
+
+.sector-name {
+  font-family: var(--font-display);
+  font-size: 23px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  fill: var(--text);
+  text-anchor: middle;
+  dominant-baseline: central;
+  pointer-events: none;
+}
+
+.sector[data-ranked="no"] .sector-name {
+  fill: var(--text-dim);
+}
+
+.tier-track,
+.tier-fill {
+  fill: none;
+  stroke-width: 7;
+}
+
+.tier-track {
+  stroke: rgb(120 196 255 / 0.2);
+}
+
+.tier-fill {
+  stroke: var(--rail);
+  filter: drop-shadow(0 0 5px var(--flux));
+}
+
+.sector-rank {
+  --rank-color: var(--text-faint);
+}
+
+.sector-rank polygon {
+  fill: var(--veil-solid);
+  stroke: var(--rank-color);
+  stroke-width: 2.5;
+}
+
+.sector-rank[data-rank="none"] polygon {
+  stroke-width: 1.5;
+  stroke-dasharray: 4 4;
+}
+
+.rank-letter {
+  font-family: var(--font-display);
+  font-size: 25px;
+  font-weight: 700;
+  fill: var(--rank-color);
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+.sector-rank[data-rank="E"] {
+  --rank-color: var(--rank-e);
+}
+
+.sector-rank[data-rank="D"] {
+  --rank-color: var(--rank-d);
+}
+
+.sector-rank[data-rank="C"] {
+  --rank-color: var(--rank-c);
+}
+
+.sector-rank[data-rank="B"] {
+  --rank-color: var(--rank-b);
+}
+
+.sector-rank[data-rank="A"] {
+  --rank-color: var(--rank-a);
+}
+
+.sector-rank[data-rank="S"] {
+  --rank-color: var(--rank-s);
+}
+
+.sector-rank[data-rank="Nation"] {
+  --rank-color: var(--rank-nation);
+}
+
+.sector:focus-visible .sector-shape {
+  fill: color-mix(in srgb, var(--sector-color, var(--flux)) 45%, transparent);
+  stroke: var(--rail);
+  stroke-width: 3;
+}
+
+@media (hover: hover) {
+  .sector:hover .sector-shape {
+    fill: color-mix(in srgb, var(--sector-color, var(--flux)) 45%, transparent);
+    stroke: var(--rail);
+    filter: drop-shadow(0 0 10px var(--sector-color, var(--flux)));
+  }
+
+  .sector:hover .sector-name {
+    fill: var(--bright);
+  }
+
+  .wheel-svg:has(.sector:hover) .sector:not(:hover) {
+    opacity: 0.55;
+  }
+}
+
+.sector {
+  transition: opacity var(--t-fast) var(--ease-out);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .is-intro .sector {
+    animation: sector-on 520ms var(--ease-out) backwards;
+    animation-delay: calc(var(--i) * 34ms + 120ms);
+  }
+
+  .is-intro .hub {
+    animation: hub-on 600ms var(--ease-out) backwards;
+  }
+
+  @keyframes sector-on {
+    from {
+      opacity: 0;
+      filter: brightness(2.4);
+    }
+  }
+
+  @keyframes hub-on {
+    from {
+      opacity: 0;
+      scale: 0.9;
+    }
+  }
+}
+
+/* ───── Centre : niveaux et accès à la fenêtre de statut ───── */
+
+.gauge-track {
+  fill: none;
+  stroke: rgb(120 196 255 / 0.14);
+  stroke-width: 3;
+}
+
+.gauge-fill {
+  fill: none;
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+.gauge-official {
+  stroke: var(--rail);
+  filter: drop-shadow(0 0 4px var(--flux-bright));
+}
+
+.gauge-system {
+  stroke: var(--flux);
+}
+
+.hub {
+  position: absolute;
+  inset: 34.4%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--size) * 0.004);
+  border: 1px solid var(--flux-line);
+  border-radius: 50%;
+  font-size: calc(var(--size) * 0.0165);
+  text-align: center;
+  background: radial-gradient(circle, rgb(28 76 160 / 0.6), rgb(7 21 52 / 0.85) 75%);
+  box-shadow:
+    var(--glow-soft),
+    inset 0 0 30px rgb(64 150 255 / 0.2);
+  transition:
+    border-color var(--t-fast) var(--ease-out),
+    box-shadow var(--t-fast) var(--ease-out);
+}
+
+.hub:focus-visible {
+  border-radius: 50%;
+}
+
+.hub-official,
+.hub-system {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0 0.5em;
+}
+
+.hub-official {
+  flex-direction: column;
+  align-items: center;
+}
+
+.hub-label {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.hub-official .hub-value {
+  font-family: var(--font-display);
+  font-size: 3.5em;
+  font-weight: 700;
+  line-height: 1.05;
+  color: var(--bright);
+  text-shadow: var(--glow-strong);
+}
+
+.hub-system .hub-value {
+  font-family: var(--font-display);
+  font-size: 1.25em;
+  font-weight: 600;
+}
+
+.hub .tag {
+  font-size: 0.85em;
+  line-height: 1.35;
+  cursor: inherit;
+}
+
+.hub-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  margin-top: 0.3em;
+  font-size: 0.92em;
+  font-weight: 500;
+  color: var(--flux-bright);
+}
+
+@media (hover: hover) {
+  .hub:hover {
+    border-color: var(--rail);
+    box-shadow:
+      var(--glow-strong),
+      inset 0 0 30px rgb(64 150 255 / 0.3);
+  }
+}
+
+/* ───── Résumé d'un domaine, à droite de la roue quand la place existe ───── */
+
+.readout {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: calc(100% + var(--s6));
+  width: min(300px, calc((100vw - var(--size)) / 2 - var(--s8)));
+  translate: 0 -50%;
+  pointer-events: none;
+}
+
+.has-side .readout {
+  display: block;
+}
+
+.readout-window {
+  animation: none;
+  padding: var(--s4);
+  font-size: var(--fs-sm);
+}
+
+.readout-rank {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  margin-bottom: var(--s4);
+}
+
+.readout-tiers {
+  display: grid;
+  gap: var(--s3);
+}
+
+.readout-tier {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--s1) var(--s3);
+}
+
+.readout-tier .bar {
+  grid-column: 1 / -1;
+}
+
+.readout-count {
+  font-family: var(--font-display);
+  color: var(--text-dim);
+}
+
+.readout-next {
+  margin-top: var(--s4);
+  padding-top: var(--s3);
+  border-top: 1px solid var(--flux-faint);
+  color: var(--text-dim);
+}
+
+.wheel-legend {
+  margin-top: var(--s4);
+  font-size: var(--fs-sm);
+  color: var(--text-dim);
+  text-align: center;
+}
+
+.wheel-empty {
+  margin-top: var(--s8);
+  text-align: center;
+}
+
+/* ───── Écran trop petit pour la roue : centre puis liste des domaines ───── */
+
+@media (max-width: 620px), (max-height: 600px) {
+  .wheel-stage {
+    --size: min(100vw - 2 * var(--s5), 320px);
+    gap: var(--s5);
+  }
+
+  .wheel {
+    height: calc(var(--size) * 0.62);
+    aspect-ratio: auto;
+  }
+
+  .wheel-svg {
+    display: none;
+  }
+
+  .hub {
+    inset: 0 19%;
+    font-size: calc(var(--size) * 0.033);
+  }
+
+  .domain-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    width: 100%;
+  }
+
+  .domain-row {
+    display: flex;
+    align-items: center;
+    gap: var(--s3);
+    min-height: 56px;
+    padding: var(--s2) var(--s3);
+    border: 1px solid var(--flux-faint);
+    font-size: var(--fs-sm);
+  }
+
+  .domain-name {
+    flex: 1;
+    font-family: var(--font-display);
+    font-weight: 600;
+  }
+
+  .domain-rank {
+    color: var(--text-dim);
+  }
+
+  .domain-row:hover,
+  .domain-row:focus-visible {
+    border-color: var(--rail);
+    background: rgb(40 100 200 / 0.3);
+  }
+}

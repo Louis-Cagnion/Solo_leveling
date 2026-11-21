@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#030814">
+  <title>Réseau des notions, Système de progression</title>
+  <link
+    rel="preload"
+    href="fonts/chakra-petch-latin-600-normal.woff2"
+    as="font"
+    type="font/woff2"
+    crossorigin
+  >
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/window.css">
+  <link rel="stylesheet" href="css/network.css">
+  <link rel="stylesheet" href="css/inbox.css">
+</head>
+<script defer src="vendor/three.min.js"></script>
+<script defer src="vendor/OrbitControls.js"></script>
+<script defer src="data.js"></script>
+<script defer src="js/model.js"></script>
+<script defer src="js/dom.js"></script>
+<script defer src="js/sound-data.js"></script>
+<script defer src="js/sound.js"></script>
+<script defer src="js/events.js"></script>
+<script defer src="js/inbox.js"></script>
+<script defer src="js/network.js"></script>
+<script defer src="js/scene-kit.js"></script>
+<script defer src="js/scene.js"></script>
+<script defer src="js/network-ui.js"></script>
+<body class="network-page">
+  <a class="skip-link" href="#connections">Aller aux connexions</a>
+  <header class="topbar">
+    <h1 class="brand"><a href="index.html">Système de progression</a></h1>
+    <nav class="topnav" aria-label="Navigation principale">
+      <a class="button" href="index.html">Roue des domaines</a>
+      <a class="button" href="index.html#/status">Statut</a>
+      <a class="button" href="network.html" aria-current="page">Réseau des notions</a>
+      <button
+        class="button inbox-toggle"
+        type="button"
+        id="inbox-toggle"
+        popovertarget="inbox"
+        hidden
+      >
+        <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M8 1.5L13.6 4.75V11.25L8 14.5L2.4 11.25V4.75ZM8 5V8.8M8 10.9V11"/>
+        </svg>
+        <span>Événements</span>
+        <span class="inbox-count" id="inbox-count" hidden></span>
+      </button>
+      <button class="button sound-toggle" type="button" id="sound-toggle" aria-pressed="true">
+        <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M2.5 6.2V9.8H5L8.5 12.5V3.5L5 6.2Z"/>
+          <path d="M11 6A3 3 0 0 1 11 10M12.8 4.2A5.6 5.6 0 0 1 12.8 11.8"/>
+        </svg>
+        <span class="sound-label">Son activé</span>
+      </button>
+    </nav>
+  </header>
+  <main class="network" id="view">
+    <h2 class="visually-hidden">Réseau des notions</h2>
+    <div class="stage" id="stage">
+      <div class="labels" id="labels" aria-hidden="true"></div>
+    </div>
+    <section class="window panel legend-panel" aria-labelledby="legend-title">
+      <header class="window-head">
+        <h3 class="window-title" id="legend-title">Liens</h3>
+      </header>
+      <div class="panel-body">
+        <h4 class="panel-heading">Disposition</h4>
+        <div id="layouts"></div>
+        <p class="root-line" id="root-line"></p>
+        <h4 class="panel-heading">Types, cliquer pour filtrer</h4>
+        <div id="kinds"></div>
+        <h4 class="panel-heading">Statuts</h4>
+        <div id="statuses"></div>
+        <div class="panel-actions">
+          <button class="button" type="button" id="show-all" hidden>Tout afficher</button>
+          <button class="button" type="button" id="reset-view">Recadrer la vue</button>
+        </div>
+        <p class="panel-hint">
+          Glisser pour tourner, molette pour zoomer, clic droit pour déplacer.
+        </p>
+      </div>
+    </section>
+    <section class="window panel list-panel" aria-labelledby="list-title">
+      <header class="window-head">
+        <h3 class="window-title" id="list-title">Connexions</h3>
+      </header>
+      <p class="list-scope" id="scope" aria-live="polite"></p>
+      <button class="button center-node" type="button" id="center-node" hidden>
+        Centrer l’arbre sur cette notion
+      </button>
+      <div class="connections" id="connections" tabindex="-1"></div>
+    </section>
+    <div class="detail" id="detail" aria-live="polite"></div>
+  </main>
+  <section class="window inbox" id="inbox" popover aria-label="Événements"></section>
+  <div class="unlocks" id="unlocks" aria-live="polite"></div>
+  <div class="tip" id="tip" role="tooltip" hidden></div>
+</body>
+</html>

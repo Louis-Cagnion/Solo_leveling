@@ -1,0 +1,756 @@
+/*
+ * Maquette « Système » : niveau 2 (domaine), niveau 3 (palier) et fenêtre de statut.
+ *
+ * L'entrée dans un domaine prolonge la roue : la vue se dévoile en cercle depuis le
+ * secteur cliqué (--ox, --oy posés par section.js, dans le repère de la vue). Les autres
+ * vues déplient leurs fenêtres (window.css). Les couleurs d'état viennent du ton de rareté
+ * (--tone, window.css).
+ */
+
+.back {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  margin-bottom: var(--s5);
+}
+
+.section-view,
+.tier-view,
+.status-view {
+  max-width: 1480px;
+  margin: 0 auto;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .section-view.from-sector {
+    animation: from-sector var(--t-travel) var(--ease-out);
+  }
+
+  .section-view.from-sector .unfold {
+    animation: none;
+  }
+
+  @keyframes from-sector {
+    from {
+      clip-path: circle(4% at var(--ox) var(--oy));
+      opacity: 0.4;
+    }
+
+    to {
+      clip-path: circle(150% at var(--ox) var(--oy));
+      opacity: 1;
+    }
+  }
+}
+
+/* ───── En-tête d'un domaine ou d'un palier ───── */
+
+.section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s3) var(--s5);
+  margin-bottom: var(--s4);
+}
+
+.section-head .rank {
+  font-size: var(--fs-xl);
+}
+
+.section-name {
+  font-size: var(--fs-2xl);
+  letter-spacing: 0.01em;
+  color: var(--bright);
+  text-shadow: var(--glow-soft);
+}
+
+.section-rank {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  color: var(--text-dim);
+}
+
+.section-next {
+  flex: 1 1 320px;
+  color: var(--text-dim);
+  text-align: right;
+}
+
+.state-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s2) var(--s5);
+  margin-bottom: var(--s5);
+  font-size: var(--fs-sm);
+  color: var(--text-dim);
+}
+
+.state-legend li {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+}
+
+.state-legend .info {
+  margin-left: calc(var(--s2) * -1);
+}
+
+/* ───── Niveau 2 : une fenêtre par palier ───── */
+
+.tiers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--s6) var(--s5);
+  align-items: start;
+}
+
+.tier-window {
+  padding: var(--s4);
+}
+
+.tier-open {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--s2) var(--s3);
+  align-items: center;
+  margin: 0 calc(var(--s2) * -1) var(--s3);
+  padding: var(--s2);
+  transition: background-color var(--t-fast) var(--ease-out);
+}
+
+.tier-open .bar {
+  grid-column: 1 / -1;
+}
+
+.tier-count {
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+.tier-more {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s1);
+  font-size: var(--fs-sm);
+  color: var(--flux-bright);
+}
+
+@media (hover: hover) {
+  .tier-open:hover {
+    background: rgb(64 150 255 / 0.18);
+  }
+}
+
+.notion {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s3);
+  padding: var(--s1) 0;
+  font-size: var(--fs-sm);
+  line-height: 1.3;
+  color: var(--text-faint);
+}
+
+.notion .glyph {
+  margin-top: 3px;
+}
+
+.notion-title {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.notion[data-group="declared"] {
+  color: var(--text-dim);
+}
+
+.notion[data-group="low"] {
+  color: var(--text);
+}
+
+.notion[data-group="high"] {
+  font-weight: 600;
+  color: var(--bright);
+}
+
+.section-certs {
+  margin-top: var(--s7);
+  font-size: var(--fs-sm);
+  color: var(--text-dim);
+}
+
+/* ───── Certifications : cartes d'un domaine, cellules du statut, premier plan ───── */
+
+.group-title {
+  margin-bottom: var(--s4);
+  font-size: var(--fs-md);
+  letter-spacing: 0.04em;
+  color: var(--flux-bright);
+}
+
+.cert-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: var(--s6) var(--s5);
+  align-items: start;
+}
+
+.cert-window,
+.cert-dialog-window {
+  display: grid;
+  gap: var(--s3);
+  padding: var(--s4);
+  color: var(--text);
+}
+
+.cert-window > .window-head,
+.cert-dialog-window > .window-head {
+  margin-bottom: 0;
+}
+
+.cert-window .window-title,
+.cert-dialog-window .window-title {
+  letter-spacing: 0.06em;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.cert-state {
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  font-weight: 600;
+  color: var(--bright);
+}
+
+[data-tone] > .cert-state {
+  color: color-mix(in oklab, var(--tone) 55%, white);
+}
+
+.cert-conditions {
+  color: var(--text-dim);
+}
+
+.cert-gauge {
+  display: grid;
+  gap: var(--s2);
+  color: var(--text-dim);
+}
+
+.cert-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s2);
+}
+
+.cert-note {
+  margin-left: var(--s2);
+  font-family: var(--font-body);
+  font-size: var(--fs-sm);
+  font-weight: 400;
+  color: var(--text-dim);
+}
+
+.cert-tiers {
+  display: grid;
+  gap: var(--s2);
+}
+
+.cert-tier summary {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: var(--s1) var(--s2);
+  align-items: center;
+  padding: var(--s1) 0;
+  list-style: none;
+  cursor: pointer;
+}
+
+.cert-tier summary::-webkit-details-marker {
+  display: none;
+}
+
+.cert-tier summary .bar {
+  grid-column: 1 / -1;
+}
+
+.cert-tier summary .icon {
+  color: var(--flux-bright);
+  transition: rotate var(--t-fast) var(--ease-out);
+}
+
+.cert-tier[open] summary .icon {
+  rotate: 90deg;
+}
+
+.cert-tier .notions {
+  max-height: min(220px, 30dvh);
+  margin-top: var(--s2);
+  padding-left: var(--s4);
+  overflow-y: auto;
+  scrollbar-color: rgb(120 196 255 / 0.4) transparent;
+  scrollbar-width: thin;
+}
+
+.cert-dialog {
+  width: min(560px, calc(100vw - 2 * var(--s5)));
+  padding: var(--s3);
+  border: 0;
+  color: var(--text);
+  background: transparent;
+  overflow: visible;
+}
+
+.cert-dialog::backdrop {
+  background: rgb(3 8 20 / 0.55);
+  backdrop-filter: blur(5px);
+}
+
+.cert-dialog-window .group-title {
+  margin: var(--s2) 0 0;
+}
+
+.cert-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  padding-top: var(--s3);
+  border-top: 1px solid var(--flux-faint);
+  font-family: var(--font-display);
+  color: var(--text-dim);
+}
+
+.cert-nav > :last-child {
+  margin-left: auto;
+}
+
+.cert-arrow {
+  padding: var(--s2);
+  min-width: 40px;
+  justify-content: center;
+}
+
+.cert-arrow.is-flipped .icon {
+  rotate: 180deg;
+}
+
+.cert-arrow[aria-disabled="true"] {
+  border-style: dashed;
+  color: var(--text-faint);
+  opacity: 0.5;
+  cursor: default;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .cert-dialog[open] {
+    animation: dialog-in var(--t-panel) var(--ease-out);
+  }
+
+  .cert-dialog-window {
+    animation: none;
+  }
+
+  @keyframes dialog-in {
+    from {
+      opacity: 0;
+      scale: 0.94;
+    }
+  }
+}
+
+/* ───── Niveau 3 : tableau des notions d'un palier ───── */
+
+.tier-head {
+  display: grid;
+  gap: var(--s2);
+  margin-bottom: var(--s6);
+}
+
+.tier-head .tier-count {
+  color: var(--text-dim);
+}
+
+.tier-head .bar {
+  max-width: 480px;
+}
+
+.table-window {
+  container-type: inline-size;
+}
+
+.notion-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 var(--s1);
+  font-size: var(--fs-sm);
+}
+
+.notion-table th,
+.notion-table td {
+  padding: var(--s2) var(--s3);
+  border-bottom: 1px solid var(--flux-faint);
+  text-align: center;
+  vertical-align: middle;
+}
+
+.notion-table thead th {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--flux-bright);
+  white-space: nowrap;
+}
+
+.notion-table th:first-child {
+  text-align: left;
+}
+
+.notion-table tbody th {
+  font-weight: 400;
+  overflow-wrap: anywhere;
+}
+
+.notion-table tbody tr:last-child > * {
+  border-bottom: 0;
+}
+
+.notion-table tr[data-tone] > * {
+  border-top: 1px solid color-mix(in oklab, var(--tone) 75%, transparent);
+  border-bottom-color: transparent;
+  background: color-mix(in oklab, var(--tone) 11%, transparent);
+}
+
+.notion-table tr[data-tone] > :last-child {
+  border-right: 1px solid color-mix(in oklab, var(--tone) 75%, transparent);
+}
+
+.notion-table tr[data-group="unmet"] {
+  color: var(--text-faint);
+}
+
+.notion-table tr[data-group="high"] th {
+  font-weight: 600;
+  color: var(--bright);
+}
+
+.state {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2);
+  white-space: nowrap;
+  cursor: help;
+}
+
+@container (max-width: 640px) {
+  .notion-table thead {
+    display: none;
+  }
+
+  .notion-table tr {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s1) var(--s4);
+    margin-bottom: var(--s1);
+    padding: var(--s3);
+    border-bottom: 1px solid var(--flux-faint);
+  }
+
+  .notion-table tr[data-tone] {
+    border-top: 1px solid color-mix(in oklab, var(--tone) 75%, transparent);
+    border-right: 1px solid color-mix(in oklab, var(--tone) 75%, transparent);
+    border-bottom-color: transparent;
+    background: color-mix(in oklab, var(--tone) 11%, transparent);
+  }
+
+  .notion-table tr[data-tone] > * {
+    background: none;
+  }
+
+  .notion-table tbody th,
+  .notion-table td {
+    padding: 0;
+    border: 0;
+    text-align: left;
+  }
+
+  .notion-table tbody th {
+    flex: 1 1 100%;
+  }
+}
+
+/* ───── Fenêtre de statut ───── */
+
+.status-view .section-name {
+  margin-bottom: var(--s6);
+}
+
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr));
+  gap: var(--s6) var(--s5);
+  align-items: stretch;
+}
+
+.stated {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--s2) var(--s3);
+}
+
+.block-rank {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s2);
+  margin-bottom: var(--s3);
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--text-dim);
+}
+
+[data-tone] > .block-rank {
+  color: color-mix(in oklab, var(--tone) 55%, white);
+}
+
+.block-rank .rank {
+  margin-right: var(--s1);
+}
+
+.level-figure {
+  text-align: center;
+}
+
+.level-figure .stated-value {
+  font-family: var(--font-display);
+  font-size: 3.5rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--bright);
+  text-shadow: var(--glow-strong);
+}
+
+.level-goal {
+  display: grid;
+  gap: var(--s2);
+  margin: var(--s3) 0 var(--s5);
+  font-family: var(--font-display);
+  color: var(--text-dim);
+  text-align: right;
+}
+
+.level-xp {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s2) var(--s4);
+  padding: var(--s3) 0;
+  border-block: 1px solid var(--flux-faint);
+}
+
+.level-xp .stated-value {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: 600;
+}
+
+.level-window .empty {
+  margin-top: var(--s3);
+  font-size: var(--fs-sm);
+}
+
+.projects {
+  margin-top: var(--s3);
+}
+
+.projects summary {
+  padding: var(--s2) 0;
+  font-family: var(--font-display);
+  color: var(--flux-bright);
+  cursor: pointer;
+}
+
+.projects li {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--s4);
+  padding: var(--s1) 0;
+  font-size: var(--fs-sm);
+}
+
+.answers {
+  display: grid;
+  gap: var(--s5);
+}
+
+.answer {
+  display: grid;
+  gap: var(--s2);
+}
+
+.answer + .answer {
+  padding-top: var(--s5);
+  border-top: 1px solid var(--flux-faint);
+}
+
+.answer-name {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--s2) var(--s3);
+}
+
+.answer-title {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--gold);
+  text-shadow: 0 0 14px rgb(242 193 78 / 0.45);
+}
+
+.answer-scope {
+  padding: 0 var(--s2);
+  border: 1px solid var(--gold);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--gold);
+}
+
+.answer-plain {
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  font-weight: 600;
+}
+
+.answer-condition {
+  font-size: var(--fs-sm);
+  color: var(--text-dim);
+}
+
+.answer-figures {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--s2) var(--s3);
+  font-size: var(--fs-sm);
+  color: var(--text-dim);
+}
+
+.answer-figures > :first-child {
+  margin-right: auto;
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--text);
+}
+
+.school-window,
+.titles-window {
+  grid-column: 1 / -1;
+}
+
+.school-count {
+  margin-bottom: var(--s3);
+  font-size: var(--fs-sm);
+  color: var(--text-dim);
+}
+
+.school {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+  gap: 0 var(--s6);
+  font-size: var(--fs-sm);
+}
+
+.school li {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0 var(--s4);
+  align-items: baseline;
+  padding: var(--s2) 0;
+  border-bottom: 1px solid var(--flux-faint);
+}
+
+.school-title {
+  grid-column: 1 / -1;
+  font-size: var(--fs-xs);
+  color: var(--text-dim);
+}
+
+.school li[data-obtained="yes"] .school-title {
+  color: var(--text);
+}
+
+.school li[data-obtained="no"] {
+  color: var(--text-faint);
+}
+
+.school li[data-obtained="yes"] .school-state {
+  color: var(--gold);
+}
+
+.cert-group + .cert-group {
+  margin-top: var(--s5);
+}
+
+.certs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  gap: var(--s3);
+}
+
+.cert {
+  --line: color-mix(in oklab, var(--tone, var(--flux)) 55%, transparent);
+  display: grid;
+  gap: var(--s1);
+  height: 100%;
+  padding: var(--s3);
+  border: 1px solid var(--line);
+  font-size: var(--fs-sm);
+  background: color-mix(in oklab, var(--tone, var(--flux)) 9%, transparent);
+  transition:
+    background-color var(--t-fast) var(--ease-out),
+    box-shadow var(--t-fast) var(--ease-out);
+}
+
+.cert-name {
+  font-weight: 600;
+  color: var(--bright);
+}
+
+.cert-card {
+  font-size: var(--fs-xs);
+  color: var(--text-dim);
+}
+
+.cert-label {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: color-mix(in oklab, var(--tone, var(--text-dim)) 60%, white);
+}
+
+.cert .bar {
+  align-self: end;
+  margin-top: var(--s1);
+}
+
+.cert:active {
+  scale: 0.99;
+}
+
+@media (hover: hover) {
+  .cert:hover {
+    background: color-mix(in oklab, var(--tone, var(--flux)) 20%, transparent);
+    box-shadow: 0 0 18px color-mix(in oklab, var(--tone, var(--flux)) 30%, transparent);
+  }
+}
+
+.sources {
+  margin-top: var(--s6);
+  font-size: var(--fs-xs);
+  color: var(--text-faint);
+}

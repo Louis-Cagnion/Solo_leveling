@@ -1,0 +1,287 @@
+/*
+ * Maquette « Système » : jetons, polices, socle de page et surfaces du navigateur.
+ *
+ * Monde visuel : fenêtres holographiques bleues sur fond d'abîme, à la façon des fenêtres
+ * du « Système ». Chakra Petch porte les titres et les chiffres, Barlow le texte courant
+ * (fonts/, licence OFL 1.1). Rangs et états de notion suivent une même échelle de rareté
+ * en sept couleurs : violet au sommet, or juste en dessous. Aucune valeur visuelle hors
+ * de ces jetons dans les autres feuilles.
+ */
+
+@font-face {
+  font-family: "Chakra Petch";
+  font-weight: 500;
+  font-display: swap;
+  src: url("../fonts/chakra-petch-latin-500-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Chakra Petch";
+  font-weight: 600;
+  font-display: swap;
+  src: url("../fonts/chakra-petch-latin-600-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Chakra Petch";
+  font-weight: 700;
+  font-display: swap;
+  src: url("../fonts/chakra-petch-latin-700-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Barlow";
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/barlow-latin-400-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Barlow";
+  font-weight: 500;
+  font-display: swap;
+  src: url("../fonts/barlow-latin-500-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Barlow";
+  font-weight: 600;
+  font-display: swap;
+  src: url("../fonts/barlow-latin-600-normal.woff2") format("woff2");
+}
+
+:root {
+  color-scheme: dark;
+
+  /* Couleurs : abîme, voile des fenêtres, flux (bleu du Système), texte. */
+  --void: #030814;
+  --deep: #071226;
+  --veil-top: rgb(20 52 112 / 0.58);
+  --veil-bottom: rgb(7 21 52 / 0.8);
+  --veil-solid: #0a1d44;
+  --veil-dense-top: rgb(15 40 90 / 0.95);
+  --veil-dense-bottom: rgb(6 18 46 / 0.97);
+  --flux: #4db5ff;
+  --flux-bright: #9ad6ff;
+  --flux-line: rgb(120 196 255 / 0.5);
+  --flux-faint: rgb(120 196 255 / 0.16);
+  --rail: #e3f3ff;
+  --bright: #ffffff;
+  --text: #e6f2ff;
+  --text-dim: #a3bcdb;
+  --text-faint: #8aa4c6;
+
+  /* Couleurs de rôle : titre, donnée insuffisante. */
+  --gold: #f2c14e;
+  --warn: #ffb45e;
+
+  /* Échelle de rareté, du plus commun au plus rare : gris, vert, bleu, orange, rouge, */
+  /* or, violet. États « découverte » à « transcendée » ; rangs E à Nation, A et S */
+  /* échangés (A en or, S en rouge, choix de Louis). */
+  --rarity-1: #a9bbd3;
+  --rarity-2: #5fdc8f;
+  --rarity-3: #4db5ff;
+  --rarity-4: #ff9a4d;
+  --rarity-5: #ff5f6d;
+  --rarity-6: var(--gold);
+  --rarity-7: #cf7dff;
+  --rank-e: var(--rarity-1);
+  --rank-d: var(--rarity-2);
+  --rank-c: var(--rarity-3);
+  --rank-b: var(--rarity-4);
+  --rank-a: var(--rarity-6);
+  --rank-s: var(--rarity-5);
+  --rank-nation: var(--rarity-7);
+
+  /* Types de lien du réseau : une couleur franche chacun, jamais l'or. */
+  --kind-transfer: #ff5fa8;
+  --kind-prerequisite: #4db5ff;
+  --kind-instance: #62d9ad;
+  --kind-complement: #b9a0ff;
+  --kind-analog: #ff9a4d;
+
+  --font-display: "Chakra Petch", "Barlow", sans-serif;
+  --font-body: "Barlow", sans-serif;
+  --fs-xs: 0.8125rem;
+  --fs-sm: 0.9375rem;
+  --fs-md: 1.0625rem;
+  --fs-lg: 1.375rem;
+  --fs-xl: 1.75rem;
+  --fs-2xl: 2.25rem;
+
+  --s1: 4px;
+  --s2: 8px;
+  --s3: 12px;
+  --s4: 16px;
+  --s5: 24px;
+  --s6: 32px;
+  --s7: 48px;
+  --s8: 64px;
+
+  --t-fast: 140ms;
+  --t-panel: 280ms;
+  --t-travel: 460ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --glow-soft: 0 0 18px rgb(64 150 255 / 0.28);
+  --glow-strong: 0 0 10px rgb(154 214 255 / 0.7), 0 0 28px rgb(64 150 255 / 0.45);
+  --topbar: 64px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--void);
+  scrollbar-color: rgb(120 196 255 / 0.4) transparent;
+  scrollbar-width: thin;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  font-family: var(--font-body);
+  font-size: var(--fs-md);
+  line-height: 1.5;
+  word-spacing: 0.05em;
+  color: var(--text);
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 38%, rgb(22 62 140 / 0.42), transparent 70%),
+    radial-gradient(ellipse 60% 40% at 50% 110%, rgb(40 90 190 / 0.2), transparent 70%),
+    var(--void);
+  background-attachment: fixed;
+  font-variant-numeric: tabular-nums;
+  -webkit-tap-highlight-color: rgb(77 181 255 / 0.2);
+  overflow-x: clip;
+}
+
+::selection {
+  color: var(--void);
+  background: var(--flux-bright);
+}
+
+h1,
+h2,
+h3,
+p,
+ul,
+ol,
+dl,
+dd,
+table {
+  margin: 0;
+  padding: 0;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+code {
+  font-family: ui-monospace, "DejaVu Sans Mono", monospace;
+  font-size: 0.88em;
+  color: var(--flux-bright);
+}
+
+svg {
+  display: block;
+}
+
+:focus-visible {
+  outline: 2px solid var(--rail);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: fixed;
+  top: var(--s2);
+  left: var(--s2);
+  z-index: 30;
+  padding: var(--s2) var(--s4);
+  color: var(--void);
+  background: var(--rail);
+  translate: 0 -200%;
+}
+
+.skip-link:focus-visible {
+  translate: 0;
+}
+
+/* ───── Barre du haut : nom de la page et navigation ───── */
+
+.topbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s2) var(--s5);
+  min-height: var(--topbar);
+  padding: var(--s3) var(--s5);
+}
+
+.brand {
+  font-size: var(--fs-md);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--flux-bright);
+  text-shadow: var(--glow-soft);
+}
+
+.topnav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s2);
+}
+
+.icon {
+  flex: none;
+  width: 1em;
+  height: 1em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+#view {
+  padding: 0 var(--s5) var(--s6);
+}
+
+#view:focus {
+  outline: none;
+}

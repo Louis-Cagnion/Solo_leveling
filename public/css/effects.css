@@ -1,0 +1,415 @@
+/*
+ * Maquette « Système » : éclairs de rang, courant du rang Nation et dépassement du niveau
+ * maximal.
+ *
+ * Les éclairs sont tracés par effects.js dans un calque .sparks, sous le texte. Le rang
+ * Nation porte un courant continu (.flow) autour de l'insigne ou du cadre. Une fenêtre de
+ * niveau au-delà de sa cible (data-over) a un cadre rompu (.fracture), se brouille par
+ * à-coups et sa limite devient « ??? ». Tout mouvement vit dans prefers-reduced-motion:
+ * no-preference ; sans lui, seul l'état fixe reste.
+ */
+
+[data-charge] {
+  position: relative;
+  isolation: isolate;
+}
+
+.sparks,
+.flow,
+.badge-crown,
+.fracture {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.sparks polyline {
+  fill: none;
+  stroke: color-mix(in oklab, var(--tone, var(--flux)) 35%, white);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 4px var(--tone, var(--flux)));
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .sparks polyline {
+    animation: flash 260ms steps(1, end) both;
+  }
+
+  .sparks.is-rider polyline {
+    animation: none;
+  }
+
+  @keyframes flash {
+    0% {
+      opacity: 1;
+    }
+
+    35% {
+      opacity: 0.15;
+    }
+
+    55% {
+      opacity: 0.9;
+    }
+
+    100% {
+      opacity: 0;
+    }
+  }
+}
+
+/* ───── Rang Nation : la puissance sous contrôle, un courant continu et régulier ───── */
+
+.flow-hex {
+  inset: -5px;
+  width: calc(100% + 10px);
+  height: calc(100% + 10px);
+}
+
+.flow-line,
+.flow-pulse {
+  fill: none;
+  stroke-linejoin: round;
+}
+
+.flow-line {
+  stroke: color-mix(in oklab, var(--tone) 60%, transparent);
+  stroke-width: 2.5;
+}
+
+.flow-pulse {
+  stroke: color-mix(in oklab, var(--tone) 25%, white);
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 4px var(--tone));
+}
+
+/* Couronne d'un insigne : hexagone de courant rouge, deux impulsions par tour (100). */
+.badge-crown {
+  inset: -10px;
+  width: calc(100% + 20px);
+  height: calc(100% + 20px);
+}
+
+.badge-crown polygon {
+  fill: none;
+  stroke: color-mix(in oklab, var(--rarity-5) 30%, white);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-dasharray: 18 32;
+  filter: drop-shadow(0 0 5px var(--rarity-5));
+}
+
+/* Les longueurs des impulsions (stroke-dasharray) sont posées par effects.js. */
+.flow-hex .flow-pulse {
+  stroke-width: 5;
+}
+
+.flow-frame .flow-pulse {
+  vector-effect: non-scaling-stroke;
+  stroke-width: 2px;
+}
+
+/* Le courant s'affirme avec --stable (part du temps où il tient), une salve le coupe. */
+.flow {
+  opacity: calc(0.3 + 0.7 * var(--stable, 1));
+  transition: opacity 160ms var(--ease-out);
+}
+
+.flow.is-cut {
+  opacity: 0.06;
+}
+
+.window[data-charge="Nation"]::before,
+.window[data-charge="Nation"]::after {
+  height: 4px;
+  background: repeating-linear-gradient(
+    90deg,
+    color-mix(in oklab, var(--tone) 65%, black) 0,
+    var(--tone) 40px,
+    white 64px,
+    var(--tone) 72px,
+    color-mix(in oklab, var(--tone) 65%, black) 96px
+  );
+  background-size: 96px 100%;
+  box-shadow:
+    0 0 12px var(--tone),
+    0 0 34px color-mix(in oklab, var(--tone) 70%, transparent);
+  mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .window[data-charge="Nation"]::before,
+  .window[data-charge="Nation"]::after {
+    animation: current 0.8s linear infinite;
+  }
+
+  .window[data-charge="Nation"]::after {
+    animation-direction: reverse;
+  }
+
+  .flow-hex .flow-pulse {
+    animation: circulate-hex 1.1s linear infinite;
+  }
+
+  .badge-crown polygon {
+    animation: circulate-hex 1.4s linear infinite;
+  }
+
+  .flow-frame .flow-pulse {
+    animation: circulate-frame 0.6s linear infinite;
+  }
+
+  @keyframes current {
+    to {
+      background-position: 96px 0;
+    }
+  }
+
+  @keyframes circulate-hex {
+    to {
+      stroke-dashoffset: -50;
+    }
+  }
+
+  @keyframes circulate-frame {
+    to {
+      stroke-dashoffset: -76;
+    }
+  }
+}
+
+/* ───── Dépassement du niveau maximal : cadre rompu, à-coups, limite brouillée ───── */
+
+.window[data-over] {
+  --over-core: #7c4dff;
+  --over-light: #d9c9ff;
+  --split-warm: rgb(255 95 109 / 0.75);
+  --split-cold: rgb(77 181 255 / 0.75);
+  isolation: isolate;
+  border-color: transparent;
+  background:
+    radial-gradient(ellipse 90% 70% at 50% 0%, rgb(124 77 255 / 0.28), transparent 70%),
+    linear-gradient(180deg, #120a26, #05030c);
+  box-shadow:
+    0 22px 50px rgb(0 0 0 / 0.7),
+    0 0 46px rgb(124 77 255 / 0.35),
+    inset 0 0 60px rgb(10 4 26 / 0.9);
+}
+
+.window[data-over]::before,
+.window[data-over]::after {
+  left: 6%;
+  right: 38%;
+  background: linear-gradient(90deg, transparent, #b99cff 20%, white 55%, transparent);
+  box-shadow: 0 0 14px rgb(160 120 255 / 0.9);
+  rotate: -1.2deg;
+}
+
+.window[data-over]::after {
+  left: 44%;
+  right: 4%;
+  rotate: 0.9deg;
+}
+
+.fracture path {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 6px var(--over-core));
+}
+
+.fracture-frame {
+  stroke: var(--over-light);
+  stroke-width: 1.5px;
+}
+
+.fracture-cracks {
+  stroke: white;
+  stroke-width: 1px;
+  opacity: 0.7;
+}
+
+.window[data-over] > .window-head .window-title,
+.window[data-over] > .block-rank {
+  color: var(--over-light);
+}
+
+.window[data-over] .stated-value {
+  font-size: 4.6rem;
+  color: white;
+  text-shadow:
+    0 0 12px white,
+    0 0 34px var(--over-core),
+    0 0 70px var(--over-core);
+}
+
+.window[data-over] .bar {
+  overflow: visible;
+}
+
+.window[data-over] .bar-fill {
+  width: 108%;
+  background: linear-gradient(90deg, #3a1d80, var(--over-core) 70%, white);
+  box-shadow: 0 0 16px var(--over-core);
+}
+
+.over-limit {
+  display: inline-grid;
+}
+
+.over-limit > span {
+  grid-area: 1 / 1;
+  text-align: right;
+}
+
+.over-limit-was {
+  opacity: 0;
+}
+
+.over-limit-now {
+  font-weight: 700;
+  color: white;
+  text-shadow:
+    -2px 0 0 var(--split-warm),
+    2px 0 0 var(--split-cold);
+}
+
+.over-label {
+  margin-bottom: var(--s4);
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-align: center;
+  color: var(--over-light);
+}
+
+/* Deux cycles de durées sans commune mesure : les à-coups ne tombent jamais en rythme. */
+@media (prefers-reduced-motion: no-preference) {
+  .window[data-over] {
+    animation:
+      unfold var(--t-panel) var(--ease-out) calc(var(--order, 0) * 50ms) backwards,
+      over-jolt 4.3s steps(1, end) 1.4s infinite,
+      over-tear 7.1s steps(1, end) 3s infinite;
+  }
+
+  .window[data-over] .stated-value {
+    animation: surge 3.2s ease-in-out infinite alternate;
+  }
+
+  .over-limit-was {
+    animation: limit-was 5.2s steps(1, end) infinite;
+  }
+
+  .over-limit-now {
+    animation: limit-now 5.2s steps(1, end) infinite;
+  }
+
+  @keyframes over-jolt {
+    0%,
+    93.5%,
+    100% {
+      translate: 0;
+      filter: none;
+    }
+
+    88% {
+      translate: -5px 1px;
+      filter: drop-shadow(-4px 0 var(--split-warm)) drop-shadow(4px 0 var(--split-cold));
+    }
+
+    90% {
+      translate: 4px -2px;
+      filter: drop-shadow(3px 0 var(--split-warm)) drop-shadow(-3px 0 var(--split-cold));
+    }
+
+    92% {
+      translate: -2px 0;
+      filter: none;
+    }
+  }
+
+  @keyframes over-tear {
+    0%,
+    57.4%,
+    100% {
+      clip-path: none;
+    }
+
+    55% {
+      clip-path: polygon(
+        -8% -20%, 108% -20%, 108% 22%, -8% 22%, -8% 31%, 108% 31%, 108% 120%, -8% 120%
+      );
+    }
+
+    56.2% {
+      clip-path: polygon(
+        -8% -20%, 108% -20%, 108% 58%, -8% 58%, -8% 64%, 108% 64%, 108% 120%, -8% 120%
+      );
+    }
+  }
+
+  @keyframes surge {
+    from {
+      text-shadow:
+        0 0 8px white,
+        0 0 22px var(--over-core),
+        0 0 44px var(--over-core);
+    }
+
+    to {
+      text-shadow:
+        0 0 14px white,
+        0 0 40px var(--over-core),
+        0 0 90px var(--over-core);
+    }
+  }
+
+  @keyframes limit-was {
+    0%,
+    11.5% {
+      opacity: 1;
+    }
+
+    10%,
+    13%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes limit-now {
+    0%,
+    11.5% {
+      opacity: 0;
+    }
+
+    10% {
+      opacity: 1;
+      translate: -2px 0;
+    }
+
+    13% {
+      opacity: 1;
+      translate: 2px 1px;
+    }
+
+    15%,
+    63.5% {
+      translate: 0;
+    }
+
+    62% {
+      translate: -1px 0;
+    }
+
+    100% {
+      opacity: 1;
+      translate: 0;
+    }
+  }
+}

@@ -1,0 +1,117 @@
+/*
+ * Maquette « Système » : ondes de courant des secteurs de la roue (wheel-fx.js).
+ *
+ * Une onde est un front net (.wave-front) et sa traîne (.wave-trail), un dégradé qui
+ * s'éteint vers le centre. Elle grandit du bord intérieur du secteur (rayon 186) à son
+ * bord extérieur (396). La couronne (.wheel-crown, .crown-hex) entoure et relie les
+ * insignes des domaines dont toutes les notions sont au moins rouges. Tout mouvement vit
+ * dans prefers-reduced-motion: no-preference ; sans lui, seule la couronne fixe reste.
+ */
+
+.sector-waves,
+.wheel-crown,
+.crown-hex {
+  pointer-events: none;
+}
+
+.sector-wave {
+  opacity: 0;
+}
+
+.wave-front {
+  fill: none;
+  stroke: color-mix(in oklab, var(--sector-color) 40%, white);
+  stroke-width: 2.5px;
+  vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 0 6px var(--sector-color));
+}
+
+.wave-stop-far {
+  stop-color: var(--sector-color);
+  stop-opacity: 0;
+}
+
+.wave-stop-near {
+  stop-color: color-mix(in oklab, var(--sector-color) 70%, white);
+  stop-opacity: 0.6;
+}
+
+/* ───── Couronne d'un domaine aux notions toutes au moins rouges (insignes) ───── */
+
+.crown-line,
+.crown-pulse,
+.sector-rank[data-rank] .crown-hex {
+  fill: none;
+}
+
+.crown-line {
+  stroke: color-mix(in oklab, var(--rarity-5) 55%, transparent);
+  stroke-width: 1.5;
+}
+
+/* Impulsions en unités de la roue : un pas de 179 vaut l'arc d'un domaine sur seize. */
+.crown-pulse,
+.sector-rank[data-rank] .crown-hex {
+  stroke: color-mix(in oklab, var(--rarity-5) 30%, white);
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 6px var(--rarity-5));
+}
+
+.crown-pulse {
+  stroke-width: 4;
+  stroke-dasharray: 70 109;
+}
+
+/* Hexagone agrandi autour de l'insigne ; deux impulsions par tour (périmètre 100). */
+.sector-rank[data-rank] .crown-hex {
+  scale: 1.32;
+  stroke-width: 2.5;
+  stroke-dasharray: 18 32;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .crown-pulse {
+    animation: crown-turn 1.6s linear infinite;
+  }
+
+  .crown-hex {
+    animation: crown-hex 1.4s linear infinite;
+  }
+
+  @keyframes crown-turn {
+    to {
+      stroke-dashoffset: -179;
+    }
+  }
+
+  @keyframes crown-hex {
+    to {
+      stroke-dashoffset: -50;
+    }
+  }
+
+  .sector-wave {
+    animation: sector-wave var(--period) cubic-bezier(0.3, 0.6, 0.4, 1) var(--delay) infinite;
+  }
+
+  /* 0.47 : rapport du bord intérieur (186) au bord extérieur (396) d'un secteur. */
+  @keyframes sector-wave {
+    from {
+      scale: 0.47;
+      opacity: 0;
+    }
+
+    18% {
+      opacity: 1;
+    }
+
+    70% {
+      opacity: 0.85;
+    }
+
+    to {
+      scale: 1;
+      opacity: 0;
+    }
+  }
+}

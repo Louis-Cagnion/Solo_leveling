@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#030814">
+  <title>Système de progression</title>
+  <link
+    rel="preload"
+    href="fonts/chakra-petch-latin-600-normal.woff2"
+    as="font"
+    type="font/woff2"
+    crossorigin
+  >
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/window.css">
+  <link rel="stylesheet" href="css/wheel.css">
+  <link rel="stylesheet" href="css/views.css">
+  <link rel="stylesheet" href="css/effects.css">
+  <link rel="stylesheet" href="css/inbox.css">
+  <link rel="stylesheet" href="css/wheel-fx.css">
+</head>
+<script defer src="data.js"></script>
+<script defer src="js/model.js"></script>
+<script defer src="js/dom.js"></script>
+<script defer src="js/effects.js"></script>
+<script defer src="js/sound-data.js"></script>
+<script defer src="js/sound.js"></script>
+<script defer src="js/wheel-fx.js"></script>
+<script defer src="js/wheel.js"></script>
+<script defer src="js/section.js"></script>
+<script defer src="js/certs.js"></script>
+<script defer src="js/status.js"></script>
+<script defer src="js/events.js"></script>
+<script defer src="js/inbox.js"></script>
+<script defer src="js/demo.js"></script>
+<script defer src="js/app.js"></script>
+<body>
+  <a class="skip-link" href="#view">Aller au contenu</a>
+  <header class="topbar">
+    <h1 class="brand"><a href="#/">Système de progression</a></h1>
+    <nav class="topnav" aria-label="Navigation principale">
+      <a class="button" id="nav-status" href="#/status">Statut</a>
+      <a class="button" href="network.html">Réseau des notions</a>
+      <button
+        class="button inbox-toggle"
+        type="button"
+        id="inbox-toggle"
+        popovertarget="inbox"
+        hidden
+      >
+        <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M8 1.5L13.6 4.75V11.25L8 14.5L2.4 11.25V4.75ZM8 5V8.8M8 10.9V11"/>
+        </svg>
+        <span>Événements</span>
+        <span class="inbox-count" id="inbox-count" hidden></span>
+      </button>
+      <button class="button sound-toggle" type="button" id="sound-toggle" aria-pressed="true">
+        <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M2.5 6.2V9.8H5L8.5 12.5V3.5L5 6.2Z"/>
+          <path d="M11 6A3 3 0 0 1 11 10M12.8 4.2A5.6 5.6 0 0 1 12.8 11.8"/>
+        </svg>
+        <span class="sound-label">Son activé</span>
+      </button>
+    </nav>
+  </header>
+  <main id="view" tabindex="-1"></main>
+  <section class="window inbox" id="inbox" popover aria-label="Événements"></section>
+  <div class="unlocks" id="unlocks" aria-live="polite"></div>
+  <div class="tip" id="tip" role="tooltip" popover="manual" hidden></div>
+</body>
+</html>
