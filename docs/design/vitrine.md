@@ -23,7 +23,7 @@ Le 21/11/2026, à ne pas redemander :
 - Source de GitHub Pages : Louis charge le moniteur de la basculer sur « GitHub Actions » dans Chrome (réponse du 21/11/2026). Le Chrome de l'extension n'est pas connecté à GitHub (essai du 21/11/2026 : la page des réglages donne 404 et propose « Sign in ») : Louis s'y connecte lui-même, jamais de mot de passe saisi par le moniteur.
 
 - Identifiant 42 de Louis (21/11/2026, à ne pas redemander) : masqué dans les instantanés (fichier local `tools/snapshot-mask.txt`, ignoré par Git) et retiré de tout l'historique du dépôt public (réécriture et push forcé du 21/11/2026 : toutes les empreintes depuis le 12/11 ont changé, les anciennes restent lisibles par adresse chez GitHub jusqu'à son nettoyage ; 0 fork, 0 étoile au moment du push).
-- Rendu validé par Louis le 21/11/2026 (« c'est bien »), avec une retouche à faire avant la mise en ligne : un effet des badges à étendre à certaines catégories du cercle (W9.3, à préciser).
+- Rendu validé par Louis le 21/11/2026 (« c'est bien »), avec une retouche faite avant la mise en ligne (W9.3) : l'anneau rouge autour du badge, relié aux voisins du même cas, s'affiche aussi sous `?demo` seul (il n'existait que sous `?demo=red` et `?demo=red-all`).
 
 Décidé par le moniteur, modifiable par Louis à la validation : le site n'est pas indexé par les moteurs de recherche (`<meta name="robots" content="noindex">`), puisqu'il ne sert qu'à Louis.
 
@@ -192,7 +192,7 @@ Conventions : celles de `docs/design/implementation.md` §0 (95 caractères par 
 
 Le suivi de `/professor` change presque chaque jour (commits sur les cartes ou `notions.md` 14 jours sur 15 du 07 au 21/11/2026) : l'instantané se rafraîchit à la demande de Louis, jamais de lui-même, tant que la V1 ne publie pas.
 
-1. `python3 -I tools/snapshot.py` : code 0, comptes affichés.
+1. `python3 -I tools/snapshot.py` : code 0, comptes affichés, et « Masqué : N occurrence(s) » avec N au moins égal à 1 (le fichier de masquage local `tools/snapshot-mask.txt`, ignoré par Git, doit exister sur la machine : sans lui l'identifiant 42 de Louis serait republié).
 2. Lignes 1 et 2 de « Restrictions et secours », puis `PYTHONPATH=source python3 -m unittest tests.public.test_site_static -v` vert.
 3. Commit `Vitrine : instantané des données du JJ/MM/AAAA` de `public/data.js` seul, puis push.
 4. Ligne 15, puis `index.html` en ligne (le cache de GitHub Pages peut garder l'ancienne version jusqu'à 10 minutes).
