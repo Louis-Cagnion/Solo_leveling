@@ -74,7 +74,7 @@ Plan du projet décrit dans `docs/specification.md`, en suivant la chaîne en 8 
 Statuts : [ ] à faire, [~] en cours, [x] faite, [v] validée, [!] bloquée
 Reprise (moniteur Sonnet/high au moins, jamais Fable ; consigne de Louis du 15/11/2026) : activer `/best-practice`, lire `todo.md` puis cet arbre, et reprendre à « Prochaine feuille prête ». Feuilles à garder en Opus/high, revue comprise : T4 (OAuth), T7 (calibration), T11 (page), W8 (revue de la vitrine).
 Ordre (Louis, 21/11/2026) : W (vitrine), puis P5 à partir de T2.a2, puis PM (pré-mortem).
-Prochaine feuille prête : W5 (W8 attend W5)
+Prochaine feuille prête : W8 (revue indépendante, opus/high)
 Moniteur : opus 5.5/high jusqu'à P3 ; depuis P4.7 : fable 5.2, effort par défaut de la session (aucun réglage pour ce modèle dans `settings.json`), session choisie par Louis ; plan de la vitrine : opus 5.5/high ; à partir de W1 : sonnet 5.5/high recommandé ; agents en sonnet ou opus seulement
 
 - W [nœud] : vitrine sur GitHub Pages (`docs/design/vitrine.md`, fiches W0 à W13) ; point de contrôle : W12 (`checker`), 15 lignes de « Restrictions et secours » jugées ; un agent à la fois
@@ -83,7 +83,7 @@ Moniteur : opus 5.5/high jusqu'à P3 ; depuis P4.7 : fable 5.2, effort par défa
   - [x] W2 builder : `public/` copié de la maquette, démonstration gardée (`?demo` tel quel) ; fait par : sonnet/low ; copie identique, pages relues dans Chrome (console vide, requêtes en 200) ; `public/data.js` copie provisoire, non commitée avant W3 (commit `ef34ac2`)
   - [x] W3 builder : `tools/snapshot.py` et `public/data.js` ; fait par : sonnet/medium, 8 tests verts, confidentialité de `data.js` contrôlée par le moniteur, rendu relu dans Chrome (19 cartes, console vide) ; commit `2b5098a`
   - [x] W4 builder : `public/` aux conventions de la PARTIE B, rendu inchangé ; fait par : sonnet/high, `views.css` scindé en 4 fichiers (CSS égal à l'ancien, règles CSSOM égales à la maquette dans Chrome), 6 corrections mécaniques ; écarts non corrigés au pré-mortem ; commit `f8830cf`
-  - [ ] W5 builder : politique de sécurité, `noindex`, icône, `404.html`, replis ; dépend de : W4 ; niveau pressenti : sonnet/high
+  - [x] W5 builder : politique de sécurité, `noindex`, icône, `404.html`, replis ; fait par : sonnet/high, 27 tests verts, 0 violation de la politique (Chrome sans interface et Chrome de l'extension, `file://` compris), replis joués ; commit `dec8bba`
   - [x] W6 builder : `tools/sound_partials.py` versionné, sortie dans `public/js/` ; fait par : sonnet/low ; `sound-data.js` identique après régénération (22 s sous plafond) ; commit `6057ed9`
   - [x] W7 builder : `.github/workflows/pages.yml`, actions épinglées par SHA ; fait par : sonnet/medium, 5 tests verts, SHA rejoués par le moniteur ; fichier NON commité jusqu'à W11 (son push déclenche un déploiement)
   - [ ] W8 analyst : revue indépendante, VALIDÉ ou À CORRIGER ; dépend de : W2 à W7 ; niveau pressenti : opus/high
