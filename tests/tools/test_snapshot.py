@@ -1,4 +1,4 @@
-"""Tests de `tools/snapshot.py` (cas N1 à N4, L1, L2 et Q1 de la fiche W1)."""
+"""Tests de `tools/snapshot.py` (cas N1 à N6, L1 à L4 et Q1)."""
 
 import hashlib
 import json
@@ -18,10 +18,20 @@ MAX_LINES = 750
 TIMEOUT = 60
 
 
-def run_snapshot(suivi, output):
-    """Lance `python3 -I tools/snapshot.py --suivi <suivi> --output <output>`."""
+def run_snapshot(suivi, output, *extra):
+    """Lance `python3 -I tools/snapshot.py --suivi <suivi> --output <output>` plus `extra`."""
+    command = [
+        sys.executable,
+        "-I",
+        str(SCRIPT),
+        "--suivi",
+        str(suivi),
+        "--output",
+        str(output),
+        *extra,
+    ]
     return subprocess.run(
-        [sys.executable, "-I", str(SCRIPT), "--suivi", str(suivi), "--output", str(output)],
+        command,
         capture_output=True,
         text=True,
         timeout=TIMEOUT,
@@ -104,6 +114,51 @@ class SnapshotTest(unittest.TestCase):
         self.assertEqual(result.returncode, 1)
         self.assertTrue(result.stderr.strip(), "message attendu sur stderr")
         self.assertNotIn("Traceback", result.stderr)
+
+    def write_mask(self, content):
+        """Écrit un fichier de masquage temporaire et renvoie son chemin."""
+        path = self.tmp / "mask.txt"
+        path.write_text(content, encoding="utf-8")
+        return path
+
+    def test_N5(self):
+        mask = self.write_mask("# commentaire\n\nSuite\n")
+        result = run_snapshot(FIXTURE, self.output, "--mask", mask)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        text = self.output.read_text(encoding="utf-8")
+        self.assertNotIn("Suite de la notion de base", text)
+        self.assertIn("[masqué] de la notion de base", text)
+        load_output(self.output)
+
+    def test_N6(self):
+        self.generate()
+        reference = load_output(self.output)
+        other = self.tmp / "out" / "empty-mask.js"
+        mask = self.write_mask("")
+        result = run_snapshot(FIXTURE, other, "--mask", mask)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        text = other.read_text(encoding="utf-8")
+        self.assertIn("Suite de la notion de base", text)
+        data = load_output(other)
+        for item in (reference, data):
+            del item["meta"]["generatedAt"]
+        self.assertEqual(data, reference)
+
+    def test_L3(self):
+        missing = self.tmp / "mask-absent.txt"
+        self.output.write_text("ancien contenu\n", encoding="utf-8")
+        before = sha256(self.output)
+        result = run_snapshot(FIXTURE, self.output, "--mask", missing)
+        self.assertEqual(result.returncode, 1)
+        self.assertIn(str(missing), result.stderr)
+        self.assertEqual(sha256(self.output), before)
+
+    def test_L4(self):
+        mask = self.write_mask('Suite\nbad"quote\n')
+        result = run_snapshot(FIXTURE, self.output, "--mask", mask)
+        self.assertEqual(result.returncode, 1)
+        self.assertIn(str(mask), result.stderr)
+        self.assertRegex(result.stderr, r"\b2\b")
 
     def test_Q1(self):
         self.assertTrue(SCRIPT.is_file(), f"fichier absent : {SCRIPT}")

@@ -5,6 +5,9 @@ Lit en lecture seule cartes/*.md, notions.md et relations.csv du suivi, puis éc
 public/data.js sous la forme window.SYSTEME = {...}, sans aucun chemin absolu.
 
 Usage : python3 -I tools/snapshot.py [--suivi DOSSIER] [--output FICHIER]
+        [--mask FICHIER]
+Masque : --mask, sinon tools/snapshot-mask.txt (local, ignoré par Git, facultatif) ; une
+chaîne par ligne, remplacée par [masqué] dans la sortie ; # et lignes vides ignorés.
 Suivi : --suivi, sinon PROFESSOR_SUIVI_DIR, sinon le suivi du dépôt des commandes.
 Sortie : code 0 et comptes sur stdout ; code 1 et message sur stderr (cause et
 chemin) si une source est illisible ou la sortie non inscriptible, l'ancien
@@ -22,8 +25,13 @@ import unicodedata
 from datetime import datetime
 from pathlib import Path
 
+# Sous `python3 -I`, le dossier du script n'est pas dans sys.path.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from snapshot_mask import DEFAULT_MASK, MaskError, mask_payload, read_mask  # noqa: E402
+
 DEFAULT_SUIVI = Path.home() / "claude_custom_commands" / "references" / "professor" / "suivi"
-OUTPUT = Path(__file__).resolve().parent.parent / "public" / "data.js"
+ROOT = Path(__file__).resolve().parent.parent
+OUTPUT = ROOT / "public" / "data.js"
 
 # Ordre de preuve de methode.md (« États d'une notion ») ; « déclarée » ne prouve rien.
 STATES = (
@@ -687,7 +695,7 @@ def write_atomically(path, text):
 
 
 def parse_arguments(argv):
-    """Lit la ligne de commande : --suivi et --output, avec leurs défauts."""
+    """Lit la ligne de commande : --suivi, --output et --mask, avec leurs défauts."""
     parser = argparse.ArgumentParser(description="Génère l'instantané de la vitrine.")
     parser.add_argument(
         "--suivi",
@@ -701,6 +709,12 @@ def parse_arguments(argv):
         default=OUTPUT,
         help="fichier data.js écrit",
     )
+    parser.add_argument(
+        "--mask",
+        type=Path,
+        default=None,
+        help="chaînes à masquer, une par ligne (défaut : tools/snapshot-mask.txt)",
+    )
     return parser.parse_args(argv)
 
 
@@ -708,11 +722,12 @@ def main(argv=None):
     """Génère l'instantané et affiche les comptes ; renvoie le code de sortie."""
     arguments = parse_arguments(argv)
     try:
+        strings = read_mask(arguments.mask or DEFAULT_MASK, arguments.mask is not None)
         data, counts = build(arguments.suivi)
-    except DataError as error:
+        payload, masked = mask_payload(json.dumps(data, ensure_ascii=False, indent=1), strings)
+    except (DataError, MaskError) as error:
         print(f"snapshot : {error}", file=sys.stderr)
         return 1
-    payload = json.dumps(data, ensure_ascii=False, indent=1)
     try:
         write_atomically(arguments.output, f"window.SYSTEME = {payload};\n")
     except OSError as error:
@@ -722,6 +737,7 @@ def main(argv=None):
     for name, value in counts.items():
         print(f"{name} : {value}")
     print(f"anomalies : {len(data['anomalies'])}")
+    print(f"Masqué : {masked} occurrence(s)")
     print(f"Écrit : {arguments.output}")
     return 0
 
