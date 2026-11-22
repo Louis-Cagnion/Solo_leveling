@@ -508,6 +508,12 @@
   color: var(--text-dim);
 }
 
+.fatal .address {
+  color: var(--text);
+  overflow-wrap: anywhere;
+  user-select: all;
+}
+
 .empty {
   color: var(--text-dim);
 }

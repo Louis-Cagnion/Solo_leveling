@@ -9,7 +9,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 PUBLIC = ROOT / "public"
-PAGES = ("index.html", "network.html", "404.html")
+PAGES = ("index.html", "network.html", "404.html", "unsupported.html")
 MAX_LINE = 95
 MAX_LINES = 750
 EM_DASH = chr(0x2014)
