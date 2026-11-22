@@ -2,7 +2,7 @@
 
 import functools
 
-GUARDED_ERRORS = (LookupError, TypeError, ValueError, AttributeError)
+GUARDED_ERRORS = (LookupError, TypeError, ValueError, AttributeError, OverflowError)
 
 
 def never_raises(fallback):

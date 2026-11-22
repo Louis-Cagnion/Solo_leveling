@@ -4,7 +4,7 @@ Les titres, leurs types et leurs seuils viennent de `rules["titles"]` : chaque t
 un évaluateur de `TITLE_TYPES`, et un titre de plus dans la configuration apparaît sans
 changer le code. Un titre acquis est un fait `titre` reçu en paramètre (A7), jamais un
 fichier lu ici. Aucune fonction publique ne lève : une donnée inutilisable donne une valeur
-`unmeasurable`, `insufficient`, `()` ou une entité vide.
+`unmeasurable`, `()` ou une entité vide.
 """
 
 import math
@@ -15,7 +15,6 @@ from system_sync.model import (
     REASON_CODES,
     Anomaly,
     StatedValue,
-    insufficient,
     observed,
     unmeasurable,
 )
@@ -139,18 +138,25 @@ def _rank_title(spec, inputs):
 
     Returns:
         Le couple (valeur statuée `obtained`, progression ou `None` sans mesure) ;
-        `insufficient` sans carte ou si le rang d'une carte est inutilisable.
+        `unmeasurable` sans carte ou si le rang d'une carte est inutilisable.
     """
     cards = inputs.card_ranks
     if not isinstance(cards, dict) or not cards:
         reason = f"aucune carte reçue ({cards!r}) : le titre ne peut pas être jugé"
-        return insufficient(reason, "no_cards"), None
+        return unmeasurable(reason, "no_cards"), None
     required = inputs.order.index(spec["rank"])
-    standings = {name: _standing(state, inputs.order, required) for name, state in cards.items()}
-    lacking = [f"{name!r} ({cards[name]!r})" for name, found in standings.items() if found is None]
+    standings = {
+        name: _standing(state, inputs.order, required)
+        for name, state in cards.items()
+    }
+    lacking = [
+        f"{name!r} ({cards[name]!r})"
+        for name, found in standings.items()
+        if found is None
+    ]
     if lacking:
         reason = f"rang inutilisable pour les cartes : {', '.join(lacking)}"
-        return insufficient(reason, "card_rank_missing"), None
+        return unmeasurable(reason, "card_rank_missing"), None
     sources = {source for state in cards.values() for source in state.sources}
     reached = sum(standings.values())
     obtained = observed(reached == len(cards), tuple(sorted(sources)) or (NOTIONS,))
@@ -224,7 +230,8 @@ def school_titles(level, card_ranks, facts, rules):
         rules: dictionnaire de `config.load_rules`.
 
     Returns:
-        Un tuple de dicts `id`, `type`, `obtained`, `progress` ; `()` si `rules` est inutilisable.
+        Un tuple de dicts `id`, `type`, `obtained`, `progress` ;
+        `()` si `rules` est inutilisable.
     """
     configured = rules["titles"]
     inputs = _Inputs(level, card_ranks, list(rules["ranks"]))
@@ -304,7 +311,7 @@ def _scan(achievements):
 
 
 def _obtained_state(item):
-    """Renvoie `obtained` d'un achievement, `unmeasurable` s'il n'est pas une valeur statuée."""
+    """Renvoie `obtained` d'un achievement, `unmeasurable` sans valeur statuée."""
     state = item.get("obtained")
     if isinstance(state, StatedValue):
         return state
@@ -382,7 +389,8 @@ def achievements_entity(achievements, complete):
 def _unlisted(item, catalogue_ids):
     """Dit si un achievement obtenu est absent des identifiants de la liste complète."""
     state = _obtained_state(item)
-    return state.status == "observed" and state.value is True and item["id"] not in catalogue_ids
+    obtained = state.status == "observed" and state.value is True
+    return obtained and item["id"] not in catalogue_ids
 
 
 @never_raises(empty)
