@@ -54,19 +54,34 @@ def _is_time(value, kind):
     return True
 
 
+def _is_finite(value):
+    """Dit si `value` est un nombre non booléen, fini et représentable en flottant."""
+    try:
+        return _is_number(value) and math.isfinite(value)
+    except OverflowError:
+        return False
+
+
+def _is_text(value):
+    """Dit si `value` est une chaîne encodable en UTF-8 (sans substitut isolé)."""
+    if not isinstance(value, str):
+        return False
+    try:
+        value.encode("utf-8")
+    except UnicodeEncodeError:
+        return False
+    return True
+
+
 # Types feuilles : nom -> (prédicat, description de la valeur attendue).
 LEAVES = {
-    "text": (lambda value: isinstance(value, str), "texte"),
+    "text": (_is_text, "texte"),
     "bool": (lambda value: isinstance(value, bool), "booléen"),
     "null": (lambda value: value is None, "null"),
     "count": (lambda value: _is_int(value) and value >= 0, "entier positif ou nul"),
     "nonneg": (
-        lambda value: _is_number(value) and math.isfinite(value) and value >= 0,
+        lambda value: _is_finite(value) and value >= 0,
         "nombre fini positif ou nul",
-    ),
-    "json": (
-        lambda value: not isinstance(value, float) or math.isfinite(value),
-        "valeur JSON finie",
     ),
     "date": (lambda value: _is_time(value, "date"), "date AAAA-MM-JJ"),
     "datetime": (
@@ -227,7 +242,31 @@ def _type_problem(path, value, expected):
     return (path or "$", cause)
 
 
+def _is_json_scalar(value):
+    """Dit si `value` est null, un booléen, un nombre fini ou un texte valide."""
+    return value is None or isinstance(value, bool) or _is_finite(value) or _is_text(value)
+
+
+def _check_json(path, value, problems):
+    """Vérifie une valeur JSON finie : texte, nombre, bool, null, liste, objet."""
+    if isinstance(value, list):
+        for index, item in enumerate(value):
+            _check_json(f"{path}[{index}]", item, problems)
+    elif isinstance(value, dict):
+        for key, item in value.items():
+            if _is_text(key):
+                _check_json(_child(path, key), item, problems)
+            else:
+                problems.append((path, f"clé {key!r} qui n'est pas du texte"))
+    elif not _is_json_scalar(value):
+        cause = f"valeur {value!r} de type {type(value).__name__}, attendu valeur JSON finie"
+        problems.append((path or "$", cause))
+
+
 def _check_leaf(path, value, node, problems):
+    if node == "json":
+        _check_json(path, value, problems)
+        return
     predicate, expected = LEAVES[node]
     if not predicate(value):
         cause = f"valeur {value!r} de type {type(value).__name__}, attendu {expected}"
@@ -260,7 +299,8 @@ def _check_list(path, value, node, problems):
         key = item.get(unique) if unique and isinstance(item, dict) else None
         if isinstance(key, str) and key in seen:
             problems.append((f"{path}[{index}].{unique}", f"doublon {key!r}"))
-        seen.add(key)
+        if isinstance(key, str):
+            seen.add(key)
 
 
 def _check_map(path, value, node, problems):

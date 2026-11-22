@@ -61,9 +61,15 @@ def stated_problems(value, status, sources, reason, reason_code):
     if status not in STATUSES:
         return [("status", f"statut {status!r} hors de {STATUSES}")]
     found = []
+    sources_valid = isinstance(sources, (list, tuple)) and all(
+        isinstance(name, str) and name.strip() for name in sources
+    )
+    if not sources_valid:
+        cause = f"sources {sources!r} : liste ou tuple de chaînes non vides attendu"
+        found.append(("sources", cause))
     if status == "observed" and value is None:
         found.append(("value", "valeur null pour un statut observed"))
-    if status == "observed" and not sources:
+    if status == "observed" and sources_valid and not sources:
         found.append(("sources", f"sources {sources!r} vides pour un statut observed"))
     if status == "unmeasurable" and value is not None:
         found.append(("value", f"valeur {value!r} pour un statut unmeasurable"))
@@ -106,7 +112,7 @@ class StatedValue:
         if problems:
             field, cause = problems[0]
             raise ModelError(f"{field} : {cause}")
-        object.__setattr__(self, "sources", tuple(self.sources or ()))
+        object.__setattr__(self, "sources", tuple(self.sources))
 
     def to_dict(self):
         """Renvoie la forme JSON de l'état, sources en liste."""
@@ -129,7 +135,7 @@ def observed(value, sources):
     Returns:
         La `StatedValue` de statut `observed`.
     """
-    return StatedValue(value, "observed", tuple(sources))
+    return StatedValue(value, "observed", sources)
 
 
 def estimated(value, sources, reason=None, reason_code=None):
@@ -144,7 +150,7 @@ def estimated(value, sources, reason=None, reason_code=None):
     Returns:
         La `StatedValue` de statut `estimated`.
     """
-    return StatedValue(value, "estimated", tuple(sources), reason, reason_code)
+    return StatedValue(value, "estimated", sources, reason, reason_code)
 
 
 def insufficient(reason, reason_code, value=None):
