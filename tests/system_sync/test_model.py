@@ -221,5 +221,31 @@ class InvariantsTest(unittest.TestCase):
             self.assertIn("code_invente", str(ctx.exception))
 
 
+class SourcesTypeTest(unittest.TestCase):
+    def test_I1_text_sources_are_refused_not_split_into_characters(self):
+        with self.assertRaises(model.ModelError) as ctx:
+            model.observed(12.44, "api42")
+        self.assertIn("sources", str(ctx.exception))
+        self.assertIn("api42", str(ctx.exception))
+
+    def test_I1_non_text_or_empty_items_are_refused(self):
+        for sources in ([5], [""]):
+            with self.assertRaises(model.ModelError, msg=repr(sources)) as ctx:
+                model.observed(1, sources)
+            self.assertIn("sources", str(ctx.exception))
+            self.assertIn(repr(sources[0]), str(ctx.exception))
+
+    def test_I1_non_iterable_sources_raise_model_error(self):
+        with self.assertRaises(model.ModelError) as ctx:
+            model.observed(1, 5)
+        self.assertIn("sources", str(ctx.exception))
+        self.assertIn("5", str(ctx.exception))
+
+    def test_I1_list_and_tuple_sources_stay_valid(self):
+        for sources in (["api42"], ("api42",)):
+            stated = model.observed(12.44, sources)
+            self.assertEqual(stated.sources, ("api42",), repr(sources))
+
+
 if __name__ == "__main__":
     unittest.main()
