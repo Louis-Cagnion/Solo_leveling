@@ -1,0 +1,5 @@
+id,cadre,statut,date,equivalent_42,justification
+demo-perso-a,perso,livré,15/03/2026,demo-printf,taille proche de demo-printf
+demo-pro-b,pro,livré,20/04/2026,demo-webserv,projet d'alternance fictif écrit par l'IA
+demo-perso-c,perso,livré,10/05/2026,demo-minishell,aucune ligne d'historique
+demo-perso-d,perso,livré,01/06/2026,demo-libft,reprise d'un projet 42 déjà validé

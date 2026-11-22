@@ -1,0 +1,43 @@
+{
+  "catalogue": [
+    {
+      "slug": "demo-libft",
+      "name": "Demo Libft",
+      "difficulty": 100
+    },
+    {
+      "slug": "demo-alternance",
+      "name": "Demo Alternance",
+      "difficulty": 200
+    },
+    {
+      "slug": "demo-minishell",
+      "name": "Demo Minishell",
+      "difficulty": 300
+    },
+    {
+      "slug": "demo-printf",
+      "name": "Demo Printf",
+      "difficulty": 400
+    },
+    {
+      "slug": "demo-webserv",
+      "name": "Demo Webserv",
+      "difficulty": 1000
+    }
+  ],
+  "validated": [
+    {
+      "id": 1,
+      "slug": "demo-libft",
+      "name": "Demo Libft",
+      "final_mark": 100
+    },
+    {
+      "id": 2,
+      "slug": "demo-alternance",
+      "name": "Demo Alternance",
+      "final_mark": 100
+    }
+  ]
+}
