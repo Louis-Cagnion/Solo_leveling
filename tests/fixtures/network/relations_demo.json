@@ -1,0 +1,152 @@
+[
+  {
+    "date": "2026-10-15",
+    "source": "net-a",
+    "relation": "prerequis",
+    "target": "net-c",
+    "status": "theorique",
+    "limit": "",
+    "proof": "",
+    "line": 2
+  },
+  {
+    "date": "2026-10-15",
+    "source": "net-b",
+    "relation": "prerequis",
+    "target": "net-c",
+    "status": "reconnue",
+    "limit": "",
+    "proof": "",
+    "line": 3
+  },
+  {
+    "date": "2026-10-15",
+    "source": "net-d",
+    "relation": "prerequis",
+    "target": "net-e",
+    "status": "demontree",
+    "limit": "",
+    "proof": "",
+    "line": 4
+  },
+  {
+    "date": "2026-10-15",
+    "source": "net-b",
+    "relation": "complementaire",
+    "target": "net-e",
+    "status": "theorique",
+    "limit": "",
+    "proof": "",
+    "line": 5
+  },
+  {
+    "date": "2026-10-15",
+    "source": "net-d",
+    "relation": "prerequis",
+    "target": "net-b",
+    "status": "theorique",
+    "limit": "",
+    "proof": "",
+    "line": 6
+  },
+  {
+    "date": "2026-10-15",
+    "source": "net-a",
+    "relation": "prerequis",
+    "target": "net-gone",
+    "status": "theorique",
+    "limit": "",
+    "proof": "",
+    "line": 7
+  },
+  {
+    "date": "2026-10-15",
+    "source": "net-a",
+    "relation": "prerequis",
+    "target": "net-a",
+    "status": "theorique",
+    "limit": "",
+    "proof": "",
+    "line": 8
+  },
+  {
+    "date": "2026-10-15",
+    "source": "net-a",
+    "relation": "prerequis",
+    "target": "net-c",
+    "status": "reconnue",
+    "limit": "",
+    "proof": "",
+    "line": 9
+  },
+  {
+    "date": "2026-10-15",
+    "source": "net-x",
+    "relation": "prerequis",
+    "target": "net-y",
+    "status": "theorique",
+    "limit": "",
+    "proof": "",
+    "line": 10
+  },
+  {
+    "date": "2026-10-15",
+    "source": "net-y",
+    "relation": "prerequis",
+    "target": "net-z",
+    "status": "theorique",
+    "limit": "",
+    "proof": "",
+    "line": 11
+  },
+  {
+    "date": "2026-10-15",
+    "source": "net-z",
+    "relation": "prerequis",
+    "target": "net-x",
+    "status": "theorique",
+    "limit": "",
+    "proof": "",
+    "line": 12
+  },
+  {
+    "date": "2026-10-15",
+    "source": "net-a",
+    "relation": "prerequis",
+    "target": "net-d",
+    "status": "presque",
+    "limit": "",
+    "proof": "",
+    "line": 13
+  },
+  {
+    "date": "2026-10-15",
+    "source": "net-a",
+    "relation": "prerequis",
+    "target": "net-f",
+    "status": "theorique",
+    "limit": "",
+    "proof": "",
+    "line": 14
+  },
+  {
+    "date": "2026-10-15",
+    "source": "net-u",
+    "relation": "prerequis",
+    "target": "net-a",
+    "status": "theorique",
+    "limit": "",
+    "proof": "",
+    "line": 15
+  },
+  {
+    "date": "2026-10-15",
+    "source": "net-b",
+    "relation": "prerequis",
+    "target": "net-u",
+    "status": "theorique",
+    "limit": "",
+    "proof": "",
+    "line": 16
+  }
+]

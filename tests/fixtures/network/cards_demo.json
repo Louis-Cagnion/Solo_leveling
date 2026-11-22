@@ -1,0 +1,34 @@
+[
+  {
+    "name": "Alpha",
+    "tiers": {
+      "Débutant": [
+        "net-a",
+        "net-b",
+        "net-c"
+      ],
+      "Intermédiaire": [
+        "net-d",
+        "net-e"
+      ],
+      "Avancé": [
+        "net-f",
+        "net-u"
+      ],
+      "Transcendée": []
+    },
+    "ids": [
+      "net-a",
+      "net-b",
+      "net-c",
+      "net-d",
+      "net-e",
+      "net-f",
+      "net-u"
+    ],
+    "declared": 7,
+    "declared_followed": 6,
+    "certifications": {},
+    "has_certifications": false
+  }
+]
