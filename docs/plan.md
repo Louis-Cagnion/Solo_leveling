@@ -74,7 +74,7 @@ Plan du projet décrit dans `docs/specification.md`, en suivant la chaîne en 8 
 Statuts : [ ] à faire, [~] en cours, [x] faite, [v] validée, [!] bloquée
 Reprise (moniteur Sonnet/high au moins, jamais Fable ; consigne de Louis du 15/11/2026) : activer `/best-practice`, lire `todo.md` puis cet arbre, et reprendre à « Prochaine feuille prête ». Feuilles à garder en Opus/high, revue comprise : T4 (OAuth), T7 (calibration), T11 (page), W8 (revue de la vitrine).
 Ordre (Louis, 21/11/2026) : W (vitrine, close), puis P5 à partir de T2.a2, puis PM (pré-mortem). Louis, 22/11/2026 : objectif du jour, la connexion de ses données : T2, puis T3 (lecteurs de `/professor`), puis T4 (API 42, achievements), avant T5 ; la connexion réelle de T4 (consentement et `.env`) reste à faire par lui.
-Prochaine feuille prête : T1.e (tester puis builder sonnet/low, `cert_ready_at_least` dans `config/rules.toml` et `config.py`), puis T6 (rangs)
+Prochaine feuille prête : T6.c (analyst, revue des rangs), après la fin de T6.b
 Moniteur : opus 5.5/high jusqu'à P3 ; depuis P4.7 : fable 5.2, effort par défaut de la session (aucun réglage pour ce modèle dans `settings.json`), session choisie par Louis ; plan de la vitrine : opus 5.5/high ; à partir de W1 : sonnet 5.5/high recommandé ; agents en sonnet ou opus seulement
 
 - W [nœud] : vitrine sur GitHub Pages, en ligne depuis le 21/11/2026 (`docs/design/vitrine.md`) ; point de contrôle W12 validé : 15 lignes de « Restrictions et secours » tenues sur 15 (9 rejouées, 6 relevées du moniteur), suite complète 88 verts et 61 erreurs, toutes dans les tests rouges de T2.a attendus
@@ -122,7 +122,7 @@ Moniteur : opus 5.5/high jusqu'à P3 ; depuis P4.7 : fable 5.2, effort par défa
   - [x] T3 (a faite par sonnet/high : 49 tests rouges, 71 avec A21 et la remesure des comptes réels du 22/11/2026, `0584602` ; b faite par sonnet/medium, `95913cb` ; c faite par sonnet/high : À CORRIGER, 0 critique, 5 importants, mineurs au pré-mortem ; d faite (tests par sonnet/medium, correction par sonnet/high, `6d0e90e` et `7512aa3`) : 298 tests verts sur toute la suite, module scindé en trois fichiers)
   - [x] T4 (a faite par opus/medium : 38 tests rouges, `f8534bc` ; b faite par opus/high : 38 verts, `f108443` ; c faite par opus/high : À CORRIGER, 0 critique, 3 importants, 13 mineurs au pré-mortem ; d faite (tests par sonnet/high, `0400a5f` ; correction par opus/high, `b775680`) : 330 tests verts sur toute la suite, serveur de retour concurrent ; la connexion réelle reste à faire par Louis)
   - [x] T5 (a faite par sonnet/medium : 25 tests rouges, `5f817c7` ; b faite par sonnet/medium, `b8e8757` ; c faite par sonnet/medium : À CORRIGER, 0 critique, 2 importants, 6 mineurs au pré-mortem ; d faite (tests par sonnet/low, `118eeb2` ; correction par sonnet/medium, `30b0388`) : 373 tests verts sur toute la suite)
-  - [ ] T6
+  - [~] T6 (a faite par sonnet/high : 43 tests rouges et 7 sur les vraies données remesurées le 22/11/2026 (19 cartes : 11 E, 8 sans rang, 0 D, 0 certification accessible), `126be78` ; b en cours, sonnet/medium)
   - [ ] T9
   - [ ] T7
   - [ ] T8
@@ -131,7 +131,7 @@ Moniteur : opus 5.5/high jusqu'à P3 ; depuis P4.7 : fable 5.2, effort par défa
   - [ ] T12
   - [v] P5.0 analyst : écarts entre la maquette validée `mockups/system/` et le contrat de données du plan ; fait par : opus/high, 17 écarts (E1 à E17), repris par le moniteur dans les amendements A17 à A30
   - [x] T2.a2 tester (fait par sonnet/medium le 22/11/2026 : 122 tests rouges, 14 entités, `fdde9eb`) : fixtures `tests/fixtures/state/*.js` et tests `test_model.py`, `test_output.py` portés au contrat amendé (A17 à A25 et entité `names` de A27, 14 entités), toujours rouges ; niveau pressenti : sonnet/medium ; puis T2.b (sonnet/high), c, d
-  - [ ] T1.e tester puis builder : `cert_ready_at_least` dans `config/rules.toml` et `config.py` (A22) ; avant T6 ; niveau pressenti : sonnet/low
+  - [x] T1.e tester puis builder (faite le 22/11/2026 : tests par sonnet/low, `5624fe3` ; code par sonnet/low, `242caac` ; 382 tests verts) : `cert_ready_at_least` dans `config/rules.toml` et `config.py` (A22) ; avant T6 ; niveau pressenti : sonnet/low
   - [ ] T13 (après T10) : synchronisation lancée à la clôture d'une session `/professor` et formats de T0 (A29) ; dépôt des commandes, commit isolé ; niveau pressenti : sonnet/medium
   - [ ] T14 (après T3, avant T10) : table `config/names-en.toml` des noms de `/professor` en anglais, lue par `sync`, avec le test « aucun identifiant sans traduction » (A27) ; niveau pressenti : sonnet/medium pour le lecteur et le test, haiku/medium pour remplir la table par carte
   - T11 se découpe au lancement (A26 à A28) : adaptateur et fonctions pures avec `node --test`, page `index.html`, page `network.html`, textes en deux langues et leur test ; opus/high pour les deux pages
