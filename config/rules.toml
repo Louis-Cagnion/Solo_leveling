@@ -16,6 +16,7 @@ order = [
     "déclarée",
 ]
 excluded = ["déclarée"]
+cert_ready_at_least = "retenue"
 
 # Rangs d'un domaine, du plus bas au plus haut : le rang affiché est le plus haut
 # dont la condition et toutes les précédentes sont remplies.

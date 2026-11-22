@@ -145,6 +145,17 @@ class _Rules:
         for state in self.texts("states", "excluded", states.get("excluded", [])):
             if state not in seen:
                 self.fail("states", "excluded", "nomme un état hors de `order`", state)
+        self.check_cert_ready(states, order)
+
+    def check_cert_ready(self, states, order):
+        """Contrôle `cert_ready_at_least` : un état de `order` non exclu."""
+        state = self.text("states", "cert_ready_at_least", states)
+        if state in states.get("excluded", []):
+            self.fail("states", "cert_ready_at_least", "nomme un état exclu", state)
+        if state not in order:
+            allowed = ", ".join(order)
+            problem = f"doit nommer un état de `states.order` ({allowed})"
+            self.fail("states", "cert_ready_at_least", problem, state)
 
     def check_typed(self, family):
         """Chaque rang ou titre est une table avec un `type` textuel."""
