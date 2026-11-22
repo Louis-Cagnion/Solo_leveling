@@ -28,7 +28,10 @@ FINGERPRINTS = {
 CARDS = 19
 CARD_NOTIONS = 822
 CARDS_WITH_CERTIFICATIONS = 7
-CERTIFICATION_CELLS = 327
+CARDS_WITH_CERTIFICATION_COLUMN = 7
+CARDS_WITHOUT_CERTIFICATION_COLUMN = 12
+CERTIFICATION_CELLS = 192
+SHORT_CARD_ROWS = ("cartes/linux-systeme.md", range(82, 92))
 FOLLOWED = 179
 FOLLOWED_ON_CARD = 124
 FOLLOWED_OFF_CARD = 55
@@ -55,7 +58,10 @@ HISTORY = 279
 HISTORY_SUSPECT_LINES = [45]
 AUTHORS = {"ia": 148, "lecture": 68, "louis": 47, "mixte": 16}
 PROJECTS = 31
-ANOMALIES = [("historique-ia.csv", 45, "suspect_date")]
+ANOMALIES = [
+    *[("cartes/linux-systeme.md", line, "field_count") for line in SHORT_CARD_ROWS[1]],
+    ("historique-ia.csv", 45, "suspect_date"),
+]
 
 
 def short_digest(data):
@@ -110,7 +116,8 @@ class RealCountsTest(unittest.TestCase):
         self.assertEqual((cards.read, cards.rejected, len(cards.records)), (CARDS, 0, CARDS))
         self.assertEqual(sum(len(card["ids"]) for card in cards.records), CARD_NOTIONS)
         self.assertEqual(sum(card["declared"] for card in cards.records), CARD_NOTIONS)
-        self.assertEqual(len(cards.anomalies), 0)
+        found = [(a.file, a.line, a.kind) for a in cards.anomalies]
+        self.assertEqual(found, ANOMALIES[:-1])
 
     def test_real_card_certification_cells(self):
         certifications = [card["certifications"] for card in self.results["cards"].records]
@@ -119,6 +126,12 @@ class RealCountsTest(unittest.TestCase):
         self.assertEqual(sum(len(found) for found in certifications), CERTIFICATION_CELLS)
         texts = [text for found in filled for text in found.values()]
         self.assertEqual([text for text in texts if not text or text != text.strip()], [])
+        self.assertNotIn("\u2014", texts)
+
+    def test_real_card_certification_column_flag(self):
+        flags = [card["has_certifications"] for card in self.results["cards"].records]
+        self.assertEqual(flags.count(True), CARDS_WITH_CERTIFICATION_COLUMN)
+        self.assertEqual(flags.count(False), CARDS_WITHOUT_CERTIFICATION_COLUMN)
 
     def test_real_followed_notions_on_and_off_card(self):
         notions = self.results["notions"]

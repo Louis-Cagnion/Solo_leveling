@@ -13,7 +13,9 @@ Contrat de T3.b (`from system_sync.sources import professor`, aucune fonction ne
   `read` (lignes de données ou cartes), `rejected` (hors dates suspectes) ; 0 et 0 si
   indisponible. Dates en AAAA-MM-JJ, `None` si texte libre ; en-tête seul : `ok`, vide.
 - `cards[].certifications` (A21) : id vers texte brut, espaces retirés, de la cellule
-  « Certifications » ; cellules vides ignorées, `{}` sans colonne ou sans cellule remplie.
+  « Certifications » ; cellules vides ou « tiret cadratin » ignorées, `{}` sans colonne ou
+  sans cellule remplie. `cards[].has_certifications` (booléen) : vrai si la carte a une colonne
+  « Certifications », même sans cellule remplie.
 """
 
 import hashlib
@@ -46,6 +48,7 @@ RECORD_KEYS = {
         "declared",
         "declared_followed",
         "certifications",
+        "has_certifications",
     },
     "notions": {
         "id",
@@ -171,9 +174,14 @@ def lines_of(text, needle):
     return [n for n, line in enumerate(text.splitlines(), 1) if needle in line]
 
 
-def card_text(title, tiers):
-    """Fabrique une carte : `tiers` est une liste de couples (palier, identifiants)."""
-    lines = [f"# Carte : {title}", "", "- **Notions** : 4, aucune déjà suivie.", ""]
+def card_text(title, tiers, declared=None):
+    """Fabrique une carte : `tiers` est une liste de couples (palier, identifiants).
+
+    `declared` est le compte « Notions : N » ; par défaut, le nombre d'identifiants distincts.
+    """
+    if declared is None:
+        declared = len({note_id for _, ids in tiers for note_id in ids})
+    lines = [f"# Carte : {title}", "", f"- **Notions** : {declared}, aucune déjà suivie.", ""]
     for tier, ids in tiers:
         lines += [f"## {tier}", "", "| Id | Notion |", "|---|---|"]
         lines += [f"| {note_id} | Notion {note_id} |" for note_id in ids]
@@ -264,10 +272,12 @@ class NominalTest(ProfessorCase):
         cards = {c["name"]: c for c in professor.read_cards(SUIVI / "cartes").records}
         expected = {"alpha-array": "ALPHA-1", "alpha-heap": "ALPHA-1 et ALPHA-2 (fictives)"}
         self.assertEqual(dict(cards["Alpha"]["certifications"]), expected)
+        self.assertIs(cards["Alpha"]["has_certifications"], True)
 
     def test_N16_card_without_certification_column_gives_an_empty_dict(self):
         cards = {c["name"]: c for c in professor.read_cards(SUIVI / "cartes").records}
         self.assertEqual(dict(cards["Beta"]["certifications"]), {})
+        self.assertIs(cards["Beta"]["has_certifications"], False)
         self.assertEqual(len(cards["Beta"]["ids"]), 4)
 
     def test_N16_card_with_the_column_but_no_filled_cell_gives_an_empty_dict(self):
@@ -276,6 +286,7 @@ class NominalTest(ProfessorCase):
             text = text.replace(f"| {code} |", "| |").replace(f"|  {code}  |", "| |")
         card = professor.read_cards(self.cards_dir(alpha=text)).records[0]
         self.assertEqual(dict(card["certifications"]), {})
+        self.assertIs(card["has_certifications"], True)
         self.assertEqual(list(card["ids"]), ALPHA_IDS)
 
     def test_N3_notions_ten_named_columns(self):
@@ -656,7 +667,8 @@ class LimitTest(ProfessorCase):
 
     def test_L15_duplicate_id_between_cards_keeps_the_first_card(self):
         alpha = (SUIVI / "cartes" / "alpha.md").read_text(encoding="utf-8")
-        other = card_text("Delta", four_tiers(["alpha-loop", "delta-b", "delta-c", "delta-d"]))
+        ids = ["alpha-loop", "delta-b", "delta-c", "delta-d"]
+        other = card_text("Delta", four_tiers(ids), declared=3)
         result = professor.read_cards(self.cards_dir(alpha=alpha, delta=other))
         cards = {card["name"]: card for card in result.records}
         self.assertEqual(list(cards["Alpha"]["ids"]), ALPHA_IDS)
