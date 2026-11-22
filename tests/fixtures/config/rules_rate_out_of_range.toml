@@ -1,6 +1,7 @@
 # Règles fictives pour les tests du chargeur.
 [states]
 order = ["non rencontrée", "déclarée", "comprise", "appliquée"]
+cert_ready_at_least = "appliquée"
 
 [ranks.E]
 type = "any_notion"

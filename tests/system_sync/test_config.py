@@ -503,5 +503,79 @@ class RulesValidationTest(TempDirCase):
         self.assertRegex(message, r"reçue\s*:\s*5\b")
 
 
+class CertReadyTest(TempDirCase):
+    """Clé `states.cert_ready_at_least` (T1.e, amendement A22)."""
+
+    CURRENT = 'cert_ready_at_least = "appliquée"'
+
+    def failure(self, old, new, name="modified.toml"):
+        text = (FIXTURES / "rules_valid.toml").read_text(encoding="utf-8")
+        self.assertIn(old, text)
+        path = self.tmp / name
+        path.write_text(text.replace(old, new), encoding="utf-8")
+        with self.assertRaises(config.ConfigError) as ctx:
+            config.load_rules(path)
+        return str(ctx.exception)
+
+    def test_T1e_real_rules_value_is_retenue(self):
+        rules = config.load_rules(REAL_RULES)
+        self.assertEqual(rules["states"]["cert_ready_at_least"], "retenue")
+
+    def test_T1e_real_value_in_order_and_not_excluded(self):
+        states = config.load_rules(REAL_RULES)["states"]
+        self.assertIn(states["cert_ready_at_least"], states["order"])
+        self.assertNotIn(states["cert_ready_at_least"], states["excluded"])
+
+    def test_T1e_valid_fixture_returns_the_key(self):
+        rules = config.load_rules(FIXTURES / "rules_valid.toml")
+        self.assertEqual(rules["states"]["cert_ready_at_least"], "appliquée")
+
+    def test_T1e_absent_key_names_it(self):
+        message = self.failure(self.CURRENT + "\n", "")
+        self.assertIn("states.cert_ready_at_least", message)
+
+    def test_T1e_value_outside_order_names_key_value_and_allowed(self):
+        message = self.failure(self.CURRENT, 'cert_ready_at_least = "expert"')
+        self.assertIn("states.cert_ready_at_least", message)
+        self.assertIn("expert", message)
+        for state in ("non rencontrée", "déclarée", "comprise", "appliquée"):
+            self.assertIn(state, message)
+
+    def test_T1e_value_in_excluded_is_rejected(self):
+        old = 'order = ["non rencontrée"'
+        text = (FIXTURES / "rules_valid.toml").read_text(encoding="utf-8")
+        text = text.replace(self.CURRENT, 'cert_ready_at_least = "déclarée"')
+        path = self.tmp / "excluded_value.toml"
+        new = 'excluded = ["déclarée"]\n' + old
+        path.write_text(text.replace(old, new), encoding="utf-8")
+        with self.assertRaises(config.ConfigError) as ctx:
+            config.load_rules(path)
+        message = str(ctx.exception)
+        self.assertIn("states.cert_ready_at_least", message)
+        self.assertIn("déclarée", message)
+        self.assertNotIn("hors de `order`", message)
+
+    def test_T1e_non_text_values_name_key_and_received_value(self):
+        for raw, value in (("7", 7), ("[1, 2]", [1, 2]), ("true", True), ("1.5", 1.5)):
+            message = self.failure(self.CURRENT, f"cert_ready_at_least = {raw}")
+            self.assertIn("states.cert_ready_at_least", message, raw)
+            self.assertIn("texte", message, raw)
+            self.assertRegex(message, r"reçue\s*:\s*" + re.escape(repr(value)), raw)
+
+    def test_T1e_empty_text_names_key(self):
+        message = self.failure(self.CURRENT, 'cert_ready_at_least = ""')
+        self.assertIn("states.cert_ready_at_least", message)
+        self.assertIn("vide", message)
+
+    def test_T1e_five_causes_have_five_messages(self):
+        values = ('"expert"', '""', "7", "[1]")
+        messages = {
+            self.failure(self.CURRENT, f"cert_ready_at_least = {value}")
+            for value in values
+        }
+        messages.add(self.failure(self.CURRENT + "\n", ""))
+        self.assertEqual(len(messages), 5)
+
+
 if __name__ == "__main__":
     unittest.main()
