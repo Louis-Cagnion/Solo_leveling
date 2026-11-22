@@ -1,0 +1,6 @@
+date,source,relation,cible,statut,limite,preuve
+15/10/2026,alpha-loop,prerequis,alpha-array,theorique,,
+16/10/2026,alpha-array,complementaire,alpha-tree,reconnue,,
+17/10/2026,alpha-heap,analogue,alpha-sort,theorique,,,extra
+20/10/2026,alpha-loop,prerequis,alpha-array,demontree,,S1/alpha-loop/M2
+21/10/2026,alpha-tree,instance_de,alpha-heap,demontree,aucune limite,S2/alpha-tree/M2

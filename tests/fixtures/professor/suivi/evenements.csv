@@ -1,0 +1,9 @@
+date,session,domaine,notion,metrique,valeur,contexte,forme_visuelle,preuve
+15/10/2026,1,Alpha,alpha-loop,etat,découverte,exercice 1,,rapport de session
+16/10/2026,passe-niveaux,Alpha,alpha-array,etat,en cours,exercice 2,,
+17/10/2026,hors-session,Alpha,alpha-tree,etat,comprise,"contexte, avec virgule",,
+18/10/2026,2,Alpha,,cadrage,objectif du projet,,,
+19/10/2026,3,Alpha,,niveau,intermédiaire,,,tests/banc-alpha
+20/10/2026,3,Alpha,,certification,ALPHA-1,,,tests/cert-alpha
+21/10/2026,3,Système,,titre,titre-demo,,,
+22/10/2026,4,Alpha,alpha-sort,rappel,2,,carte,
