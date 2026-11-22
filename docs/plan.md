@@ -74,7 +74,7 @@ Plan du projet décrit dans `docs/specification.md`, en suivant la chaîne en 8 
 Statuts : [ ] à faire, [~] en cours, [x] faite, [v] validée, [!] bloquée
 Reprise (moniteur Sonnet/high au moins, jamais Fable ; consigne de Louis du 15/11/2026) : activer `/best-practice`, lire `todo.md` puis cet arbre, et reprendre à « Prochaine feuille prête ». Feuilles à garder en Opus/high, revue comprise : T4 (OAuth), T7 (calibration), T11 (page), W8 (revue de la vitrine).
 Ordre (Louis, 21/11/2026) : W (vitrine, close), puis P5 à partir de T2.a2, puis PM (pré-mortem). Louis, 22/11/2026 : objectif du jour, la connexion de ses données : T2, puis T3 (lecteurs de `/professor`), puis T4 (API 42, achievements), avant T5 ; la connexion réelle de T4 (consentement et `.env`) reste à faire par lui.
-Prochaine feuille prête : T6.c (analyst, revue des rangs), après la fin de T6.b
+Prochaine feuille prête : T9.a (tester sonnet/medium, réseau de compétences : contrôle des relations) ou T7.a (tester opus/high, XP Système et calibration)
 Moniteur : opus 5.5/high jusqu'à P3 ; depuis P4.7 : fable 5.2, effort par défaut de la session (aucun réglage pour ce modèle dans `settings.json`), session choisie par Louis ; plan de la vitrine : opus 5.5/high ; à partir de W1 : sonnet 5.5/high recommandé ; agents en sonnet ou opus seulement
 
 - W [nœud] : vitrine sur GitHub Pages, en ligne depuis le 21/11/2026 (`docs/design/vitrine.md`) ; point de contrôle W12 validé : 15 lignes de « Restrictions et secours » tenues sur 15 (9 rejouées, 6 relevées du moniteur), suite complète 88 verts et 61 erreurs, toutes dans les tests rouges de T2.a attendus
@@ -122,7 +122,7 @@ Moniteur : opus 5.5/high jusqu'à P3 ; depuis P4.7 : fable 5.2, effort par défa
   - [x] T3 (a faite par sonnet/high : 49 tests rouges, 71 avec A21 et la remesure des comptes réels du 22/11/2026, `0584602` ; b faite par sonnet/medium, `95913cb` ; c faite par sonnet/high : À CORRIGER, 0 critique, 5 importants, mineurs au pré-mortem ; d faite (tests par sonnet/medium, correction par sonnet/high, `6d0e90e` et `7512aa3`) : 298 tests verts sur toute la suite, module scindé en trois fichiers)
   - [x] T4 (a faite par opus/medium : 38 tests rouges, `f8534bc` ; b faite par opus/high : 38 verts, `f108443` ; c faite par opus/high : À CORRIGER, 0 critique, 3 importants, 13 mineurs au pré-mortem ; d faite (tests par sonnet/high, `0400a5f` ; correction par opus/high, `b775680`) : 330 tests verts sur toute la suite, serveur de retour concurrent ; la connexion réelle reste à faire par Louis)
   - [x] T5 (a faite par sonnet/medium : 25 tests rouges, `5f817c7` ; b faite par sonnet/medium, `b8e8757` ; c faite par sonnet/medium : À CORRIGER, 0 critique, 2 importants, 6 mineurs au pré-mortem ; d faite (tests par sonnet/low, `118eeb2` ; correction par sonnet/medium, `30b0388`) : 373 tests verts sur toute la suite)
-  - [~] T6 (a faite par sonnet/high : 43 tests rouges et 7 sur les vraies données remesurées le 22/11/2026 (19 cartes : 11 E, 8 sans rang, 0 D, 0 certification accessible), `126be78` ; b en cours, sonnet/medium)
+  - [x] T6 (a faite par sonnet/high : 43 tests rouges et 7 sur les vraies données remesurées le 22/11/2026 (19 cartes : 11 E, 8 sans rang, 0 D, 0 certification accessible), `126be78` ; b faite par sonnet/medium, `2df9c34` ; c faite par sonnet/high : À CORRIGER, 0 critique, 4 importants (dont un choix de règle sur le fait `niveau` laissé à Louis), 19 rangs réels identiques à un recalcul indépendant, mineurs au pré-mortem ; d faite (tests par sonnet/low, `320059b` ; correction par sonnet/medium, `6d7629c`) : 455 tests verts avec le suivi réel)
   - [ ] T9
   - [ ] T7
   - [ ] T8
@@ -181,4 +181,8 @@ Moniteur : opus 5.5/high jusqu'à P3 ; depuis P4.7 : fable 5.2, effort par défa
   - T10 : un `XpTableResult` `ok` peut porter un `error` non nul (cache non écrit) : c'est un avertissement à journaliser, pas un échec ; un statut `cache` après hash différent porte les deux hashes dans `error`.
   - T7 : `xp_for_level` rend un `int` (arrondi à la moitié vers le haut) et `level_for_xp` un `float` avec le code `xp_interpolated` ; les niveaux décimaux se passent en `float` (pour un contrat décimal exact, `Fraction(repr(niveau))`).
   - T11 : traduire `xp_table_unavailable`, `level_out_of_table`, `xp_out_of_table`, `xp_invalid` (A27).
+- Revue de T6 (22/11/2026), pour les sous-tâches suivantes :
+  - T10 : lire d'abord le statut de `rank_card` avant d'interpréter `next_rank` (qui vaut `None` aussi quand les règles sont inutilisables), `card_certifications` et `rank_anomalies` ; pré-indexer les états des notions pour toutes les cartes.
+  - T11 : traduire `tier_fallback`, `half_tier_rule`, `empty_tier`, `level_fact_missing` (A27) ; le `detail` d'une certification vaut toujours `None`.
+  - Aucun fait `niveau`, `certification` ou `titre` n'existe dans le suivi réel : les rangs A, S et Nation ne sont exercés que par les fixtures.
 - Le niveau 25 n'est pas un jalon officiel de 42 : le titre reste un objectif personnel, à calibrer sur la table XP de l'API de l'intranet.
