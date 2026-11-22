@@ -25,6 +25,8 @@ REASON_CODES = frozenset(
         "full_list_unavailable",
         "no_personal_project",
         "card_unmeasurable",
+        "cursus_absent",
+        "level_invalid",
     }
 )
 
