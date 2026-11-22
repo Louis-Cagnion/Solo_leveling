@@ -1,0 +1,103 @@
+[
+  {
+    "name": "Alpha",
+    "tiers": {
+      "Débutant": [
+        "alpha-d1",
+        "alpha-d2",
+        "alpha-d3",
+        "alpha-d4"
+      ],
+      "Intermédiaire": [
+        "alpha-i1",
+        "alpha-i2"
+      ],
+      "Avancé": [
+        "alpha-a1",
+        "alpha-a2",
+        "alpha-a3",
+        "alpha-a4"
+      ],
+      "Transcendée": [
+        "alpha-t1"
+      ]
+    },
+    "ids": [
+      "alpha-d1",
+      "alpha-d2",
+      "alpha-d3",
+      "alpha-d4",
+      "alpha-i1",
+      "alpha-i2",
+      "alpha-a1",
+      "alpha-a2",
+      "alpha-a3",
+      "alpha-a4",
+      "alpha-t1"
+    ],
+    "declared": 11,
+    "declared_followed": 8,
+    "certifications": {
+      "alpha-d1": "ALPHA-1",
+      "alpha-a1": "ALPHA-1 et ALPHA-2 (fictives)"
+    },
+    "has_certifications": true
+  },
+  {
+    "name": "Beta",
+    "tiers": {
+      "Débutant": [
+        "beta-d1",
+        "beta-d2",
+        "beta-d3"
+      ],
+      "Intermédiaire": [
+        "beta-i1"
+      ],
+      "Avancé": [
+        "beta-a1",
+        "beta-a2",
+        "beta-a3"
+      ],
+      "Transcendée": []
+    },
+    "ids": [
+      "beta-d1",
+      "beta-d2",
+      "beta-d3",
+      "beta-i1",
+      "beta-a1",
+      "beta-a2",
+      "beta-a3"
+    ],
+    "declared": 7,
+    "declared_followed": 2,
+    "certifications": {},
+    "has_certifications": false
+  },
+  {
+    "name": "Gamma",
+    "tiers": {
+      "Débutant": [],
+      "Intermédiaire": [
+        "gamma-i1",
+        "gamma-i2"
+      ],
+      "Avancé": [],
+      "Transcendée": [
+        "gamma-t1"
+      ]
+    },
+    "ids": [
+      "gamma-i1",
+      "gamma-i2",
+      "gamma-t1"
+    ],
+    "declared": 3,
+    "declared_followed": 0,
+    "certifications": {
+      "gamma-i1": "ALPHA-1"
+    },
+    "has_certifications": true
+  }
+]

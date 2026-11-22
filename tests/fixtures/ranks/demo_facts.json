@@ -1,0 +1,38 @@
+[
+  {
+    "date": "2026-10-18",
+    "session": "3",
+    "domain": "Alpha",
+    "notion": "",
+    "metric": "niveau",
+    "value": "débutant",
+    "context": "",
+    "visual_form": "",
+    "proof": "tests/banc-fictif",
+    "line": 2
+  },
+  {
+    "date": "2026-10-19",
+    "session": "3",
+    "domain": "Alpha",
+    "notion": "",
+    "metric": "niveau",
+    "value": "intermédiaire",
+    "context": "",
+    "visual_form": "",
+    "proof": "tests/banc-fictif",
+    "line": 3
+  },
+  {
+    "date": "2026-10-20",
+    "session": "3",
+    "domain": "Alpha",
+    "notion": "",
+    "metric": "certification",
+    "value": "ALPHA-1",
+    "context": "",
+    "visual_form": "",
+    "proof": "tests/banc-fictif",
+    "line": 4
+  }
+]
