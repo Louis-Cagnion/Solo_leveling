@@ -74,7 +74,7 @@ Plan du projet décrit dans `docs/specification.md`, en suivant la chaîne en 8 
 Statuts : [ ] à faire, [~] en cours, [x] faite, [v] validée, [!] bloquée
 Reprise (moniteur Sonnet/high au moins, jamais Fable ; consigne de Louis du 15/11/2026) : activer `/best-practice`, lire `todo.md` puis cet arbre, et reprendre à « Prochaine feuille prête ». Feuilles à garder en Opus/high, revue comprise : T4 (OAuth), T7 (calibration), T11 (page), W8 (revue de la vitrine).
 Ordre (Louis, 21/11/2026) : W (vitrine, close), puis P5 à partir de T2.a2, puis PM (pré-mortem). Louis, 22/11/2026 : objectif du jour, la connexion de ses données : T2, puis T3 (lecteurs de `/professor`), puis T4 (API 42, achievements), avant T5 ; la connexion réelle de T4 (consentement et `.env`) reste à faire par lui.
-Prochaine feuille prête : T9.a (tester sonnet/medium, réseau de compétences : contrôle des relations) ou T7.a (tester opus/high, XP Système et calibration)
+Prochaine feuille prête : T8.d (tests par sonnet/low, correction par sonnet/medium, trois points dans la ligne de T8) ; puis T7.a (tester opus/high, XP Système et calibration)
 Moniteur : opus 5.5/high jusqu'à P3 ; depuis P4.7 : fable 5.2, effort par défaut de la session (aucun réglage pour ce modèle dans `settings.json`), session choisie par Louis ; plan de la vitrine : opus 5.5/high ; à partir de W1 : sonnet 5.5/high recommandé ; agents en sonnet ou opus seulement
 
 - W [nœud] : vitrine sur GitHub Pages, en ligne depuis le 21/11/2026 (`docs/design/vitrine.md`) ; point de contrôle W12 validé : 15 lignes de « Restrictions et secours » tenues sur 15 (9 rejouées, 6 relevées du moniteur), suite complète 88 verts et 61 erreurs, toutes dans les tests rouges de T2.a attendus
@@ -123,9 +123,9 @@ Moniteur : opus 5.5/high jusqu'à P3 ; depuis P4.7 : fable 5.2, effort par défa
   - [x] T4 (a faite par opus/medium : 38 tests rouges, `f8534bc` ; b faite par opus/high : 38 verts, `f108443` ; c faite par opus/high : À CORRIGER, 0 critique, 3 importants, 13 mineurs au pré-mortem ; d faite (tests par sonnet/high, `0400a5f` ; correction par opus/high, `b775680`) : 330 tests verts sur toute la suite, serveur de retour concurrent ; la connexion réelle reste à faire par Louis)
   - [x] T5 (a faite par sonnet/medium : 25 tests rouges, `5f817c7` ; b faite par sonnet/medium, `b8e8757` ; c faite par sonnet/medium : À CORRIGER, 0 critique, 2 importants, 6 mineurs au pré-mortem ; d faite (tests par sonnet/low, `118eeb2` ; correction par sonnet/medium, `30b0388`) : 373 tests verts sur toute la suite)
   - [x] T6 (a faite par sonnet/high : 43 tests rouges et 7 sur les vraies données remesurées le 22/11/2026 (19 cartes : 11 E, 8 sans rang, 0 D, 0 certification accessible), `126be78` ; b faite par sonnet/medium, `2df9c34` ; c faite par sonnet/high : À CORRIGER, 0 critique, 4 importants (dont un choix de règle sur le fait `niveau` laissé à Louis), 19 rangs réels identiques à un recalcul indépendant, mineurs au pré-mortem ; d faite (tests par sonnet/low, `320059b` ; correction par sonnet/medium, `6d7629c`) : 455 tests verts avec le suivi réel)
-  - [ ] T9
+  - [x] T9 (a faite par sonnet/medium : 33 tests rouges et 6 sur les vraies relations remesurées le 22/11/2026 (95 relations, 10 prérequis fragiles), `a101f30` ; b faite par sonnet/medium, `a6db694` ; c faite par sonnet/medium : À CORRIGER pour la seule mise en forme, 0 critique, recalcul indépendant identique ; d faite par sonnet/low, `6855450` : 494 tests verts avec le suivi réel ; réduite par A25 : contrôle des relations et prérequis fragiles)
   - [ ] T7
-  - [ ] T8
+  - [~] T8 (a faite par sonnet/medium : 35 tests rouges et 5 sur les vraies données, `e07bcf0` ; b faite, `202f1ba` : 35 verts ; c faite par sonnet/medium : À CORRIGER, 0 critique, 2 importants, mineurs au pré-mortem ; d à faire : tests puis correction, avec (1) A6 : carte au rang inconnu ou liste de cartes vide donne `unmeasurable` et non `insufficient` (`titles.py:147` et `:153`, tests `test_titles.py:223-228`, `:326-336`, `:427` à réécrire), (2) `OverflowError` ajouté à `GUARDED_ERRORS` de `guard.py` (entrée `10**400` pour le niveau), (3) cinq lignes de `titles.py` de plus de 95 caractères (149, 150, 227 et deux autres, test N10 de `test_architecture.py`))
   - [ ] T10
   - [ ] T11 (après P4)
   - [ ] T12
@@ -185,4 +185,7 @@ Moniteur : opus 5.5/high jusqu'à P3 ; depuis P4.7 : fable 5.2, effort par défa
   - T10 : lire d'abord le statut de `rank_card` avant d'interpréter `next_rank` (qui vaut `None` aussi quand les règles sont inutilisables), `card_certifications` et `rank_anomalies` ; pré-indexer les états des notions pour toutes les cartes.
   - T11 : traduire `tier_fallback`, `half_tier_rule`, `empty_tier`, `level_fact_missing` (A27) ; le `detail` d'une certification vaut toujours `None`.
   - Aucun fait `niveau`, `certification` ou `titre` n'existe dans le suivi réel : les rangs A, S et Nation ne sont exercés que par les fixtures.
+- Revue de T9 (22/11/2026), pour les sous-tâches suivantes :
+  - T10 : `network_anomalies(relations, notions, cards, rules)` rend un tuple d'`Anomaly` (fichier `relations.csv`) à ajouter tel quel à `anomalies[]` ; `control_relations` rend aussi les relations gardées, seules à passer à la page ; `rules/guard.py` expose `never_raises(fallback)` et `empty`, que T7 et T8 peuvent importer.
+  - Sur les données du 22/11/2026 : 95 relations gardées, 1 extrémité inconnue (`relations.csv:32`), aucun cycle, doublon ni statut inconnu, 10 prérequis fragiles (sources « en cours » 8, « découverte » 2) : à corriger dans une session `/professor`.
 - Le niveau 25 n'est pas un jalon officiel de 42 : le titre reste un objectif personnel, à calibrer sur la table XP de l'API de l'intranet.
