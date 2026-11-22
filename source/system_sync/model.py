@@ -31,6 +31,10 @@ REASON_CODES = frozenset(
         "level_out_of_table",
         "xp_out_of_table",
         "xp_invalid",
+        "tier_fallback",
+        "half_tier_rule",
+        "empty_tier",
+        "level_fact_missing",
     }
 )
 
