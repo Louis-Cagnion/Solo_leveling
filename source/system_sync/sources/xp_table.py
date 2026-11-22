@@ -16,17 +16,16 @@ import math
 import os
 import ssl
 import stat
-import tempfile
 from bisect import bisect_right
 from dataclasses import dataclass
 from fractions import Fraction
-from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.request import HTTPSHandler, Request, build_opener
 
 from system_sync import model
 from system_sync.sources.api42 import NoRedirect, digits, http_error
 from system_sync.sources.api42_profile import is_integer, is_number, preview
+from system_sync.sources.atomic_file import write_atomic
 
 __all__ = [
     "XpTable",
@@ -219,7 +218,7 @@ def _read_cache(path, max_bytes):
     `load_text` décode et retire le BOM : il fausserait le hash, d'où cette lecture brute.
 
     Args:
-        path: `Path` du cache.
+        path: `Path` ou texte du cache.
         max_bytes: entier, octets au plus.
 
     Returns:
@@ -235,6 +234,8 @@ def _read_cache(path, max_bytes):
             data = handle.read(max_bytes + 1)
     except FileNotFoundError:
         raise _TableError("absent") from None
+    except (TypeError, ValueError) as error:
+        raise _TableError(f"chemin invalide ({type(error).__name__})") from None
     except OSError as error:
         raise _TableError(f"illisible ({error.strerror})") from None
     if not data:
@@ -245,34 +246,17 @@ def _read_cache(path, max_bytes):
 
 
 def _write_cache(path, body):
-    """Écrit les octets reçus atomiquement (temporaire 0600 puis `os.replace`).
+    """Écrit les octets reçus atomiquement (voir `write_atomic`).
 
     Args:
-        path: `Path` du cache ; son dossier est créé au besoin.
+        path: `Path` ou texte du cache ; son dossier est créé au besoin.
         body: octets bruts de la table.
 
     Returns:
         `None` si écrit, sinon l'erreur qui nomme le chemin et la cause.
     """
-    temporary = None
-    try:
-        path.parent.mkdir(parents=True, exist_ok=True)
-        descriptor, temporary = tempfile.mkstemp(dir=path.parent, prefix=f".{path.name}.")
-        with os.fdopen(descriptor, "wb") as handle:
-            handle.write(body)
-            handle.flush()
-            os.fsync(handle.fileno())
-        os.replace(temporary, path)
-        temporary = None
-    except OSError as error:
-        return f"cache {path} non écrit : {error.strerror or error}"
-    finally:
-        if temporary is not None:
-            try:
-                os.unlink(temporary)
-            except OSError:
-                LOGGER.warning("table XP : temporaire %s non supprimé", temporary)
-    return None
+    error = write_atomic(path, body)
+    return None if error is None else f"cache {error}"
 
 
 def _fall_back(cause, cache_path, url, commit, pinned, max_bytes):
@@ -280,7 +264,7 @@ def _fall_back(cause, cache_path, url, commit, pinned, max_bytes):
 
     Args:
         cause: texte de l'échec, avec l'URL ou les deux hashes.
-        cache_path: `Path` du cache, jamais réécrit ici.
+        cache_path: `Path` ou texte du cache, jamais réécrit ici.
         url: URL épinglée, texte.
         commit: commit épinglé, texte.
         pinned: sha256 hexadécimal épinglé, texte.
@@ -312,7 +296,7 @@ def load_xp_table(
         url: URL de la table à l'adresse du commit épinglé, texte.
         commit: commit épinglé de 42calculator, texte.
         sha256: empreinte hexadécimale attendue des octets bruts, texte.
-        cache_path: `Path` du cache, écrit en 0600 après un succès seulement.
+        cache_path: `Path` ou texte du cache, écrit en 0600 après un succès seulement.
         timeout: secondes de délai de chaque opération du socket, nombre positif.
         max_bytes: entier, octets au plus pour la réponse et pour le cache.
 
@@ -320,7 +304,6 @@ def load_xp_table(
         `XpTableResult` : `ok` (cache écrit), `cache` (cache valide relu après un échec) ou
         `unavailable`.
     """
-    cache_path = Path(cache_path)
     try:
         body = _download(url, timeout, max_bytes)
     except _TableError as error:

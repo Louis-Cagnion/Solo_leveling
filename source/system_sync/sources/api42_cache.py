@@ -4,11 +4,8 @@ Le cache ne porte que le résultat en liste blanche, jamais de jeton ni de secre
 fonction publique ne lève : un cache absent, vide ou corrompu donne `unavailable`.
 """
 
-import contextlib
 import json
 import logging
-import os
-import tempfile
 from datetime import date
 
 from system_sync import model
@@ -18,6 +15,7 @@ from system_sync.sources.api42_profile import (
     Api42Result,
     preview,
 )
+from system_sync.sources.atomic_file import write_atomic
 from system_sync.sources.professor import SourceError, load_text
 
 CACHE_VERSION = 1
@@ -48,7 +46,7 @@ def cache_payload(result):
 
 
 def write_cache(path, payload):
-    """Écrit le cache atomiquement (temporaire 0600 puis `os.replace`), sans jamais lever.
+    """Écrit le cache atomiquement (voir `write_atomic`), sans jamais lever.
 
     Args:
         path: `Path` du cache ; son dossier est créé au besoin.
@@ -64,23 +62,8 @@ def write_cache(path, payload):
         return f"cache {path} non écrit : {cause}"
     except (TypeError, ValueError) as error:
         return f"cache {path} non écrit : contenu non sérialisable en JSON ({error})"
-    temporary = None
-    try:
-        path.parent.mkdir(parents=True, exist_ok=True)
-        descriptor, temporary = tempfile.mkstemp(dir=path.parent, prefix=f".{path.name}.")
-        with os.fdopen(descriptor, "wb") as handle:
-            handle.write(data)
-            handle.flush()
-            os.fsync(handle.fileno())
-        os.replace(temporary, path)
-        temporary = None
-    except OSError as error:
-        return f"cache {path} non écrit : {error.strerror or error}"
-    finally:
-        if temporary is not None:
-            with contextlib.suppress(OSError):
-                os.unlink(temporary)
-    return None
+    error = write_atomic(path, data)
+    return None if error is None else f"cache {error}"
 
 
 class _CacheError(Exception):

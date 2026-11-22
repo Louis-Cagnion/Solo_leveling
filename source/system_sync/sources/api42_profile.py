@@ -36,11 +36,12 @@ def is_number(value):
     Returns:
         True pour un `int` ou un `float` fini qui n'est pas un `bool`.
     """
-    return (
-        isinstance(value, (int, float))
-        and not isinstance(value, bool)
-        and math.isfinite(value)
-    )
+    if not isinstance(value, (int, float)) or isinstance(value, bool):
+        return False
+    try:
+        return math.isfinite(value)
+    except OverflowError:  # entier trop grand pour un float
+        return False
 
 
 def is_integer(value):
