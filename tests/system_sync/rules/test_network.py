@@ -29,8 +29,8 @@ sur les chaînes de prérequis) :
     les notions du cycle. Seul le type `prerequis` forme un cycle.
 - `fragile_prerequisites(relations, notions, cards, rules) -> tuple[Anomaly]` : une anomalie
   `fragile_prerequisite` par relation `prerequis` dont la source est sous « comprise » et la
-  cible au moins « comprise » (ordre `states.order`). Une source « déclarée » (état non
-  prouvé) est sous « comprise » : fragile ; une cible « déclarée » n'est jamais fragile.
+  cible au moins « comprise » (ordre `states.order`). « déclarée » est exclue de toutes les
+  comparaisons (A8) : une source ou une cible « déclarée » n'est jamais fragile.
   Une notion connue mais non suivie vaut « non rencontrée ». Une relation à extrémité
   inconnue n'est jamais fragile. Fichier `relations.csv`, ligne de la relation, détail qui
   nomme les deux identifiants et leurs deux états.
@@ -348,11 +348,8 @@ class FragileTest(NetworkTestCase):
     def test_declared_state_is_excluded_from_at_least(self):
         self.assertEqual(self.pair("découverte", "déclarée"), ())
 
-    def test_N5_declared_source_is_fragile(self):
-        found = self.pair("déclarée", "appliquée")
-        self.assertEqual([item.kind for item in found], ["fragile_prerequisite"])
-        self.assertIn("déclarée", found[0].detail)
-        self.assertIn("appliquée", found[0].detail)
+    def test_N6_declared_source_is_not_fragile(self):
+        self.assertEqual(self.pair("déclarée", "appliquée"), ())
         self.assertEqual(self.pair("déclarée", "en cours"), ())
 
     def test_followed_notion_never_met_counts_as_not_met(self):
