@@ -15,7 +15,7 @@ Tableau de bord personnel de progression en programmation, dans l'esprit de *Sol
 
 ## État actuel
 
-- La vitrine est en ligne sur https://louis-cagnion.github.io/Solo_leveling/ : pour Louis seul, sur ordinateur, en français. Elle affiche un instantané des données de `/professor` (`public/data.js`), rafraîchi à la demande ; l'adresse `?demo` montre des données fictives pour juger les effets.
+- La vitrine est en ligne sur https://louis-cagnion.github.io/Solo_leveling/ : pour Louis seul, sur ordinateur, en français ; un téléphone ou une tablette est renvoyé vers `public/unsupported.html`, qui donne l'adresse à ouvrir sur ordinateur. Elle affiche un instantané des données de `/professor` (`public/data.js`), rafraîchi à la demande ; l'adresse `?demo` montre des données fictives pour juger les effets.
 - Les maquettes de référence sont dans `mockups/`, non versionnées.
 - Le squelette Python de la synchronisation est posé : le paquet `system_sync` se charge, avec le chargeur de `config/rules.toml` et de `.env`.
 - La synchronisation complète (API 42, règles de calcul) et la page qu'elle alimente restent à écrire.
