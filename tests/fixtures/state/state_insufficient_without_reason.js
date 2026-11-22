@@ -9,50 +9,47 @@ window.SYSTEM_STATE = {
       "name": "professor",
       "status": "ok",
       "lines_read": 120,
-      "lines_rejected": 1
+      "lines_rejected": 1,
+      "observed_at": "2026-11-11"
     },
     {
       "name": "api42",
-      "status": "cache",
-      "lines_read": 3,
-      "lines_rejected": 0
+      "status": "unavailable",
+      "lines_read": 0,
+      "lines_rejected": 0,
+      "observed_at": null
     },
     {
       "name": "xp_table",
       "status": "ok",
       "lines_read": 1,
-      "lines_rejected": 0
+      "lines_rejected": 0,
+      "observed_at": null
     }
   ],
   "level42": {
     "level": {
       "value": null,
-      "status": "insufficient",
+      "status": "unmeasurable",
       "sources": [],
-      "reason": null
+      "reason": null,
+      "reason_code": "api_unavailable"
     },
     "xp": {
-      "value": 133834,
-      "status": "estimated",
-      "sources": [
-        "xp_table"
-      ],
-      "reason": "interpolation linéaire"
+      "value": null,
+      "status": "unmeasurable",
+      "sources": [],
+      "reason": "API 42 indisponible",
+      "reason_code": "api_unavailable"
     },
-    "projects": [
-      {
-        "id": "projet_a",
-        "name": "Projet A",
-        "base_xp": {
-          "value": 4200,
-          "status": "observed",
-          "sources": [
-            "api42"
-          ],
-          "reason": null
-        }
-      }
-    ]
+    "target_xp": {
+      "value": null,
+      "status": "unmeasurable",
+      "sources": [],
+      "reason": "API 42 indisponible",
+      "reason_code": "api_unavailable"
+    },
+    "projects": []
   },
   "system": {
     "xp": {
@@ -62,7 +59,8 @@ window.SYSTEM_STATE = {
         "professor",
         "xp_table"
       ],
-      "reason": "taux de l'IA"
+      "reason": "taux de l'IA",
+      "reason_code": "ia_rate"
     },
     "level": {
       "value": 12.6,
@@ -70,7 +68,8 @@ window.SYSTEM_STATE = {
       "sources": [
         "xp_table"
       ],
-      "reason": "table tierce"
+      "reason": "table tierce",
+      "reason_code": "third_party_table"
     },
     "origins": [
       {
@@ -81,7 +80,8 @@ window.SYSTEM_STATE = {
           "sources": [
             "xp_table"
           ],
-          "reason": "table tierce"
+          "reason": "table tierce",
+          "reason_code": "third_party_table"
         }
       },
       {
@@ -92,17 +92,17 @@ window.SYSTEM_STATE = {
           "sources": [
             "professor"
           ],
-          "reason": "taux de l'IA"
+          "reason": "taux de l'IA",
+          "reason_code": "ia_rate"
         }
       }
     ],
     "calibration": {
-      "value": "provisional",
-      "status": "estimated",
-      "sources": [
-        "professor"
-      ],
-      "reason": "moins de 3 projets"
+      "value": null,
+      "status": "unmeasurable",
+      "sources": [],
+      "reason": "aucun projet perso ou pro enregistré",
+      "reason_code": "no_personal_project"
     }
   },
   "trajectory": [
@@ -122,7 +122,28 @@ window.SYSTEM_STATE = {
         "sources": [
           "professor"
         ],
-        "reason": null
+        "reason": null,
+        "reason_code": null
+      },
+      "next_rank": {
+        "rank": "D",
+        "condition": "toutes les notions débutantes au moins comprises",
+        "progress": {
+          "value": 1,
+          "status": "observed",
+          "sources": [
+            "professor"
+          ],
+          "reason": null,
+          "reason_code": null
+        },
+        "total": 2,
+        "missing": [
+          {
+            "id": "notion_b",
+            "state": "non rencontrée"
+          }
+        ]
       },
       "tiers": [
         {
@@ -136,19 +157,31 @@ window.SYSTEM_STATE = {
       "certifications": [
         {
           "code": "CERT_X",
-          "tier": "débutant",
+          "detail": "Certification X",
+          "notions": [
+            "notion_a"
+          ],
+          "conditions": null,
           "obtained": {
             "value": false,
             "status": "observed",
             "sources": [
               "professor"
             ],
-            "reason": null
+            "reason": null,
+            "reason_code": null
+          },
+          "obtained_on": null,
+          "accessible": {
+            "value": false,
+            "status": "observed",
+            "sources": [
+              "professor"
+            ],
+            "reason": null,
+            "reason_code": null
           }
         }
-      ],
-      "gaps": [
-        "notion_b : comprise requise"
       ]
     },
     {
@@ -156,25 +189,82 @@ window.SYSTEM_STATE = {
       "name": "Bêta",
       "rank": {
         "value": null,
-        "status": "insufficient",
+        "status": "unmeasurable",
         "sources": [],
-        "reason": "liste des certifications illisible"
+        "reason": "liste des certifications illisible",
+        "reason_code": "certification_list_unreadable"
+      },
+      "next_rank": null,
+      "tiers": [],
+      "certifications": [
+        {
+          "code": "CERT_Y",
+          "detail": null,
+          "notions": [],
+          "conditions": null,
+          "obtained": {
+            "value": true,
+            "status": "observed",
+            "sources": [
+              "professor"
+            ],
+            "reason": null,
+            "reason_code": null
+          },
+          "obtained_on": "2026-10-20",
+          "accessible": {
+            "value": null,
+            "status": "unmeasurable",
+            "sources": [],
+            "reason": "aucune notion ne cite cette certification",
+            "reason_code": "no_certification_notion"
+          }
+        }
+      ]
+    },
+    {
+      "id": "card_gamma",
+      "name": "Gamma",
+      "rank": {
+        "value": "none",
+        "status": "observed",
+        "sources": [
+          "professor"
+        ],
+        "reason": null,
+        "reason_code": null
+      },
+      "next_rank": {
+        "rank": "E",
+        "condition": "au moins une notion de la carte suivie",
+        "progress": {
+          "value": 0,
+          "status": "observed",
+          "sources": [
+            "professor"
+          ],
+          "reason": null,
+          "reason_code": null
+        },
+        "total": null,
+        "missing": []
       },
       "tiers": [],
-      "certifications": [],
-      "gaps": []
+      "certifications": []
     }
   ],
   "notions": {
     "notion_a": {
       "label": "Notion A",
+      "section": "Alpha",
       "state": {
         "value": "comprise",
         "status": "observed",
         "sources": [
           "professor"
         ],
-        "reason": null
+        "reason": null,
+        "reason_code": null
       },
       "goal": "appliquée",
       "card": "card_alpha",
@@ -183,13 +273,15 @@ window.SYSTEM_STATE = {
     },
     "notion_b": {
       "label": "Notion B",
+      "section": "Alpha",
       "state": {
         "value": "non rencontrée",
         "status": "observed",
         "sources": [
           "professor"
         ],
-        "reason": null
+        "reason": null,
+        "reason_code": null
       },
       "goal": null,
       "card": "card_alpha",
@@ -198,13 +290,15 @@ window.SYSTEM_STATE = {
     },
     "notion_hors_carte": {
       "label": "Notion hors carte",
+      "section": null,
       "state": {
         "value": "en cours",
         "status": "observed",
         "sources": [
           "professor"
         ],
-        "reason": null
+        "reason": null,
+        "reason_code": null
       },
       "goal": null,
       "card": null,
@@ -214,10 +308,10 @@ window.SYSTEM_STATE = {
   },
   "relations": [
     {
-      "source_id": "notion_a",
-      "target_id": "notion_b",
+      "source": "notion_a",
+      "target": "notion_b",
       "kind": "prerequis",
-      "status": "reconnu",
+      "status": "reconnue",
       "limit": "valable hors contexte",
       "proof": null
     }
@@ -236,7 +330,8 @@ window.SYSTEM_STATE = {
         "sources": [
           "ia_history"
         ],
-        "reason": "moyenne des taux"
+        "reason": "moyenne des taux",
+        "reason_code": "ia_rate"
       },
       "xp": {
         "value": 2100,
@@ -245,31 +340,30 @@ window.SYSTEM_STATE = {
           "ia_history",
           "xp_table"
         ],
-        "reason": "taux de l'IA"
+        "reason": "taux de l'IA",
+        "reason_code": "ia_rate"
       }
     }
   ],
   "titles": [
     {
       "id": "answer_42",
-      "name": "I AM THE ANSWER (42)",
+      "name": "I AM THE ANSWER",
       "scope": "42",
       "condition": "niveau 42 au moins égal à 25",
       "obtained": {
-        "value": false,
-        "status": "observed",
-        "sources": [
-          "api42"
-        ],
-        "reason": null
+        "value": null,
+        "status": "unmeasurable",
+        "sources": [],
+        "reason": "API 42 indisponible",
+        "reason_code": "api_unavailable"
       },
       "progress": {
-        "value": 12.44,
-        "status": "observed",
-        "sources": [
-          "api42"
-        ],
-        "reason": null
+        "value": null,
+        "status": "unmeasurable",
+        "sources": [],
+        "reason": "API 42 indisponible",
+        "reason_code": "api_unavailable"
       },
       "target": 25
     },
@@ -280,15 +374,17 @@ window.SYSTEM_STATE = {
       "condition": "rang S sur toutes les cartes",
       "obtained": {
         "value": null,
-        "status": "insufficient",
+        "status": "unmeasurable",
         "sources": [],
-        "reason": "une carte est insuffisante"
+        "reason": "une carte est non mesurable",
+        "reason_code": "card_unmeasurable"
       },
       "progress": {
         "value": null,
-        "status": "insufficient",
+        "status": "unmeasurable",
         "sources": [],
-        "reason": "une carte est insuffisante"
+        "reason": "une carte est non mesurable",
+        "reason_code": "card_unmeasurable"
       },
       "target": null
     }
@@ -301,30 +397,35 @@ window.SYSTEM_STATE = {
       "detail": "virgule"
     }
   ],
-  "network": {
-    "nodes": [
-      {
-        "id": "notion_a",
-        "type": "notion"
-      },
-      {
-        "id": "card_alpha",
-        "type": "card"
-      }
+  "rules": {
+    "proof_order": [
+      "en cours",
+      "comprise",
+      "appliquée",
+      "retenue"
     ],
-    "edges": [
-      {
-        "source": "notion_a",
-        "target": "card_alpha",
-        "kind": "appartenance",
-        "status": "reconnu"
-      }
+    "excluded_states": [
+      "déclarée"
     ],
-    "highlights": [
-      {
-        "id": "notion_b",
-        "kind": "fragile_prerequisite"
-      }
-    ]
+    "rank_d_threshold": "comprise",
+    "cert_threshold": "retenue",
+    "target_level": 25
+  },
+  "achievements": {
+    "complete": {
+      "value": null,
+      "status": "unmeasurable",
+      "sources": [],
+      "reason": "liste complète indisponible",
+      "reason_code": "full_list_unavailable"
+    },
+    "items": []
+  },
+  "names": {
+    "en": {
+      "notion_a": "Notion A",
+      "card_alpha": "Alpha",
+      "CERT_X": "Certification X"
+    }
   }
 };
