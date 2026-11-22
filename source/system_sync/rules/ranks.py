@@ -20,6 +20,9 @@ NOTIONS_FILE = "notions.md"
 LEVEL_METRIC = "niveau"
 CERT_METRIC = "certification"
 NOT_OBTAINED = "non obtenue"
+CARDS_LABEL = "cartes"
+# Cellules « Certifications » sans certification, comparées sans casse ni espaces de bord.
+NO_CERTIFICATION = frozenset({"", "aucune", "\N{EM DASH}"})
 # Un code de certification : mot de majuscules, chiffres et tirets, qui débute par une lettre.
 CODE_PATTERN = re.compile(r"(?<!\w)[A-Z][A-Z0-9-]*(?!\w)")
 # Champs d'une carte de `read_cards(...).records` et type attendu.
@@ -149,9 +152,15 @@ def _read_rules(rules):
     if not isinstance(rules, dict):
         raise _Unusable(f"règles de type {type(rules).__name__}, dict attendu")
     ranks, states = rules.get("ranks"), rules.get("states")
-    if not isinstance(ranks, dict) or not ranks:
+    if (
+        not isinstance(ranks, dict)
+        or not ranks
+    ):
         raise _Unusable(f"[ranks] absent ou vide : {ranks!r}")
-    if not isinstance(states, dict) or not isinstance(states.get("order"), list):
+    if (
+        not isinstance(states, dict)
+        or not isinstance(states.get("order"), list)
+    ):
         raise _Unusable(f"[states] sans liste `order` : {states!r}")
     for name, rule in ranks.items():
         kind = rule.get("type") if isinstance(rule, dict) else None
@@ -222,6 +231,30 @@ def _card_codes(card):
     return list(dict.fromkeys(found))
 
 
+def _unreadable_texts(card):
+    """Renvoie les cellules `certifications` non vides dont aucun code ne s'extrait."""
+    cells = card.get("certifications")
+    if not isinstance(cells, dict):
+        return []
+    return [
+        text
+        for text in cells.values()
+        if text.strip().casefold() not in NO_CERTIFICATION
+        if not CODE_PATTERN.search(text)
+    ]
+
+
+def _list_problem(card):
+    """Renvoie la raison pour laquelle la liste des certifications est illisible, ou `None`."""
+    if not card["has_certifications"]:
+        return f"la carte {card['name']!r} n'a pas de colonne « Certifications »"
+    texts = _unreadable_texts(card)
+    if texts:
+        shown = "; ".join(texts)
+        return f"carte {card['name']!r} : cellule « Certifications » illisible « {shown} »"
+    return None
+
+
 def _half(count):
     """Renvoie la moitié par excès de `count` (A9)."""
     return (count + 1) // 2
@@ -252,7 +285,10 @@ def _eval_fact_level(ctx, rule):
     if "fallback_tier" not in rule:
         return _Verdict(False, "observed", (EVENTS,), None, None)
     ids = ctx.tier(rule["fallback_tier"])
-    met = bool(ids) and ctx.count_at_least(ids, rule["fallback_at_least"]) == len(ids)
+    met = (
+        bool(ids)
+        and ctx.count_at_least(ids, rule["fallback_at_least"]) == len(ids)
+    )
     reason = f"palier {rule['fallback_tier']} estimé d'après les notions, sans fait niveau"
     return _Verdict(met, "estimated", (NOTIONS,), reason, "tier_fallback")
 
@@ -269,7 +305,7 @@ def _eval_half_tier(ctx, rule):
 def _eval_certifications(ctx, rule):
     """Condition `certifications` : colonne lisible et tous les codes obtenus (A2)."""
     missing = [code for code in _card_codes(ctx.card) if code not in ctx.obtained]
-    met = ctx.card["has_certifications"] and not missing
+    met = _list_problem(ctx.card) is None and not missing
     return _Verdict(met, "observed", (EVENTS,), None, None)
 
 
@@ -359,11 +395,11 @@ def _progress_half_tier(ctx, rule):
 def _progress_certifications(ctx, rule):
     """Progression vers `certifications` : codes obtenus sur codes retenus."""
     condition = "toutes les certifications retenues obtenues"
-    if not ctx.card["has_certifications"]:
-        reason = f"la carte {ctx.card['name']!r} n'a pas de colonne « Certifications »"
+    problem = _list_problem(ctx.card)
+    if problem:
         return _progress(
             condition,
-            unmeasurable(reason, "certification_list_unreadable"),
+            unmeasurable(problem, "certification_list_unreadable"),
             None,
             [],
         )
@@ -390,9 +426,9 @@ def _never_raises(fallback):
 
     def decorate(function):
         @functools.wraps(function)
-        def wrapper(*args):
+        def wrapper(*args, **kwargs):
             try:
-                return function(*args)
+                return function(*args, **kwargs)
             except GUARDED_ERRORS as error:
                 return fallback(error)
 
@@ -478,9 +514,9 @@ def _citing_notions(cards, code):
 
 def _accessible(ctx, ids):
     """Dit si une certification est accessible : toutes ses notions au seuil `ready`."""
-    if not ctx.card["has_certifications"]:
-        reason = f"la carte {ctx.card['name']!r} n'a pas de colonne « Certifications »"
-        return unmeasurable(reason, "certification_list_unreadable")
+    problem = _list_problem(ctx.card)
+    if problem:
+        return unmeasurable(problem, "certification_list_unreadable")
     if not ids:
         return unmeasurable("aucune notion ne cite ce code", "no_certification_notion")
     ready = all(ctx.at_least(note_id, ctx.rules.ready) for note_id in ids)
@@ -566,6 +602,17 @@ def _fact_problems(fact, names, codes, levels):
     return problems
 
 
+def _unreadable_anomalies(cards):
+    """Une anomalie `unreadable_certification` par carte à cellule illisible."""
+    found = []
+    for record in _records(cards):
+        texts = _unreadable_texts(record)
+        if texts:
+            detail = f"carte {record.get('name')!r} : cellule illisible « {'; '.join(texts)} »"
+            found.append(Anomaly(CARDS_LABEL, 1, "unreadable_certification", detail))
+    return found
+
+
 @_never_raises(_empty)
 def rank_anomalies(cards, notions, facts, rules):
     """Signale les états, niveaux, cartes et codes inconnus (A9, A13).
@@ -577,13 +624,15 @@ def rank_anomalies(cards, notions, facts, rules):
         rules: dictionnaire de `config.load_rules`.
 
     Returns:
-        Tuple d'`Anomaly` `unknown_state`, `unknown_level`, `unknown_card` et
-        `unknown_certification` ; `()` si les règles sont inutilisables.
+        Tuple d'`Anomaly` `unknown_state`, `unknown_level`, `unknown_card`,
+        `unknown_certification` et `unreadable_certification` (cellule sans code) ;
+        `()` si les règles sont inutilisables.
     """
     parsed = _read_rules(rules)
     names = {card.get("name") for card in _records(cards)}
     codes = {code for card in _records(cards) for code in _card_codes(card)}
     found = _state_anomalies(notions, parsed.order)
+    found.extend(_unreadable_anomalies(cards))
     for fact in _records(facts):
         if fact.get("metric") not in (LEVEL_METRIC, CERT_METRIC):
             continue
