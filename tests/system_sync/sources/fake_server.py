@@ -273,6 +273,38 @@ def callback_url(port, **params):
     return f"http://{HOST}:{port}/callback?{urlencode(params)}"
 
 
+def silent_connection(port):
+    """Ouvre une connexion vers 127.0.0.1:`port` sans rien y envoyer (préconnexion)."""
+    return socket.create_connection((HOST, port), timeout=2)
+
+
+def dribble(port, data, step, limit):
+    """Envoie `data` octet par octet vers 127.0.0.1:`port`, puis ferme la connexion.
+
+    Args:
+        port: port TCP de 127.0.0.1.
+        data: octets à envoyer un par un.
+        step: secondes entre deux octets.
+        limit: secondes au plus avant de couper soi-même.
+
+    Returns:
+        Le nombre d'octets envoyés ; l'envoi s'arrête dès que le serveur coupe.
+    """
+    sent = 0
+    begin = time.monotonic()
+    with socket.create_connection((HOST, port), timeout=2) as client:
+        for index in range(len(data)):
+            if time.monotonic() - begin >= limit:
+                break
+            try:
+                client.sendall(data[index : index + 1])
+            except OSError:
+                break
+            sent += 1
+            time.sleep(step)
+    return sent
+
+
 def in_thread(target):
     """Lance `target` dans un fil démon et le renvoie."""
     thread = threading.Thread(target=target, daemon=True)

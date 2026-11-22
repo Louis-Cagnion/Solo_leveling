@@ -717,11 +717,12 @@ class ReadApi42Test(Guarded):
 
 
 class StaticTest(Guarded):
-    """Analyse du source `api42.py` : délais, TLS et comparaison du `state`."""
+    """Analyse du source de tous les `api42*.py` : délais, TLS et `state`."""
 
     def source(self):
-        """Texte du module importé, `source/system_sync/sources/api42.py`."""
-        return Path(api42.__file__).read_text(encoding="utf-8")
+        """Texte de tous les `api42*.py` du dossier du module importé, bout à bout."""
+        folder = Path(api42.__file__).parent
+        return "\n".join(p.read_text("utf-8") for p in sorted(folder.glob("api42*.py")))
 
     def test_N13_every_network_call_has_timeout(self):
         calls = []
@@ -731,13 +732,12 @@ class StaticTest(Guarded):
             func = node.func
             name = getattr(func, "id", None) or getattr(func, "attr", None)
             receiver = ast.unparse(func.value) if isinstance(func, ast.Attribute) else ""
-            if  name in NETWORK_CALLS \
-                or (name == "open" and "opener" in receiver.lower()):
+            if name in NETWORK_CALLS or (name == "open" and "opener" in receiver.lower()):
                 calls.append(node)
         self.assertTrue(calls, "aucun appel réseau trouvé")
         for call in calls:
             keywords = {keyword.arg for keyword in call.keywords}
-            self.assertIn("timeout", keywords, f"api42.py:{call.lineno}")
+            self.assertIn("timeout", keywords, ast.unparse(call))
 
     def test_C3_tls_never_bypassed(self):
         self.assertEqual(TLS_BYPASS.findall(self.source()), [])
