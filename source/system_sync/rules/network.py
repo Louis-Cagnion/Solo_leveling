@@ -218,11 +218,16 @@ def _cycle_anomalies(kept):
     for item in prerequisites:
         graph.setdefault(item["source"], []).append(item["target"])
     cycles = [part for part in _Walker(graph).run() if len(part) > 1]
-    owner = {note_id: number for number, part in enumerate(cycles) for note_id in part}
+    owner = {
+        note_id: number
+        for number, part in enumerate(cycles)
+        for note_id in part
+    }
     lines = {}
     for item in prerequisites:
         number = owner.get(item["source"])
-        if number is not None and number == owner.get(item["target"]):
+        if (number is not None
+                and number == owner.get(item["target"])):
             lines[number] = min(item["line"], lines.get(number, item["line"]))
     return [
         Anomaly(
@@ -246,7 +251,8 @@ def _read_order(rules):
     """
     states = rules.get("states") if isinstance(rules, dict) else None
     order = states.get("order") if isinstance(states, dict) else None
-    if not isinstance(order, list) or FRAGILE_BELOW not in order:
+    if (not isinstance(order, list)
+            or FRAGILE_BELOW not in order):
         raise ValueError(f"[states] sans liste `order` avec {FRAGILE_BELOW!r} : {states!r}")
     return order, frozenset(states.get("excluded", ()))
 
@@ -271,13 +277,16 @@ def _fragile_anomalies(kept, notions, cards, rules):
     found = []
     for item in kept:
         ends = (item["source"], item["target"])
-        if item["relation"] != PREREQUISITE or not known.issuperset(ends):
+        if (item["relation"] != PREREQUISITE
+                or not known.issuperset(ends)):
             continue
         source, target = (states.get(note_id, order[0]) for note_id in ends)
         if source not in order or target not in order:
             continue
-        low = source in excluded or order.index(source) < threshold
-        high = target not in excluded and order.index(target) >= threshold
+        low = (source in excluded
+               or order.index(source) < threshold)
+        high = (target not in excluded
+                and order.index(target) >= threshold)
         if low and high:
             found.append(
                 Anomaly(
