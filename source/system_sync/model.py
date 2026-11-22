@@ -27,6 +27,10 @@ REASON_CODES = frozenset(
         "card_unmeasurable",
         "cursus_absent",
         "level_invalid",
+        "xp_table_unavailable",
+        "level_out_of_table",
+        "xp_out_of_table",
+        "xp_invalid",
     }
 )
 

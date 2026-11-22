@@ -46,3 +46,29 @@ Base : `https://api.intra.42.fr`, TLS vérifié par le magasin de certificats du
 - `source/system_sync/sources/api42_server.py` : `CallbackServer`, serveur de retour OAuth.
 - `source/system_sync/sources/api42_profile.py` : extraction en liste blanche de `/v2/me` et de la liste complète (`Api42Result`).
 - `source/system_sync/sources/api42_cache.py` : écriture et relecture du cache.
+
+## Table XP de 42calculator
+
+### Source
+
+La table XP (niveau vers XP) vient du dépôt GPL-3.0 `lucas-ht/42calculator`, lue à distance et jamais copiée dans le dépôt. L'hôte est `raw.githubusercontent.com`, en HTTPS vérifié par le magasin de certificats du système, sans identifiant ni jeton.
+
+L'adresse, le commit et le sha256 sont épinglés dans la section `[xp_table]` de `config/rules.toml` (`url`, `commit`, `sha256`) : changer de version de la table se fait en changeant ces trois valeurs ensemble.
+
+### Requête type
+
+| Requête | Contenu | Usage |
+|---|---|---|
+| `GET /lucas-ht/42calculator/<commit>/data/experience_21.json` | aucun en-tête particulier | table `{meta, levels: [{level, experience}]}` |
+
+### Limites et repli
+
+- Aucune redirection n'est suivie : toute réponse 3xx est un échec.
+- Chaque requête : délai de 10 s sur chaque opération du socket (connexion, puis chaque lecture), qui ne borne donc pas la durée totale d'une réponse lente ; corps de 1 Mio au plus, refusé dès l'annonce de `Content-Length` ou à la lecture.
+- Le sha256 des octets bruts reçus doit égaler l'épingle, puis la forme est validée : au moins 2 niveaux entiers, niveaux et XP strictement croissants.
+- Après un succès, les octets reçus sont écrits atomiquement en 0600 dans le cache passé en `cache_path` (dossier `data/`, ignoré par Git). Après un échec (réseau, HTTP, taille, hash différent, forme), le cache est relu avec les mêmes contrôles, hash épinglé compris : statut `cache`, et `error` nomme la cause. Un hash différent ne réécrit jamais le cache.
+- Sans cache valide, la source est `unavailable` et l'XP cible reste `unmeasurable` (code `xp_table_unavailable`).
+
+### Code concerné
+
+- `source/system_sync/sources/xp_table.py` : `load_xp_table`, `XpTable`, `XpTableResult`, `xp_for_level`, `level_for_xp`.
