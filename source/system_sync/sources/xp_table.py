@@ -16,13 +16,13 @@ import math
 import os
 import ssl
 import stat
-from bisect import bisect_right
 from dataclasses import dataclass
 from fractions import Fraction
 from urllib.error import HTTPError, URLError
 from urllib.request import HTTPSHandler, Request, build_opener
 
 from system_sync import model
+from system_sync.interpolation import interpolate
 from system_sync.sources.api42 import NoRedirect, digits, http_error
 from system_sync.sources.api42_profile import is_integer, is_number, preview
 from system_sync.sources.atomic_file import write_atomic
@@ -316,25 +316,6 @@ def load_xp_table(
     return XpTableResult("ok", _write_cache(cache_path, body), table)
 
 
-def _interpolate(points, value):
-    """Interpole linéairement, sans arrondi ni extrapolation.
-
-    Args:
-        points: tuple de couples (x, y) entiers, x strictement croissant.
-        value: nombre fini, `int` ou `float`.
-
-    Returns:
-        Le `Fraction` exact de y en `value`, ou `None` hors de l'intervalle des x.
-    """
-    if not points[0][0] <= value <= points[-1][0]:
-        return None
-    index = bisect_right([x for x, _ in points], value) - 1
-    if index == len(points) - 1:
-        return Fraction(points[-1][1])
-    (x0, y0), (x1, y1) = points[index], points[index + 1]
-    return y0 + (Fraction(value) - x0) * Fraction(y1 - y0, x1 - x0)
-
-
 def _refusal(result, value, code, noun):
     """Dit pourquoi une valeur ne se calcule pas, avant toute interpolation.
 
@@ -385,7 +366,7 @@ def xp_for_level(result, level):
     refused = _refusal(result, level, "level_invalid", "niveau")
     if refused is not None:
         return refused
-    found = _interpolate(result.table.levels, level)
+    found = interpolate(result.table.levels, level)
     if found is None:
         first, last = result.table.levels[0][0], result.table.levels[-1][0]
         reason = f"niveau {level} hors de la table (de {first} à {last})"
@@ -409,7 +390,7 @@ def level_for_xp(result, xp):
     if refused is not None:
         return refused
     points = tuple((points_xp, level) for level, points_xp in result.table.levels)
-    found = _interpolate(points, xp)
+    found = interpolate(points, xp)
     if found is None:
         first, last = points[0][0], points[-1][0]
         reason = f"XP {xp} hors de la table (de {first} à {last})"

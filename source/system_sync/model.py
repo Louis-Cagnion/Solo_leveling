@@ -38,6 +38,18 @@ REASON_CODES = frozenset(
         "card_rank_missing",
         "no_cards",
         "no_achievements",
+        "ia_history_missing",
+        "ia_no_rated_line",
+        "ambiguous_project_key",
+        "duplicates_42_project",
+        "equivalent_unknown",
+        "base_xp_invalid",
+        "suspect_date",
+        "xp_below_anchor",
+        "anchor_at_target",
+        "calibration_provisional",
+        "pace_invalid",
+        "no_anchor",
     }
 )
 
