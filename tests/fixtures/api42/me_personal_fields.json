@@ -1,0 +1,44 @@
+{
+  "id": 999000111,
+  "email": "personal-email@example.invalid",
+  "login": "personal-login",
+  "first_name": "PersonalFirstName",
+  "last_name": "PersonalLastName",
+  "usual_full_name": "PersonalFullName",
+  "displayname": "PersonalDisplayName",
+  "phone": "personal-phone-0000",
+  "location": "personal-location-host",
+  "pool_month": "personal-pool-month",
+  "pool_year": "1900",
+  "wallet": 424242,
+  "correction_point": 777,
+  "image": {"link": "https://personal-image.example.invalid/photo.jpg"},
+  "cursus_users": [
+    {
+      "cursus_id": 21,
+      "level": 12.44,
+      "cursus": {"id": 21, "name": "42cursus", "slug": "42cursus"},
+      "user": {
+        "id": 999000111,
+        "login": "personal-login",
+        "email": "personal-email@example.invalid"
+      }
+    }
+  ],
+  "projects_users": [
+    {
+      "id": 3000001,
+      "occurrence": 0,
+      "final_mark": 125,
+      "status": "finished",
+      "validated?": true,
+      "cursus_ids": [21],
+      "marked_at": "2025-01-10T10:00:00.000Z",
+      "marked": true,
+      "project": {"id": 1314, "name": "Libft", "slug": "42cursus-libft", "parent_id": null}
+    }
+  ],
+  "achievements": [
+    {"id": 1, "name": "Achievement 1", "description": "Fictif 1", "kind": "project"}
+  ]
+}

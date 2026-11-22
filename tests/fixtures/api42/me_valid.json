@@ -1,0 +1,67 @@
+{
+  "cursus_users": [
+    {
+      "cursus_id": 9,
+      "level": 8.5,
+      "cursus": {"id": 9, "name": "C Piscine", "slug": "c-piscine"}
+    },
+    {
+      "cursus_id": 21,
+      "level": 12.44,
+      "cursus": {"id": 21, "name": "42cursus", "slug": "42cursus"}
+    }
+  ],
+  "projects_users": [
+    {
+      "id": 3000001,
+      "occurrence": 0,
+      "final_mark": 125,
+      "status": "finished",
+      "validated?": true,
+      "cursus_ids": [21],
+      "marked_at": "2025-01-10T10:00:00.000Z",
+      "marked": true,
+      "project": {"id": 1314, "name": "Libft", "slug": "42cursus-libft", "parent_id": null}
+    },
+    {
+      "id": 3000002,
+      "occurrence": 0,
+      "final_mark": 100,
+      "status": "finished",
+      "validated?": true,
+      "cursus_ids": [21],
+      "marked_at": "2025-02-14T10:00:00.000Z",
+      "marked": true,
+      "project": {"id": 1327, "name": "get_next_line", "slug": "42cursus-get_next_line",
+                  "parent_id": null}
+    },
+    {
+      "id": 3000003,
+      "occurrence": 1,
+      "final_mark": 0,
+      "status": "finished",
+      "validated?": false,
+      "cursus_ids": [21],
+      "marked_at": "2025-03-20T10:00:00.000Z",
+      "marked": true,
+      "project": {"id": 1316, "name": "ft_printf", "slug": "42cursus-ft_printf",
+                  "parent_id": null}
+    },
+    {
+      "id": 3000004,
+      "occurrence": 0,
+      "final_mark": null,
+      "status": "in_progress",
+      "validated?": null,
+      "cursus_ids": [21],
+      "marked_at": null,
+      "marked": false,
+      "project": {"id": 1994, "name": "Born2beroot", "slug": "born2beroot", "parent_id": null}
+    }
+  ],
+  "achievements": [
+    {"id": 1, "name": "Achievement 1", "description": "Fictif 1", "kind": "project"},
+    {"id": 2, "name": "Achievement 2", "description": "Fictif 2", "kind": "project"},
+    {"id": 101, "name": "Achievement 101", "description": "Fictif 101", "kind": "project"}
+  ]
+}
