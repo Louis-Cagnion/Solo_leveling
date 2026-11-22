@@ -100,7 +100,7 @@ La maquette `mockups/system/`, validée par Louis le 15/11/2026, lit des donnée
 
 Un seul agent à la fois (consigne de Louis du 11/11/2026), donc sans worktree. Chaque sous-tâche passe par l'étape 4 (un `tester` écrit ses tests, rouges), puis l'étape 5 (un `builder` les fait passer au vert), puis la revue de l'étape 6 et la correction de l'étape 7.
 
-Ordre (A31) : la vitrine (W0 à W13), puis T1, T2, T4, T3, T5, T6, T9, T7, T8, T10, T11, T12 (`checker`), T15, puis le pré-mortem. T0 se fait en session `/professor`, à n'importe quel moment : la V1 fonctionne sans T0, avec des valeurs « insuffisant ».
+Ordre (A31) : la vitrine (W0 à W13), puis T1, T2, T3, T4, T5, T6, T9, T7, T8, T10, T11, T12 (`checker`), T15, puis le pré-mortem. T0 se fait en session `/professor`, à n'importe quel moment : la V1 fonctionne sans T0, avec des valeurs « insuffisant ».
 
 ## 0. Conventions communes
 
