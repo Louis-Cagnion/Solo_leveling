@@ -1,30 +1,28 @@
 """Client de l'API 42 (T4) : consentement OAuth, lecture de `/v2/me` et des achievements.
 
-Flux authorization code (A15) : un serveur de retour sur 127.0.0.1 reçoit le code, échangé
-contre un jeton gardé en mémoire seulement. Chaque requête passe par un limiteur de 2 par
-seconde, porte un délai, refuse un corps trop gros et reprend au plus quelques fois sur
-429 et 5xx. De `/v2/me` ne sortent que le niveau du cursus 21, les projets validés et les
-achievements (liste blanche, `conception.md:33` ; `api42_profile.py`), écrits ensuite dans
-un cache atomique (`api42_cache.py`). Aucune fonction publique ne lève ; le secret, le
-code et le jeton ne vont ni au journal, ni au cache, ni dans un message. Contrat :
-`tests/system_sync/sources/test_api42.py` ; dépendance décrite dans `EXTERNAL.md`.
+Flux authorization code (A15) : un serveur de retour sur 127.0.0.1 (`api42_server.py`)
+reçoit le code, échangé contre un jeton gardé en mémoire seulement. Chaque requête passe
+par un limiteur de 2 par seconde, porte un délai, refuse un corps trop gros et reprend au
+plus quelques fois sur 429 et 5xx. De `/v2/me` ne sortent que le niveau du cursus 21, les
+projets validés et les achievements (liste blanche, `conception.md:33` ;
+`api42_profile.py`), écrits ensuite dans un cache atomique (`api42_cache.py`). Aucune
+fonction publique ne lève ; le secret, le code et le jeton ne vont ni au journal, ni au
+cache, ni dans un message. Contrat : `tests/system_sync/sources/test_api42.py` ;
+dépendance décrite dans `EXTERNAL.md`.
 """
 
-import hmac
 import http.client
 import json
 import logging
 import re
 import secrets
 import ssl
-import sys
 import time
 import webbrowser
-from dataclasses import dataclass, field
-from http.server import BaseHTTPRequestHandler, HTTPServer
+from dataclasses import dataclass
 from pathlib import Path
 from urllib.error import HTTPError, URLError
-from urllib.parse import parse_qs, urlencode, urlsplit
+from urllib.parse import urlencode, urlsplit
 from urllib.request import HTTPRedirectHandler, HTTPSHandler, Request, build_opener
 
 from system_sync.config import PORTS
@@ -38,6 +36,12 @@ from system_sync.sources.api42_profile import (
     is_number,
     me_problem,
     preview,
+)
+from system_sync.sources.api42_server import (
+    CALLBACK_PATH,
+    HOST,
+    Callback,
+    CallbackServer,
 )
 
 __all__ = [
@@ -53,8 +57,6 @@ __all__ = [
 ]
 
 API_BASE = "https://api.intra.42.fr"
-HOST = "127.0.0.1"
-CALLBACK_PATH = "/callback"
 TOKEN_PATH = "/oauth/token"
 CREDENTIALS = ("API42_CLIENT_ID", "API42_CLIENT_SECRET")
 PORT_VARIABLE = "API42_CALLBACK_PORT"
@@ -68,8 +70,6 @@ MAX_RETRY_AFTER = 10.0
 DEFAULT_RETRY_PAUSE = 1.0
 MAX_PAGES = 20
 MAX_BYTES = 5_000_000
-# Délai minimal du socket d'une requête du navigateur : 0 le rendrait non bloquant.
-MIN_SOCKET_WAIT = 0.01
 DIGITS = re.compile(r"[0-9]{1,12}")
 # Jeton émis par l'API : caractères ASCII visibles seulement, sans quoi l'en-tête casse.
 TOKEN_PATTERN = re.compile(r"[\x21-\x7e]+")
@@ -97,7 +97,8 @@ def digits(text):
     Returns:
         L'entier écrit en chiffres ASCII seuls, ou `None`.
     """
-    if text is None or not DIGITS.fullmatch(text.strip()):
+    if  text is None \
+        or not DIGITS.fullmatch(text.strip()):
         return None
     return int(text)
 
@@ -134,173 +135,6 @@ def authorization_url(client_id, port):
         }
     )
     return f"{API_BASE}/oauth/authorize?{query}", state
-
-
-def single(query, name):
-    """Lit un paramètre présent une seule fois dans une requête analysée.
-
-    Args:
-        query: dict nom vers liste de valeurs (`parse_qs`).
-        name: nom du paramètre.
-
-    Returns:
-        La valeur, ou `None` si le paramètre manque ou se répète.
-    """
-    values = query.get(name, [])
-    return values[0] if len(values) == 1 else None
-
-
-@dataclass(frozen=True)
-class Callback:
-    """Issue de l'attente du retour OAuth.
-
-    Args:
-        code: code d'autorisation reçu, ou `None` ; jamais rendu par `repr`.
-        error: `None` si `code`, sinon la cause (délai écoulé, `error` reçue de l'API).
-    """
-
-    code: str | None = field(default=None, repr=False)
-    error: str | None = None
-
-
-class LoopbackServer(HTTPServer):
-    """Serveur HTTP d'un seul fil, sans partage de port ni trace d'erreur."""
-
-    allow_reuse_port = False
-
-    def handle_error(self, request, client_address):
-        """Journalise une requête interrompue sans trace, qui pourrait citer le code."""
-        LOGGER.warning(
-            "API 42 : requête du navigateur interrompue (%s)",
-            type(sys.exception()).__name__,
-        )
-
-
-class CallbackHandler(BaseHTTPRequestHandler):
-    """Répond au navigateur pour le `CallbackServer` qui porte le serveur."""
-
-    @property
-    def timeout(self):
-        """Délai du socket : le temps qui reste à l'attente, en secondes."""
-        return self.server.owner.remaining()
-
-    def log_message(self, format, *args):
-        """Coupe le journal de `http.server`, qui écrirait la ligne de requête et le code."""
-
-    def do_GET(self):
-        """Juge la requête puis écrit une page texte sans ressource externe."""
-        status, text = self.server.owner.receive(self.path)
-        body = text.encode("utf-8")
-        self.send_response(status)
-        self.send_header("Content-Type", "text/plain; charset=utf-8")
-        self.send_header("Content-Length", str(len(body)))
-        self.send_header("Cache-Control", "no-store")
-        self.send_header("Referrer-Policy", "no-referrer")
-        self.end_headers()
-        self.wfile.write(body)
-
-
-class CallbackServer:
-    """Serveur de retour OAuth sur 127.0.0.1 : un seul retour accepté, délai borné.
-
-    `start()` lie le port, `wait()` sert jusqu'au premier retour `/callback` dont le
-    `state` est égal (temps constant) ou jusqu'au délai, puis ferme le port.
-
-    Args:
-        port: entier, port TCP de 127.0.0.1.
-        state: texte attendu dans le paramètre `state`.
-        timeout: secondes réelles d'attente au plus, nombre fini positif.
-    """
-
-    def __init__(self, port, state, timeout):
-        self.port = port
-        self.timeout = timeout
-        self._state = state.encode("utf-8")
-        self._httpd = None
-        self._deadline = 0.0
-        self._callback = None
-
-    @property
-    def address(self):
-        """Couple (hôte, port) du socket à l'écoute, ou `None` hors écoute."""
-        return self._httpd.socket.getsockname() if self._httpd else None
-
-    def start(self):
-        """Lie 127.0.0.1:`port`, sans jamais toucher à un éventuel occupant.
-
-        Returns:
-            `None` si le serveur écoute, sinon l'erreur qui nomme le port et la cause.
-        """
-        if self._httpd is not None:
-            return None
-        try:
-            self._httpd = LoopbackServer((HOST, self.port), CallbackHandler)
-        except (OverflowError, TypeError):
-            return f"port {self.port!r} invalide : entier de 0 à 65535 attendu"
-        except OSError as error:
-            return f"port {self.port} de {HOST} indisponible : {error.strerror}"
-        self._httpd.owner = self
-        return None
-
-    def remaining(self):
-        """Renvoie les secondes qui restent avant la fin de l'attente, au moins le minimum."""
-        return max(self._deadline - time.monotonic(), MIN_SOCKET_WAIT)
-
-    def receive(self, target):
-        """Juge une requête du navigateur et retient le premier retour valide.
-
-        Args:
-            target: chemin et requête de la ligne HTTP, texte.
-
-        Returns:
-            Couple (statut HTTP, texte de la page).
-        """
-        parts = urlsplit(target)
-        if parts.path != CALLBACK_PATH:
-            return 404, "Adresse inconnue."
-        query = parse_qs(parts.query)
-        state = single(query, "state")
-        if state is None or not hmac.compare_digest(state.encode("utf-8"), self._state):
-            return 400, "Paramètre state absent ou différent : retour ignoré."
-        error = single(query, "error")
-        if error is not None:
-            cause = f"consentement refusé par l'API 42 (error={preview(error)})"
-            self._callback = Callback(error=cause)
-            return 200, "Consentement refusé ; vous pouvez fermer cet onglet."
-        code = single(query, "code")
-        if not code:
-            return 400, "Paramètre code absent : retour ignoré."
-        self._callback = Callback(code=code)
-        return 200, "Consentement reçu ; vous pouvez fermer cet onglet."
-
-    def wait(self):
-        """Sert jusqu'au premier retour valide ou jusqu'au délai, puis ferme le port.
-
-        Returns:
-            `Callback` avec le code, ou avec la cause de l'échec.
-        """
-        if self._httpd is None:
-            return Callback(error="serveur de retour non démarré : start() à appeler d'abord")
-        if not is_number(self.timeout) or self.timeout <= 0:
-            self.close()
-            return Callback(error=f"délai de consentement {preview(self.timeout)} invalide")
-        self._deadline = time.monotonic() + self.timeout
-        try:
-            while self._callback is None:
-                left = self._deadline - time.monotonic()
-                if left <= 0:
-                    return Callback(error=f"aucun retour valide en {self.timeout} s")
-                self._httpd.timeout = left
-                self._httpd.handle_request()
-            return self._callback
-        finally:
-            self.close()
-
-    def close(self):
-        """Ferme le port s'il est ouvert ; sans effet sinon."""
-        if self._httpd is not None:
-            self._httpd.server_close()
-            self._httpd = None
 
 
 class RateLimiter:
@@ -379,7 +213,9 @@ def refused_base(api_base):
         `None` pour `https://` ou `http://127.0.0.1`, sinon la cause du refus.
     """
     parts = urlsplit(api_base)
-    if parts.scheme == "https" or (parts.scheme == "http" and parts.hostname == HOST):
+    if  parts.scheme == "https" \
+        or (parts.scheme == "http"
+            and parts.hostname == HOST):
         return None
     return f"base {preview(api_base)} refusée : https attendu (http vers {HOST} seul)"
 
@@ -610,7 +446,8 @@ def env_problem(env):
     causes = [
         f"{name} vide ou absente"
         for name in CREDENTIALS
-        if not isinstance(env.get(name), str) or not env.get(name).strip()
+        if not isinstance(env.get(name), str)
+           or not env.get(name).strip()
     ]
     port = env.get(PORT_VARIABLE)
     if port is None:

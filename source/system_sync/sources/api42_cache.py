@@ -48,7 +48,7 @@ def cache_payload(result):
 
 
 def write_cache(path, payload):
-    """Écrit le cache atomiquement (fichier temporaire 0600 puis `os.replace`).
+    """Écrit le cache atomiquement (temporaire 0600 puis `os.replace`), sans jamais lever.
 
     Args:
         path: `Path` du cache ; son dossier est créé au besoin.
@@ -57,21 +57,29 @@ def write_cache(path, payload):
     Returns:
         `None` si écrit, sinon l'erreur qui nomme le chemin et la cause.
     """
-    text = json.dumps(payload, ensure_ascii=False, allow_nan=False)
+    try:
+        data = json.dumps(payload, ensure_ascii=False, allow_nan=False).encode("utf-8")
+    except UnicodeEncodeError as error:
+        cause = f"caractère non encodable en UTF-8 à l'offset {error.start} ({error.reason})"
+        return f"cache {path} non écrit : {cause}"
+    except (TypeError, ValueError) as error:
+        return f"cache {path} non écrit : contenu non sérialisable en JSON ({error})"
     temporary = None
     try:
         path.parent.mkdir(parents=True, exist_ok=True)
         descriptor, temporary = tempfile.mkstemp(dir=path.parent, prefix=f".{path.name}.")
-        with os.fdopen(descriptor, "w", encoding="utf-8") as handle:
-            handle.write(text)
+        with os.fdopen(descriptor, "wb") as handle:
+            handle.write(data)
             handle.flush()
             os.fsync(handle.fileno())
         os.replace(temporary, path)
+        temporary = None
     except OSError as error:
+        return f"cache {path} non écrit : {error.strerror or error}"
+    finally:
         if temporary is not None:
             with contextlib.suppress(OSError):
                 os.unlink(temporary)
-        return f"cache {path} non écrit : {error.strerror or error}"
     return None
 
 

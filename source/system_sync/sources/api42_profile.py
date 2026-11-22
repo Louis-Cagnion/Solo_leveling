@@ -7,6 +7,7 @@ dont `file` est le chemin d'API. Aucune fonction publique ne lève.
 
 import logging
 import math
+import re
 from dataclasses import dataclass
 from datetime import date
 
@@ -20,6 +21,9 @@ ME_LISTS = ("cursus_users", "projects_users", "achievements")
 PROJECT_KEYS = ("id", "slug", "name", "final_mark")
 ITEM_KEYS = ("id", "name", "description", "obtained", "obtained_on", "title")
 PREVIEW_LENGTH = 40
+MALFORMED_DETAIL = "champ absent ou de type inattendu"
+# Surrogate isolé (`"\ud800"` reçu en JSON) : l'écriture UTF-8 du cache le refuserait.
+SURROGATE = re.compile("[\ud800-\udfff]")
 LOGGER = logging.getLogger(__name__)
 
 
@@ -93,6 +97,23 @@ class Api42Result:
     rejected: int = 0
 
 
+def surrogate_problem(record, names):
+    """Nomme le premier champ texte qu'UTF-8 ne peut pas encoder (surrogate isolé).
+
+    Args:
+        record: dict déjà contrôlé.
+        names: tuple des noms de ses champs texte gardés.
+
+    Returns:
+        La cause qui nomme le champ et sa valeur, ou `None`.
+    """
+    for name in names:
+        value = record.get(name)
+        if isinstance(value, str) and SURROGATE.search(value):
+            return f"champ {name} {preview(value)} : surrogate isolé, non encodable en UTF-8"
+    return None
+
+
 def project_key(entry):
     """Contrôle une entrée de `projects_users` et renvoie l'identifiant du projet.
 
@@ -100,18 +121,23 @@ def project_key(entry):
         entry: élément de la liste, de n'importe quel type.
 
     Returns:
-        L'identifiant entier, ou `None` si un champ gardé manque ou a un autre type.
+        Couple (identifiant entier, `None`), ou (`None`, cause) si un champ gardé manque,
+        a un autre type ou porte un surrogate isolé.
     """
     project = entry.get("project") if isinstance(entry, dict) else None
     if not isinstance(project, dict):
-        return None
+        return None, MALFORMED_DETAIL
     well_formed = (
         is_integer(project.get("id"))
         and isinstance(project.get("slug"), str)
         and isinstance(project.get("name"), str)
-        and (entry.get("final_mark") is None or is_integer(entry.get("final_mark")))
+        and (entry.get("final_mark") is None
+             or is_integer(entry.get("final_mark")))
     )
-    return project["id"] if well_formed else None
+    if not well_formed:
+        return None, MALFORMED_DETAIL
+    problem = surrogate_problem(project, ("slug", "name"))
+    return (None, problem) if problem else (project["id"], None)
 
 
 def achievement_key(entry):
@@ -121,16 +147,21 @@ def achievement_key(entry):
         entry: élément de la liste, de n'importe quel type.
 
     Returns:
-        L'identifiant entier, ou `None` si un champ gardé manque ou a un autre type.
+        Couple (identifiant entier, `None`), ou (`None`, cause) si un champ gardé manque,
+        a un autre type ou porte un surrogate isolé.
     """
     if not isinstance(entry, dict):
-        return None
+        return None, MALFORMED_DETAIL
     well_formed = (
         is_integer(entry.get("id"))
         and isinstance(entry.get("name"), str)
-        and (entry.get("description") is None or isinstance(entry.get("description"), str))
+        and (entry.get("description") is None
+             or isinstance(entry.get("description"), str))
     )
-    return entry["id"] if well_formed else None
+    if not well_formed:
+        return None, MALFORMED_DETAIL
+    problem = surrogate_problem(entry, ("name", "description"))
+    return (None, problem) if problem else (entry["id"], None)
 
 
 def select(entries, path, noun, identify):
@@ -140,16 +171,15 @@ def select(entries, path, noun, identify):
         entries: liste reçue de l'API.
         path: chemin d'API, texte, pour les anomalies.
         noun: `project` ou `achievement`, suffixe de la nature d'anomalie.
-        identify: fonction entrée vers identifiant, ou `None` si mal formée.
+        identify: fonction entrée vers couple (identifiant ou `None`, cause ou `None`).
 
     Returns:
         Couple (entrées gardées, liste de `model.Anomaly` des écartées).
     """
     kept, first_line, anomalies = [], {}, []
     for line, entry in enumerate(entries, 1):
-        key = identify(entry)
+        key, detail = identify(entry)
         if key is None:
-            detail = "champ absent ou de type inattendu"
             anomalies.append(model.Anomaly(path, line, f"malformed_{noun}", detail))
         elif key in first_line:
             detail = f"identifiant {key} déjà lu à l'entrée {first_line[key]}"
