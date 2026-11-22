@@ -6,12 +6,12 @@ atteint) et de `_PROGRESS` (rang suivant). Aucune fonction publique ne lève : u
 données ou des règles inutilisables donnent une valeur `unmeasurable`, `None` ou `()`.
 """
 
-import functools
 import re
 from dataclasses import dataclass
 from typing import NamedTuple
 
 from system_sync.model import Anomaly, estimated, insufficient, observed, unmeasurable
+from system_sync.rules.guard import empty, never_raises
 
 EVENTS = "events"
 NOTIONS = "notions"
@@ -33,7 +33,6 @@ CARD_FIELDS = {
     "certifications": dict,
     "has_certifications": bool,
 }
-GUARDED_ERRORS = (LookupError, TypeError, ValueError, AttributeError)
 
 
 class _Unusable(ValueError):
@@ -421,22 +420,6 @@ _PROGRESS = {
 }
 
 
-def _never_raises(fallback):
-    """Fabrique un décorateur qui remplace toute erreur de données par `fallback(erreur)`."""
-
-    def decorate(function):
-        @functools.wraps(function)
-        def wrapper(*args, **kwargs):
-            try:
-                return function(*args, **kwargs)
-            except GUARDED_ERRORS as error:
-                return fallback(error)
-
-        return wrapper
-
-    return decorate
-
-
 def _unusable_rank(error):
     """Valeur de `rank_card` quand la carte, les données ou les règles sont inutilisables."""
     reason = f"carte, données ou règles inutilisables ({type(error).__name__} : {error})"
@@ -448,12 +431,7 @@ def _none(error):
     return None
 
 
-def _empty(error):
-    """Valeur de repli `()`."""
-    return ()
-
-
-@_never_raises(_unusable_rank)
+@never_raises(_unusable_rank)
 def rank_card(card, notions, facts, rules):
     """Calcule le rang d'une carte : le plus haut dont toutes les conditions sont remplies.
 
@@ -477,7 +455,7 @@ def rank_card(card, notions, facts, rules):
     return observed(name, verdict.sources)
 
 
-@_never_raises(_none)
+@never_raises(_none)
 def next_rank(card, notions, facts, rules):
     """Décrit le rang suivant d'une carte (A20).
 
@@ -539,7 +517,7 @@ def _certification_entry(ctx, cards, code):
     }
 
 
-@_never_raises(_empty)
+@never_raises(empty)
 def card_certifications(card, cards, notions, facts, rules):
     """Liste les certifications d'une carte (A21) : codes cités, puis codes des faits.
 
@@ -613,7 +591,7 @@ def _unreadable_anomalies(cards):
     return found
 
 
-@_never_raises(_empty)
+@never_raises(empty)
 def rank_anomalies(cards, notions, facts, rules):
     """Signale les états, niveaux, cartes et codes inconnus (A9, A13).
 
