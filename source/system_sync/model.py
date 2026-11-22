@@ -35,6 +35,9 @@ REASON_CODES = frozenset(
         "half_tier_rule",
         "empty_tier",
         "level_fact_missing",
+        "card_rank_missing",
+        "no_cards",
+        "no_achievements",
     }
 )
 
