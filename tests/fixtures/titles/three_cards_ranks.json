@@ -1,0 +1,29 @@
+{
+  "Alpha": {
+    "value": "S",
+    "status": "observed",
+    "sources": [
+      "events"
+    ],
+    "reason": null,
+    "reason_code": null
+  },
+  "Beta": {
+    "value": "S",
+    "status": "observed",
+    "sources": [
+      "notions"
+    ],
+    "reason": null,
+    "reason_code": null
+  },
+  "Gamma": {
+    "value": "A",
+    "status": "observed",
+    "sources": [
+      "notions"
+    ],
+    "reason": null,
+    "reason_code": null
+  }
+}

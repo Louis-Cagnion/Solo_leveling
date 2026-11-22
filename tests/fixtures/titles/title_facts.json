@@ -1,0 +1,74 @@
+[
+  {
+    "date": "2026-11-20",
+    "session": "3",
+    "domain": "Alpha",
+    "notion": "",
+    "metric": "niveau",
+    "value": "avancé",
+    "context": "",
+    "visual_form": "",
+    "proof": "tests/banc-fictif",
+    "line": 4
+  },
+  {
+    "date": "2026-11-20",
+    "session": "3",
+    "domain": "",
+    "notion": "",
+    "metric": "titre",
+    "value": "answer_system",
+    "context": "",
+    "visual_form": "",
+    "proof": "tests/banc-fictif",
+    "line": 7
+  },
+  {
+    "date": "2026-11-20",
+    "session": "3",
+    "domain": "",
+    "notion": "",
+    "metric": "titre",
+    "value": "answer_inconnu",
+    "context": "",
+    "visual_form": "",
+    "proof": "tests/banc-fictif",
+    "line": 8
+  },
+  {
+    "date": "2026-11-20",
+    "session": "3",
+    "domain": "",
+    "notion": "",
+    "metric": "titre",
+    "value": "",
+    "context": "",
+    "visual_form": "",
+    "proof": "tests/banc-fictif",
+    "line": 9
+  },
+  {
+    "date": "2026-11-20",
+    "session": "3",
+    "domain": "",
+    "notion": "",
+    "metric": "titre",
+    "value": 42,
+    "context": "",
+    "visual_form": "",
+    "proof": "tests/banc-fictif",
+    "line": 10
+  },
+  {
+    "date": "2026-11-20",
+    "session": "3",
+    "domain": "Alpha",
+    "notion": "",
+    "metric": "certification",
+    "value": "ALPHA-1",
+    "context": "",
+    "visual_form": "",
+    "proof": "tests/banc-fictif",
+    "line": 11
+  }
+]
