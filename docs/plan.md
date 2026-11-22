@@ -74,7 +74,7 @@ Plan du projet décrit dans `docs/specification.md`, en suivant la chaîne en 8 
 Statuts : [ ] à faire, [~] en cours, [x] faite, [v] validée, [!] bloquée
 Reprise (moniteur Sonnet/high au moins, jamais Fable ; consigne de Louis du 15/11/2026) : activer `/best-practice`, lire `todo.md` puis cet arbre, et reprendre à « Prochaine feuille prête ». Feuilles à garder en Opus/high, revue comprise : T4 (OAuth), T7 (calibration), T11 (page), W8 (revue de la vitrine).
 Ordre (Louis, 21/11/2026) : W (vitrine, close), puis P5 à partir de T2.a2, puis PM (pré-mortem). Louis, 22/11/2026 : objectif du jour, la connexion de ses données : T2, puis T3 (lecteurs de `/professor`), puis T4 (API 42, achievements), avant T5 ; la connexion réelle de T4 (consentement et `.env`) reste à faire par lui.
-Prochaine feuille prête : T7.a (tester opus/high : XP Système et calibration, A6, fiche T7 de `docs/design/implementation.md`) ; puis T10, T11 (opus/high), T12, T13, T14, T15, PM
+Prochaine feuille prête : T7.b (builder opus/high : `source/system_sync/rules/xp.py` et `calibration.py`, contrat dans l'en-tête de `test_xp.py` et `test_calibration.py`) ; puis T7.c, T10, T11 (opus/high), T12, T13, T14, T15, PM
 Moniteur : opus 5.5/high jusqu'à P3 ; depuis P4.7 : fable 5.2, effort par défaut de la session (aucun réglage pour ce modèle dans `settings.json`), session choisie par Louis ; plan de la vitrine : opus 5.5/high ; à partir de W1 : sonnet 5.5/high recommandé ; agents en sonnet ou opus seulement
 
 - W [nœud] : vitrine sur GitHub Pages, en ligne depuis le 21/11/2026 (`docs/design/vitrine.md`) ; point de contrôle W12 validé : 15 lignes de « Restrictions et secours » tenues sur 15 (9 rejouées, 6 relevées du moniteur), suite complète 88 verts et 61 erreurs, toutes dans les tests rouges de T2.a attendus
@@ -124,7 +124,7 @@ Moniteur : opus 5.5/high jusqu'à P3 ; depuis P4.7 : fable 5.2, effort par défa
   - [x] T5 (a faite par sonnet/medium : 25 tests rouges, `5f817c7` ; b faite par sonnet/medium, `b8e8757` ; c faite par sonnet/medium : À CORRIGER, 0 critique, 2 importants, 6 mineurs au pré-mortem ; d faite (tests par sonnet/low, `118eeb2` ; correction par sonnet/medium, `30b0388`) : 373 tests verts sur toute la suite)
   - [x] T6 (a faite par sonnet/high : 43 tests rouges et 7 sur les vraies données remesurées le 22/11/2026 (19 cartes : 11 E, 8 sans rang, 0 D, 0 certification accessible), `126be78` ; b faite par sonnet/medium, `2df9c34` ; c faite par sonnet/high : À CORRIGER, 0 critique, 4 importants (dont un choix de règle sur le fait `niveau` laissé à Louis), 19 rangs réels identiques à un recalcul indépendant, mineurs au pré-mortem ; d faite (tests par sonnet/low, `320059b` ; correction par sonnet/medium, `6d7629c`) : 455 tests verts avec le suivi réel)
   - [x] T9 (a faite par sonnet/medium : 33 tests rouges et 6 sur les vraies relations remesurées le 22/11/2026 (95 relations, 10 prérequis fragiles), `a101f30` ; b faite par sonnet/medium, `a6db694` ; c faite par sonnet/medium : À CORRIGER pour la seule mise en forme, 0 critique, recalcul indépendant identique ; d faite par sonnet/low, `6855450` : 494 tests verts avec le suivi réel ; réduite par A25 : contrôle des relations et prérequis fragiles)
-  - [ ] T7
+  - [~] T7 (a faite par opus/high le 22/11/2026 : 41 tests rouges, 12 codes de raison à ajouter, `ef51ed5` ; b à faire par opus/high : `xp.py` et `calibration.py`, puis c, d)
   - [x] T8 (a faite par sonnet/medium : 35 tests rouges et 5 sur les vraies données, `e07bcf0` ; b faite, `202f1ba` : 35 verts ; c faite par sonnet/medium : À CORRIGER, 0 critique, 2 importants, mineurs au pré-mortem ; d faite (tests par sonnet/low, `a377390` ; correction par sonnet/medium, `ba48342`) : 505 tests verts, 5 ignorés, titre sans carte ou sans rang lisible `unmeasurable` (A6), `OverflowError` gardée, lignes de 95 caractères au plus)
   - [ ] T10
   - [ ] T11 (après P4)
@@ -188,4 +188,10 @@ Moniteur : opus 5.5/high jusqu'à P3 ; depuis P4.7 : fable 5.2, effort par défa
 - Revue de T9 (22/11/2026), pour les sous-tâches suivantes :
   - T10 : `network_anomalies(relations, notions, cards, rules)` rend un tuple d'`Anomaly` (fichier `relations.csv`) à ajouter tel quel à `anomalies[]` ; `control_relations` rend aussi les relations gardées, seules à passer à la page ; `rules/guard.py` expose `never_raises(fallback)` et `empty`, que T7 et T8 peuvent importer.
   - Sur les données du 22/11/2026 : 95 relations gardées, 1 extrémité inconnue (`relations.csv:32`), aucun cycle, doublon ni statut inconnu, 10 prérequis fragiles (sources « en cours » 8, « découverte » 2) : à corriger dans une session `/professor`.
+- Revue de T7.a (22/11/2026), pour T7.b et T10 :
+  - `output.SCHEMA` n'a pas de clé `level42.unexplained_gap`, que la fiche T7 met dans `level42` : l'ajouter au schéma (T2) avant que T10 écrive l'état.
+  - Le catalogue 42 (`projects_21.json`, champ `difficulty`, A4) n'a aucun lecteur et `Api42Result.projects` ne porte pas `difficulty` : forme supposée `{slug, name, difficulty}`, à vérifier sur le fichier réel.
+  - `calibration.py` ne peut pas importer `sources/` : l'interpolation exacte de `xp_table.py` (`_interpolate`) passe dans un module neutre.
+  - `config/rules.toml` n'a pas de points d'ancrage (`[[calibration.anchors]]`) et `config.py` ne les contrôle pas ; personne ne reporte un point signalé `recalibrated` (A7).
+  - `_PROJECT.date` est un texte non nullable alors que T3 rend `date: None` pour une date `mm/aaaa`.
 - Le niveau 25 n'est pas un jalon officiel de 42 : le titre reste un objectif personnel, à calibrer sur la table XP de l'API de l'intranet.
