@@ -20,8 +20,8 @@ les données déjà lues, l'état précédent compris, que T10 lira dans `data/h
     cartes au moins au rang requis (ordre de `rules["ranks"]`, Nation vaut au moins S) sur
     cartes. Un rang `none` ne compte pas et le titre reste « non obtenu » (observé faux,
     A19). Une carte dont le rang est `insufficient` ou `unmeasurable` rend le titre
-    `insufficient` (raison `card_rank_missing`) ; aucune carte (`{}` ou `None`) rend
-    `insufficient` (raison `no_cards`), jamais vrai par vacuité.
+    `unmeasurable` (raison `card_rank_missing`) ; aucune carte (`{}` ou `None`) rend
+    `unmeasurable` (raison `no_cards`), jamais vrai par vacuité.
   - `facts` : `read_events(...).facts` ou `None` (A7). Un titre dont l'identifiant (clé de
     `rules["titles"]`) est la `value` d'un fait `titre` est `obtained` observé vrai, sources
     contenant `events`, même si ses conditions ne sont plus remplies (`c:142`), pour tout
@@ -220,13 +220,12 @@ class NominalTest(TitleCase):
         self.assertEqual(self.counts(entry), (2, 3))
         self.assertAlmostEqual(entry["progress"]["percent"], 66.67, places=2)
 
-    def test_N6_a_card_without_usable_rank_makes_the_system_title_insufficient(self):
+    def test_N6_a_card_without_usable_rank_makes_the_system_title_unmeasurable(self):
         for status in ("insufficient", "unmeasurable"):
             with self.subTest(status=status):
                 card_ranks = ranks_with(Gamma=rank_of(None, status))
                 entry = self.entries(card_ranks=card_ranks)["answer_system"]
-                self.assertEqual(entry["obtained"].status, "insufficient")
-                self.assertIsNot(entry["obtained"].value, True)
+                self.check(entry["obtained"], None, "unmeasurable")
                 self.assertEqual(entry["obtained"].reason_code, "card_rank_missing")
 
     def test_N7_a_card_without_rank_is_not_obtained_and_not_insufficient(self):
@@ -323,7 +322,7 @@ class LimitTest(TitleCase):
         self.check(entry["obtained"], True, "observed")
         self.assertEqual(entry["progress"]["percent"], 100.0)
 
-    def test_L3_no_card_makes_the_system_title_insufficient_never_true(self):
+    def test_L3_no_card_makes_the_system_title_unmeasurable_never_true(self):
         for card_ranks in ({}, None):
             with self.subTest(card_ranks=card_ranks):
                 found = titles.school_titles(
@@ -333,9 +332,17 @@ class LimitTest(TitleCase):
                     rules=self.rules,
                 )
                 entry = {item["id"]: item for item in found}["answer_system"]
-                self.assertEqual(entry["obtained"].status, "insufficient")
-                self.assertIsNot(entry["obtained"].value, True)
+                self.check(entry["obtained"], None, "unmeasurable")
                 self.assertEqual(entry["obtained"].reason_code, "no_cards")
+
+    def test_L10_a_level_too_large_for_a_float_does_not_raise(self):
+        found = titles.school_titles(
+            level=level_of(10**400),
+            card_ranks=load_ranks(),
+            facts=None,
+            rules=self.rules,
+        )
+        self.assertIsInstance(found, tuple)
 
     def test_L4_absent_or_empty_achievements_give_an_explicit_notice(self):
         for achievements in (None, [], ()):
@@ -424,7 +431,7 @@ class AmendmentTest(TitleCase):
                     self.assertTrue(state.sources)
                 if state.status == "unmeasurable":
                     self.assertIsNone(state.value)
-        self.assertEqual(seen, {"observed", "insufficient", "unmeasurable"})
+        self.assertEqual(seen, {"observed", "unmeasurable"})
 
     def test_A18_every_missing_measure_carries_a_reason_with_its_code(self):
         reasons = 0
