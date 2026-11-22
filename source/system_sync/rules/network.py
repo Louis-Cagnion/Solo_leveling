@@ -267,8 +267,8 @@ def _fragile_anomalies(kept, notions, cards, rules):
         rules: dictionnaire de `config.load_rules`.
 
     Returns:
-        Liste d'`Anomaly` ; la source est sous `FRAGILE_BELOW` (un état exclu y est sous) et
-        la cible au moins à `FRAGILE_BELOW` (un état exclu ne l'est jamais).
+        Liste d'`Anomaly` ; la source est sous `FRAGILE_BELOW` et la cible au moins à
+        `FRAGILE_BELOW` ; un état exclu, de source ou de cible, n'est jamais fragile (A8).
     """
     order, excluded = _read_order(rules)
     threshold = order.index(FRAGILE_BELOW)
@@ -283,11 +283,9 @@ def _fragile_anomalies(kept, notions, cards, rules):
         source, target = (states.get(note_id, order[0]) for note_id in ends)
         if source not in order or target not in order:
             continue
-        low = (source in excluded
-               or order.index(source) < threshold)
-        high = (target not in excluded
-                and order.index(target) >= threshold)
-        if low and high:
+        if source in excluded or target in excluded:
+            continue
+        if order.index(source) < threshold <= order.index(target):
             found.append(
                 Anomaly(
                     RELATIONS_FILE,
