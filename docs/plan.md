@@ -117,7 +117,18 @@ Moniteur : opus 5.5/high jusqu'à P3 ; depuis P4.7 : fable 5.2, effort par défa
   - [v] P3.2 moniteur : `docs/design/implementation.md`, validé par Louis le 11/11/2026 (critères visuels de T11 après la maquette)
 
 - P5 [nœud] : V1, construite en entier sur ordre de Louis du 15/11/2026 (« avec tous les choix validés jusqu'ici, commit et push »), une sous-tâche après l'autre (`docs/design/implementation.md`, section « Ordre d'exécution ») ; point de contrôle : T12 (`checker`). Chaque Tn se déroule en a (tester, tests rouges), b (builder, tests verts), c (analyst, revue VALIDÉ ou À CORRIGER), d (fixer, si à corriger). Niveaux pressentis : section « Niveaux d'agent » du plan, réévalués au lancement.
-  - [x] T1 (a faite par sonnet/low : 37 tests rouges ; b faite par sonnet/medium après une interruption par disque plein : 37 verts ; c faite par sonnet/high : À CORRIGER, 1 critique (fuite de secret), 6 importants, 12 mineurs ; d faite (tests par sonnet/low, correction par sonnet/medium) : 56 verts) ; [x] T2 (a faite par sonnet/medium : 61 tests rouges, puis T2.a2 : 122 tests au contrat amendé ; b faite par sonnet/medium : 122 verts, `5f35af6` ; c faite par sonnet/high : À CORRIGER, 0 critique, 3 importants, 11 mineurs au pré-mortem ; d faite (tests par sonnet/low, correction par sonnet/medium) : 133 verts, `4c58603`) ; [x] T3 (a faite par sonnet/high : 49 tests rouges, 71 avec A21 et la remesure des comptes réels du 22/11/2026, `0584602` ; b faite par sonnet/medium, `95913cb` ; c faite par sonnet/high : À CORRIGER, 0 critique, 5 importants, mineurs au pré-mortem ; d faite (tests par sonnet/medium, correction par sonnet/high, `6d0e90e` et `7512aa3`) : 298 tests verts sur toute la suite, module scindé en trois fichiers) ; [ ] T4 ; [ ] T5 ; [ ] T6 ; [ ] T9 ; [ ] T7 ; [ ] T8 ; [ ] T10 ; [ ] T11 (après P4) ; [ ] T12
+  - [x] T1 (a faite par sonnet/low : 37 tests rouges ; b faite par sonnet/medium après une interruption par disque plein : 37 verts ; c faite par sonnet/high : À CORRIGER, 1 critique (fuite de secret), 6 importants, 12 mineurs ; d faite (tests par sonnet/low, correction par sonnet/medium) : 56 verts)
+  - [x] T2 (a faite par sonnet/medium : 61 tests rouges, puis T2.a2 : 122 tests au contrat amendé ; b faite par sonnet/medium : 122 verts, `5f35af6` ; c faite par sonnet/high : À CORRIGER, 0 critique, 3 importants, 11 mineurs au pré-mortem ; d faite (tests par sonnet/low, correction par sonnet/medium) : 133 verts, `4c58603`)
+  - [x] T3 (a faite par sonnet/high : 49 tests rouges, 71 avec A21 et la remesure des comptes réels du 22/11/2026, `0584602` ; b faite par sonnet/medium, `95913cb` ; c faite par sonnet/high : À CORRIGER, 0 critique, 5 importants, mineurs au pré-mortem ; d faite (tests par sonnet/medium, correction par sonnet/high, `6d0e90e` et `7512aa3`) : 298 tests verts sur toute la suite, module scindé en trois fichiers)
+  - [~] T4 (a faite par opus/medium : 38 tests rouges, `f8534bc` ; b faite par opus/high : 38 verts, `f108443` ; c faite par opus/high : À CORRIGER, 0 critique, 3 importants, 13 mineurs au pré-mortem ; d en cours : tests rouges `0400a5f`, correction par opus/high)
+  - [ ] T5
+  - [ ] T6
+  - [ ] T9
+  - [ ] T7
+  - [ ] T8
+  - [ ] T10
+  - [ ] T11 (après P4)
+  - [ ] T12
   - [v] P5.0 analyst : écarts entre la maquette validée `mockups/system/` et le contrat de données du plan ; fait par : opus/high, 17 écarts (E1 à E17), repris par le moniteur dans les amendements A17 à A30
   - [x] T2.a2 tester (fait par sonnet/medium le 22/11/2026 : 122 tests rouges, 14 entités, `fdde9eb`) : fixtures `tests/fixtures/state/*.js` et tests `test_model.py`, `test_output.py` portés au contrat amendé (A17 à A25 et entité `names` de A27, 14 entités), toujours rouges ; niveau pressenti : sonnet/medium ; puis T2.b (sonnet/high), c, d
   - [ ] T1.e tester puis builder : `cert_ready_at_least` dans `config/rules.toml` et `config.py` (A22) ; avant T6 ; niveau pressenti : sonnet/low
@@ -160,4 +171,10 @@ Moniteur : opus 5.5/high jusqu'à P3 ; depuis P4.7 : fable 5.2, effort par défa
   - Aucun fait `niveau`, `certification` ou `titre` n'existe dans les données réelles : seules les fixtures exercent ce code.
   - T9 et T14 : les relations vers un identifiant inconnu sont gardées ; `notions[].section` et `cards[].ids` portent les rattachements.
   - Le module `professor.py` approche 750 lignes : toute extension passe par une scission en `professor_csv.py` et `professor_markdown.py`.
+- Revue de T4 (22/11/2026), pour les sous-tâches suivantes :
+  - `Api42Result.error` contient le chemin absolu du cache, donc le nom d'utilisateur : T10 et T15 l'écartent de tout ce qui est publié.
+  - La liste blanche retire `cursus_ids` : T5 ne distingue pas les projets de la piscine (cursus 9) de ceux du cursus 21.
+  - T10 appelle `read_api42(check_env(...), <data/cache/api42.json>)`, qui bloque jusqu'à 120 s sur le consentement, et configure `logging` (niveau, horodatage).
+  - T11 traduit les codes `cursus_absent`, `level_invalid` et les natures d'anomalie `malformed_project`, `malformed_achievement` (A27).
+  - À vérifier à la connexion réelle (Louis) : que l'intranet 42 accepte la redirection `http://127.0.0.1:<port>/callback`.
 - Le niveau 25 n'est pas un jalon officiel de 42 : le titre reste un objectif personnel, à calibrer sur la table XP de l'API de l'intranet.

@@ -4,7 +4,7 @@ Ce document décrit ce qu'il faut pour lire le niveau, les projets et les achiev
 
 ## Brancher l'API (étapes de Louis)
 
-1. Créer une application sur `profile.intra.42.fr/oauth/applications`, avec une redirection locale (`http://localhost:<port>/callback`). Garder l'UID et le secret dans un `.env` ignoré par Git.
+1. Créer une application sur `profile.intra.42.fr/oauth/applications`, avec une redirection locale (`http://127.0.0.1:<port>/callback`, l'adresse exacte que le client écoute et envoie, port de `API42_CALLBACK_PORT`). Garder l'UID et le secret dans un `.env` ignoré par Git.
 2. Utiliser le flux authorization code (`/oauth/authorize`, puis `/oauth/token`). Le flux client credentials n'est lié à aucun utilisateur.
 3. Appeler `GET /v2/me`, qui donne `cursus_users[]` (cursus 21, `level` décimal), `projects_users[]` (`final_mark`, `validated?`, `status`) et `achievements[]` (achievements obtenus).
 4. Tester `GET /v2/achievements?per_page=100` pour la liste complète, et donc les achievements non obtenus. Ni son existence ni son scope ne sont établis.

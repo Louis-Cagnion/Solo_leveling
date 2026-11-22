@@ -17,8 +17,8 @@ Tableau de bord personnel de progression en programmation, dans l'esprit de *Sol
 
 - La vitrine est en ligne sur https://louis-cagnion.github.io/Solo_leveling/ : pour Louis seul, sur ordinateur, en français ; un téléphone ou une tablette est renvoyé vers `public/unsupported.html`, qui donne l'adresse à ouvrir sur ordinateur. Elle affiche un instantané des données de `/professor` (`public/data.js`), rafraîchi à la demande ; l'adresse `?demo` montre des données fictives pour juger les effets.
 - Les maquettes de référence sont dans `mockups/`, non versionnées.
-- Le squelette Python de la synchronisation est posé : le paquet `system_sync` se charge, avec le chargeur de `config/rules.toml` et de `.env`.
-- La synchronisation complète (API 42, règles de calcul) et la page qu'elle alimente restent à écrire.
+- Le paquet `system_sync` lit les sources : le suivi de `/professor` (cartes, notions, relations, événements, historique, en lecture seule) et l'API 42 (niveau, projets, achievements, par OAuth sur 127.0.0.1), avec le modèle de données et le validateur du fichier de sortie.
+- Les règles de calcul, la commande `sync` et la page qu'elle alimente restent à écrire.
 
 ## Fonctionnement
 
@@ -35,9 +35,11 @@ Le détail se trouve dans `docs/design/conception.md`.
 ```
 config/rules.toml      règles : états, rangs, taux d'IA, table XP épinglée, titres
 .env.example           variables à renseigner dans `.env` (ignoré par Git)
+EXTERNAL.md            dépendance externe : API 42 (connexion, variables, requêtes, quotas)
 source/system_sync/    paquet Python 3.12, bibliothèque standard seulement
   config.py            chargement et contrôle de `rules.toml` et de `.env`
-  sources/             lecture des sources de données
+  model.py, output.py  valeur statuée, anomalie ; schéma fermé et écriture atomique de `data/state.js`
+  sources/             lecture des sources : professor*.py (suivi de `/professor`), api42*.py (API 42)
   rules/               règles de calcul, sans accès aux sources
 public/                site publié tel quel par GitHub Pages : index.html, network.html,
                        404.html, favicon.svg, css/, js/, fonts/, vendor/, data.js (instantané)
