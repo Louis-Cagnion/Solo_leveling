@@ -115,6 +115,10 @@ def _stated(value_node="json"):
     return ("stated", value_node)
 
 
+def _optional(node):
+    return ("optional", node)
+
+
 _CERTIFICATION = _obj(
     code="text",
     detail=_nullable("text"),
@@ -204,6 +208,7 @@ SCHEMA = _obj(
         xp=_stated("nonneg"),
         target_xp=_stated("nonneg"),
         projects=_list(_obj(id="text", name="text", base_xp=_stated("nonneg"))),
+        unexplained_gap=_optional(_stated()),
     ),
     system=_obj(
         xp=_stated("nonneg"),
@@ -273,6 +278,11 @@ def _check_leaf(path, value, node, problems):
         problems.append((path or "$", cause))
 
 
+def _is_optional(node):
+    """Dit si un nœud de champ peut manquer dans son objet."""
+    return not isinstance(node, str) and node[0] == "optional"
+
+
 def _check_object(path, value, node, problems):
     fields = node[1]
     if not isinstance(value, dict):
@@ -281,7 +291,7 @@ def _check_object(path, value, node, problems):
     for key, sub_node in fields.items():
         if key in value:
             _check(_child(path, key), value[key], sub_node, problems)
-        else:
+        elif not _is_optional(sub_node):
             problems.append((_child(path, key), "champ manquant"))
     for key in value:
         if key not in fields:
@@ -325,6 +335,10 @@ def _check_nullable(path, value, node, problems):
         _check(path, value, node[1], problems)
 
 
+def _check_optional(path, value, node, problems):
+    _check(path, value, node[1], problems)
+
+
 def _check_stated(path, value, node, problems):
     """Vérifie les cinq clés d'une valeur statuée puis ses invariants (`model`)."""
     fields = {
@@ -355,6 +369,7 @@ CHECKERS = {
     "map": _check_map,
     "enum": _check_enum,
     "nullable": _check_nullable,
+    "optional": _check_optional,
     "stated": _check_stated,
 }
 

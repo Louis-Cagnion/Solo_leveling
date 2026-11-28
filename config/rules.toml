@@ -76,6 +76,15 @@ r_initial = 0
 min_projects = 3
 min_days = 90
 
+# Point d'ancrage provisoire, à recalibrer sur l'API 42. Sources : conception.md:61
+# (« 12,44 donne 133 834 XP », table 42calculator) et objectifs-louis.md (niveau 12,44
+# déclaré par Louis le 11/11/2026).
+[[calibration.anchors]]
+date = "2026-11-11"
+level = 12.44
+xp_system = 133834
+xp_42 = 133834
+
 # « I AM THE ANSWER » : version 42 au niveau officiel 25, version Système avec
 # le rang S sur toutes les cartes (P1, point 7).
 [titles.answer_42]
