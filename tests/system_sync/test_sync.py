@@ -1,11 +1,13 @@
 """Tests rouges de T10 : commande `sync` (`source/system_sync/sync.py`, pas encore écrit).
 
 Contrat testé (fiche `docs/design/implementation.md:596-633`, arbitrages A1 à A31) :
-- `sync.run_sync(argv, *, open_browser=None, api_base=None, rules_path=None) -> int` reçoit
-  les options APRÈS `sync` (`--env CHEMIN`, `--sortie CHEMIN`) et rend le code de sortie :
-  0, 1 (échec de configuration, de règles ou d'écriture), 2 (option invalide). Les
-  paramètres nommés ne servent qu'aux tests (`None` : `webbrowser.open`, `API_BASE`,
-  `config/rules.toml` du dépôt, trouvé depuis le fichier du module, non le dossier courant).
+- `sync.run_sync(argv, *, open_browser=None, api_base=None, rules_path=None,
+  xp_loader=None) -> int` reçoit les options APRÈS `sync` (`--env CHEMIN`,
+  `--sortie CHEMIN`) et rend le code de sortie : 0, 1 (échec de configuration, de règles ou
+  d'écriture), 2 (option invalide). Les paramètres nommés ne servent qu'aux tests
+  (`None` : `webbrowser.open`, `API_BASE`, `config/rules.toml` du dépôt, trouvé depuis le
+  fichier du module, non le dossier courant ;
+  `xp_loader` : appelable de la signature de `load_xp_table`, `None` pour le vrai).
 - `python3 -m system_sync` sans sous-commande ou avec une inconnue : usage, code 2.
 - Sortie par défaut `<dépôt>/data/state.js` ; le cache (`cache/api42.json`,
   `cache/xp_table.json`) et la trajectoire (`history/`, une ligne par synchronisation)
@@ -28,12 +30,17 @@ from pathlib import Path
 from unittest import mock
 
 from system_sync import output
+from system_sync.sources.xp_table import (
+    DEFAULT_MAX_BYTES,
+    DEFAULT_TIMEOUT,
+    XpTable,
+    XpTableResult,
+)
 from tests.system_sync.sources.fake_server import (
     Browser,
     Capture,
     FakeServer,
     NetworkGuard,
-    Reply,
     free_port,
     json_reply,
     load,
@@ -49,6 +56,8 @@ FIXTURES = ROOT / "tests" / "fixtures"
 SYNC_FIXTURES = FIXTURES / "sync"
 XP_TABLE = FIXTURES / "xp_table" / "valid.json"
 REAL_RULES = ROOT / "config" / "rules.toml"
+COMMIT = "0123456789abcdef0123456789abcdef01234567"
+XP_URL = f"https://example.invalid/42calculator/{COMMIT}/xp.json"
 SECRET = "secret-fictif-sync-0123456789"
 CODE = "fake-authorization-code-0123"
 PREFIX = "window.SYSTEM_STATE = "
@@ -95,6 +104,39 @@ def big_table(path):
     Path(path).write_bytes(body)
 
 
+def table_loader(table_path):
+    """Faux `load_xp_table` : rend la table de `table_path` en résultat `ok`, sans réseau."""
+    body = Path(table_path).read_bytes()
+    levels = tuple((n["level"], n["experience"]) for n in json.loads(body)["levels"])
+
+    def load_xp_table(
+        url,
+        commit,
+        sha256,
+        cache_path,
+        *,
+        timeout=DEFAULT_TIMEOUT,
+        max_bytes=DEFAULT_MAX_BYTES,
+    ):
+        table = XpTable(levels, url, commit, hashlib.sha256(body).hexdigest())
+        return XpTableResult("ok", None, table)
+
+    return load_xp_table
+
+
+def unavailable_loader(
+    url,
+    commit,
+    sha256,
+    cache_path,
+    *,
+    timeout=DEFAULT_TIMEOUT,
+    max_bytes=DEFAULT_MAX_BYTES,
+):
+    """Faux `load_xp_table` d'une table XP indisponible (réseau et cache en échec)."""
+    return XpTableResult("unavailable", f"{url} : connexion impossible ; cache absent")
+
+
 class SyncCase(unittest.TestCase):
     """Dossier temporaire, serveur factice, `rules.toml` de test et lanceur de `sync`."""
 
@@ -109,28 +151,32 @@ class SyncCase(unittest.TestCase):
         self.addCleanup(self.server.close)
         self.server.route("/oauth/token", json_reply(load("token.json")))
         self.server.route("/v2/me", json_reply(load("me_valid.json")))
+        self.route_achievements()
+        self.set_table(XP_TABLE)
+        self.journal = ""
+
+    def route_achievements(self):
+        """Rejoue les deux pages des succès depuis la première (compteur remis à 0)."""
         self.server.route(
             "/v2/achievements",
             json_reply(load("achievements_page1.json")),
             json_reply(load("achievements_page2.json")),
         )
-        self.set_table(XP_TABLE)
-        self.journal = ""
 
     def set_table(self, table_path):
-        """Sert `table_path` sur `/xp.json` et écrit `rules.toml` qui l'épingle."""
+        """Injecte `table_path` (jamais téléchargée) et écrit `rules.toml` qui l'épingle."""
         body = Path(table_path).read_bytes()
-        self.server.route("/xp.json", Reply(body=body))
+        self.xp_loader = table_loader(table_path)
         self.write_rules(hashlib.sha256(body).hexdigest())
 
-    def write_rules(self, digest, anchor=True, url=None):
-        """`config/rules.toml` du dépôt, table XP et point d'ancrage de test remplacés."""
+    def write_rules(self, digest, anchor=True):
+        """`rules.toml` du dépôt, table XP https et point d'ancrage de test remplacés."""
         text = REAL_RULES.read_text(encoding="utf-8")
         head, rest = text.split("[xp_table]", 1)
         tail = rest.split("[calibration]", 1)[1]
         table = (
-            f'[xp_table]\nurl = "{url or self.server.url + "/xp.json"}"\n'
-            f'commit = "0123456789abcdef0123456789abcdef01234567"\nsha256 = "{digest}"\n\n'
+            f'[xp_table]\nurl = "{XP_URL}"\n'
+            f'commit = "{COMMIT}"\nsha256 = "{digest}"\n\n'
         )
         text = head + table + "[calibration]" + tail
         if anchor:
@@ -167,6 +213,7 @@ class SyncCase(unittest.TestCase):
                 open_browser=browser,
                 api_base=self.server.url,
                 rules_path=rules or self.rules,
+                xp_loader=self.xp_loader,
             )
             browser.join()
         self.stderr = capture.err.getvalue()
@@ -293,6 +340,7 @@ class NominalTest(SyncCase):
 
     def test_N9_two_runs_same_state_except_date_and_trajectory(self):
         first = self.sync_ok()
+        self.route_achievements()
         second = self.sync_ok()
         for state in (first, second):
             del state["meta"]["generated_at"]
@@ -358,7 +406,7 @@ class LimitTest(SyncCase):
         self.assertNotIn(str(self.tmp), self.out.read_text(encoding="utf-8"))
 
     def test_L4_xp_table_unavailable_rest_of_state_written(self):
-        self.server.route("/xp.json", Reply(status=404, body=b"{}"))
+        self.xp_loader = unavailable_loader
         state = self.sync_ok()
         xp = state["level42"]["xp"]
         self.assertEqual((xp["status"], xp["value"]), ("unmeasurable", None))
