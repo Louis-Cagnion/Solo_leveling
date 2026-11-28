@@ -13,9 +13,7 @@ import contextlib
 import json
 import logging
 import math
-import re
 import sys
-import unicodedata
 import webbrowser
 from dataclasses import dataclass
 from datetime import date, datetime, timezone
@@ -161,12 +159,6 @@ def _plain(value):
     return value
 
 
-def _slug(name):
-    """Identifiant d'une carte : son nom en minuscules sans accent, séparé par des tirets."""
-    plain = unicodedata.normalize("NFKD", name).encode("ascii", "ignore").decode()
-    return re.sub(r"[^a-z0-9]+", "-", plain.lower()).strip("-") or "card"
-
-
 def _parse(argv):
     """Analyse les options de `sync` ; `argparse` quitte par `SystemExit` si invalides."""
     parser = argparse.ArgumentParser(prog=PROG, description="Synchronise l'état du Système.")
@@ -294,7 +286,7 @@ def _facts(found):
 def _placement(cards):
     """Associe chaque identifiant de notion à (identifiant de carte, palier en minuscules)."""
     return {
-        note_id: (_slug(card["name"]), tier.lower())
+        note_id: (card["id"], tier.lower())
         for card in cards
         for tier, ids in card["tiers"].items()
         for note_id in ids
@@ -335,7 +327,7 @@ def _card_entity(card, inputs, notions, cards):
     if rank.status != "unmeasurable":
         following = ranks.next_rank(card, notions, facts, rules)
     return {
-        "id": _slug(card["name"]),
+        "id": card["id"],
         "name": card["name"],
         "rank": rank,
         "next_rank": following,
@@ -638,7 +630,7 @@ def run_sync(
 
     Returns:
         0 si l'état est écrit ; 2 pour une option inconnue ; 130 si interrompue ;
-        1 pour une erreur de configuration, de règles ou d'écriture.
+        1 pour une erreur de configuration, de règles, d'écriture ou inattendue.
     """
     try:
         options = _parse(argv)
@@ -660,4 +652,10 @@ def run_sync(
         except KeyboardInterrupt:
             LOGGER.error("synchronisation interrompue par l'utilisateur")
             return INTERRUPTED
+        except Exception as error:
+            LOGGER.error(
+                "synchronisation interrompue, erreur inattendue %s : %s",
+                type(error).__name__,
+                error,
+            )
     return 1

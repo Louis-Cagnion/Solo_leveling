@@ -88,10 +88,12 @@ xp_42 = 133834
 # « I AM THE ANSWER » : version 42 au niveau officiel 25, version Système avec
 # le rang S sur toutes les cartes (P1, point 7).
 [titles.answer_42]
+name = "I AM THE ANSWER"
 type = "level_at_least"
 value = 25
 
 [titles.answer_system]
+name = "I AM THE ANSWER"
 type = "rank_on_all_cards"
 rank = "S"
 

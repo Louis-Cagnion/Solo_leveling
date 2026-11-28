@@ -42,6 +42,7 @@ BAD = FIXTURES / "mal_forme"
 # Clés de chaque enregistrement ; `section` est le titre `##` de `notions.md`.
 RECORD_KEYS = {
     "cards": {
+        "id",
         "name",
         "tiers",
         "ids",

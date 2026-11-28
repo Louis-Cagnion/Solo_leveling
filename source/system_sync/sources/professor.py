@@ -311,7 +311,8 @@ def read_cards(directory):
         directory: chemin du dossier `cartes/`.
 
     Returns:
-        Le `SourceResult` `cards` ; une carte rejetée est comptée et signalée.
+        Le `SourceResult` `cards` (`id` d'une carte : son fichier sans `.md`) ;
+        une carte rejetée est comptée et signalée.
     """
     directory = Path(directory)
     records, anomalies, taken = [], [], {}
@@ -328,7 +329,7 @@ def read_cards(directory):
                 card = None
             anomalies.extend(notes)
             if card:
-                records.append(card)
+                records.append({**card, "id": path.stem})
     except SourceError as error:
         return SourceResult(
             name="cards",

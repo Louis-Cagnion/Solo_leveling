@@ -119,11 +119,11 @@ class RealRulesTest(unittest.TestCase):
         titles = rules["titles"]
         self.assertEqual(
             titles["answer_42"],
-            {"type": "level_at_least", "value": 25},
+            {"name": "I AM THE ANSWER", "type": "level_at_least", "value": 25},
         )
         self.assertEqual(
             titles["answer_system"],
-            {"type": "rank_on_all_cards", "rank": "S"},
+            {"name": "I AM THE ANSWER", "type": "rank_on_all_cards", "rank": "S"},
         )
         self.assertEqual(titles["achievements_42"], {"type": "school_achievements"})
         calibration = rules["calibration"]

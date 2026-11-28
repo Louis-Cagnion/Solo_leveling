@@ -21,6 +21,7 @@ import hashlib
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -65,6 +66,7 @@ ENTITIES = {
     "meta", "sources", "level42", "system", "trajectory", "cards", "notions",
     "relations", "projects", "titles", "anomalies", "rules", "achievements", "names",
 }
+SUIVI = FIXTURES / "professor" / "suivi"
 PROFESSOR_SOURCES = ("cards", "notions", "relations", "events", "history", "projects")
 NOTION_IDS = {
     "alpha-loop", "alpha-array", "alpha-tree", "alpha-graph", "alpha-heap",
@@ -504,6 +506,46 @@ class LimitTest(SyncCase):
         self.assertEqual(done.returncode, 0, done.stderr)
         self.assertEqual(output.validate(read_state(elsewhere / "relative" / "state.js")), [])
         self.assertFalse((ROOT / "relative").exists())
+
+
+class ReviewFixesTest(SyncCase):
+    """T10.d : identifiants de carte, noms des titres, erreur inattendue."""
+
+    def test_card_ids_are_file_names_when_slugs_collide(self):
+        suivi = self.tmp / "suivi"
+        cards = suivi / "cartes"
+        shutil.copytree(SUIVI, suivi)
+        for old in cards.glob("*.md"):
+            old.unlink()
+        source = (SUIVI / "cartes" / "alpha.md").read_text(encoding="utf-8")
+        for stem, name in (("c", "C"), ("cpp", "C++")):
+            text = source.replace("# Carte : Alpha", f"# Carte : {name}")
+            (cards / f"{stem}.md").write_text(text, encoding="utf-8")
+        env = self.env(PROFESSOR_SUIVI_DIR=suivi)
+        state = self.sync_ok(env=env)
+        self.assertEqual({c["id"] for c in state["cards"]}, {"c", "cpp"})
+
+    def test_real_rules_give_the_answer_titles_a_name(self):
+        self.rules = REAL_RULES
+        state = self.sync_ok()
+        names = {t["id"]: t["name"] for t in state["titles"]}
+        for title_id in ("answer_42", "answer_system"):
+            self.assertIn(title_id, names)
+            self.assertNotEqual(names[title_id], title_id)
+
+    def test_unexpected_error_is_logged_masked_without_traceback(self):
+        self.sync_ok()
+        before = sha256(self.out)
+        with mock.patch(
+            "system_sync.output.validate",
+            side_effect=ValueError(f"valeur {SECRET} refusée"),
+        ):
+            code = self.run_sync()
+        self.assertEqual(code, 1)
+        self.assertNotIn(SECRET, self.stderr)
+        self.assertNotIn("Traceback", self.stderr)
+        self.assertIn("ValueError", self.stderr)
+        self.assertEqual(sha256(self.out), before)
 
 
 class RealRulesTest(unittest.TestCase):
