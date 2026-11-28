@@ -60,6 +60,8 @@ API_BASE = "https://api.intra.42.fr"
 TOKEN_PATH = "/oauth/token"
 CREDENTIALS = ("API42_CLIENT_ID", "API42_CLIENT_SECRET")
 PORT_VARIABLE = "API42_CALLBACK_PORT"
+# En-tête générique de chaque requête : sans lui, le pare-feu du service refuse (erreur 1010).
+USER_AGENT = "progression-system-sync/1.0"
 PAGE_SIZE = 100
 STATE_BYTES = 32
 DEFAULT_RATE = 2.0
@@ -76,7 +78,7 @@ TOKEN_PATTERN = re.compile(r"[\x21-\x7e]+")
 # Cause d'un statut HTTP d'échec ; un statut absent prend celle de sa centaine.
 HTTP_CAUSES = {
     401: "authentification refusée (identifiants ou jeton invalides)",
-    403: "accès interdit (scope insuffisant)",
+    403: "accès refusé (scope insuffisant ou requête bloquée par le pare-feu du service)",
     404: "ressource introuvable",
     429: "quota de requêtes dépassé",
 }
@@ -366,7 +368,10 @@ class Api42Client:
             Couple (`Fetch`, pause avant reprise en secondes, ou `None` si rien à reprendre).
         """
         self.limiter.wait()
-        headers = {"Accept": "application/json"}
+        headers = {
+            "Accept": "application/json",
+            "User-Agent": USER_AGENT,
+        }
         if self._token:
             headers["Authorization"] = f"Bearer {self._token}"
         data = urlencode(form).encode("utf-8") if form else None

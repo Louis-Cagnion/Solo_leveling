@@ -30,6 +30,8 @@ Les trois sont facultatives : si l'une manque, `sync` relit le cache, sinon la s
 | `GET /v2/me` | en-tête `Authorization: Bearer <jeton>` | niveau du cursus 21, `projects_users`, `achievements` obtenus |
 | `GET /v2/achievements?per_page=100&page=N` | idem, de la page 1 à la première incomplète | liste complète des achievements |
 
+Chaque requête envoie l'en-tête générique `User-Agent: progression-system-sync/1.0` (aucune donnée personnelle) : sans lui, le pare-feu du service refuse la requête (HTTP 403, erreur 1010).
+
 Base : `https://api.intra.42.fr`, TLS vérifié par le magasin de certificats du système ; aucune redirection n'est suivie.
 
 ### Limites et repli
