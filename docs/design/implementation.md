@@ -413,6 +413,48 @@ Ordre (A31) : la vitrine (W0 à W13), puis T1, T2, T3, T4, T5, T6, T9, T7, T8, T
 - **Pré-mortem** : arrondi à .5 (le `round` de Python arrondit au pair) ; représentation binaire de 12,44 ; hash sur octets bruts contre texte (CRLF) ; limite de débit de `raw.githubusercontent.com` ; commit supprimé ; `levels` désordonné ; niveaux écrits en chaînes ; BOM ; `data/cache/` jamais suivi par Git.
 - **Niveau** : tester sonnet/medium ; builder sonnet/medium. Petit module, hash et interpolation.
 
+### T16 : catalogue des projets 42 (A4, insérée après T10 le 28/11/2026)
+
+- **Entrées** : A4 (`implementation.md:29`), T5 (`xp_table.py`, mécanisme épinglé), `conception.md:62`, `rules/xp.py:242-280` (`_bases` attend `{slug, name, difficulty}`), `sync.py:485-509` (`None` passé au catalogue).
+- **Faits constatés (28/11/2026)** : `https://raw.githubusercontent.com/lucas-ht/42calculator/459eab1b634988167ec2e027ab0e301dde6ac6cd/data/projects_21.json` (dernier commit touchant le fichier, 26/10/2026) ; 146 192 octets ; sha256 `9b378628afe07ae3efed624b7bb57b17e540f5c81ab88086ead765fdd1dbf045` ; forme `{meta: {id, kind, name, slug}, projects: [{id, name, slug, difficulty, completions, duration, created_at, updated_at, exam, parent, children}]}` ; 393 projets, `slug` uniques (`42cursus-libft` 462, `born2beroot` 577), `difficulty` entier partout. Sur les 49 projets validés du cache de Louis : 32 dans le catalogue (somme des `difficulty` 119 187), 17 absents (Piscine, `c-piscine-*`).
+- **Sortie** : `load_catalogue(url, commit, sha256, cache_path, *, timeout, max_bytes)` dans `source/system_sync/sources/project_catalogue.py`, qui ne lève jamais et rend `CatalogueResult(status, error, projects)` : `status` `ok`, `cache` ou `unavailable` ; `projects` un tuple de dicts `{slug, name, difficulty}` (ordre du fichier) ou `None`. Table refusée en bloc si `projects` n'est pas une liste non vide, si un élément n'est pas un objet, si `slug` ou `name` n'est pas un texte non vide, si `difficulty` n'est pas un entier non négatif (booléen refusé) ou si un `slug` est en double ; le message nomme `projects[i].champ` et la valeur reçue.
+- **Mutualisation (DRY)** : téléchargement sans redirection, plafond de taille, hash des octets bruts, cache atomique et repli sur le cache passent de `xp_table.py` dans `source/system_sync/sources/pinned_file.py`, utilisé par les deux chargeurs ; `xp_table.py` garde son interface publique et `tests/system_sync/sources/test_xp_table*.py` ne change pas (empreinte vérifiée avant et après).
+- **Configuration** : section `[projects_catalogue]` (`url`, `commit`, `sha256`) de `config/rules.toml`, placée après le bloc `[calibration]` (le `write_rules` de `test_sync.py` ne remplace que `[xp_table]`) ; `config.py` contrôle les deux sections par une même fonction (https, commit de 40 hexadécimaux contenu dans l'URL, sha256 de 64 hexadécimaux).
+- **Branchement** : `run_sync(..., catalogue_loader=None)` (de la signature de `load_catalogue`, `None` pour le vrai) ; `sync.py` charge le catalogue comme la table XP (journal du statut, avertissement si `error`) et passe `result.projects` à `level42_entity`, `project_entries` et `project_anomalies` à la place de `None` ; un catalogue `unavailable` laisse les XP de base `unmeasurable` (`equivalent_unknown`), l'état s'écrit, code 0.
+- **Fichiers**
+  - Créés : `source/system_sync/sources/pinned_file.py`, `source/system_sync/sources/project_catalogue.py`, `tests/system_sync/sources/test_project_catalogue.py`, `tests/system_sync/sources/test_project_catalogue_network.py`.
+  - Créés (fixtures, `tests/fixtures/catalogue/`) : `valid.json` (forme réelle, 4 projets dont `demo-libft` 462), `no_projects.json`, `empty_projects.json`, `bad_entry.json`, `duplicate_slug.json`, `bad_difficulty.json`.
+  - Modifiés : `xp_table.py`, `sync.py`, `config.py`, `config/rules.toml`, `EXTERNAL.md` (dépendance), `tests/system_sync/test_sync.py` (injection d'un faux `catalogue_loader` : aucun test ne touche le réseau), `tests/system_sync/test_config.py`.
+
+| # | Critère | Commande exacte | Résultat attendu | Source |
+|---|---|---|---|---|
+| 1 | Tests | `PYTHONPATH=source python3 -m unittest tests.system_sync.sources.test_project_catalogue tests.system_sync.test_sync tests.system_sync.test_config -v` | `OK`, `Ran` ≥ 120 | A4 |
+| 2 | Catalogue réel épinglé | `SYNC_TEST_NETWORK=1 PYTHONPATH=source python3 -m unittest tests.system_sync.sources.test_project_catalogue_network -v` | `Ran 1`, `OK`, non ignoré : sha256 conforme, 393 projets, `42cursus-libft` à 462, `born2beroot` à 577 | A4 |
+| 3 | Délais | `grep -rnE "\.open\(Request" source/system_sync/sources` | chaque ligne contient `timeout` | bp:190 |
+| 4 | Pas de doublon | `grep -rnE "def (_download\|_read_cache\|_write_cache\|_fall_back)" source/system_sync/sources` | une seule occurrence de chaque, dans `pinned_file.py` | code.md, Maintenabilité |
+| 5 | T5 inchangée | `sha256sum tests/system_sync/sources/test_xp_table.py tests/system_sync/sources/test_xp_table_review.py tests/system_sync/sources/test_xp_table_network.py` | identique avant et après le builder | T5 |
+| 6 | Suite complète | `PYTHONPATH=source python3 -m unittest discover -s tests -t . ` | `OK` (574 tests au départ, plus ceux de T16) | c:127 |
+
+- **Cas nominaux**
+  - N1 : catalogue fictif chargé, `projects` dans l'ordre du fichier, champs `slug`, `name`, `difficulty` seuls.
+  - N2 : hash épinglé vérifié sur les octets bruts.
+  - N3 : `status` `ok`, cache écrit en 0600 ; relu quand le réseau est coupé (`cache`).
+  - N4 : délai passé à chaque appel réseau.
+  - N5 : `run_sync` passe le catalogue aux règles : un projet validé connu a une XP de base `estimated` (`difficulty` du catalogue), un inconnu est `unmeasurable` (`equivalent_unknown`).
+  - N6 : `[projects_catalogue]` valide acceptée ; changer `commit` ou `sha256` change la version lue sans toucher au code.
+- **Cas limites**
+  - L1 : hash différent, message avec les deux hashes, cache non écrit.
+  - L2 : JSON invalide, tableau à la racine, `projects` absent, vide ou non liste.
+  - L3 : élément non objet ; `slug` ou `name` absent, vide ou non texte.
+  - L4 : `difficulty` absente, négative, décimale, booléenne, NaN, en texte ; 0 accepté.
+  - L5 : `slug` en double, refusé en nommant le doublon.
+  - L6 : réseau coupé sans cache ; HTTP 404 ; redirection vers un autre hôte ; réponse trop grande.
+  - L7 : cache corrompu ou de hash différent.
+  - L8 : `run_sync` avec un catalogue `unavailable` : état écrit, code 0, XP de base `unmeasurable`, avertissement au journal.
+  - L9 : `[projects_catalogue]` absente, ou URL sans le commit, commit ou sha256 de mauvaise longueur : `ConfigError` qui nomme la clé.
+- **Pré-mortem** : slug renommé en amont ; commit supprimé ; limite de débit de `raw.githubusercontent.com` ; hash sur octets bruts contre texte (CRLF, BOM) ; les 17 projets de la Piscine, absents du catalogue, laissent l'écart non expliqué `unmeasurable` tant que Louis n'a pas tranché leur traitement (todo.md) ; `sources[]` ne liste pas le catalogue (ni la table XP) ; les XP de base citent `catalogue_42` sans URL ni commit.
+- **Niveau** : tester sonnet/medium ; builder sonnet/medium ; revue sonnet/high. Mécanisme déjà écrit en T5, mais une extraction partagée et des cas limites à décliner.
+
 ### T6 : rangs
 
 - **Entrées** : T3 (cartes, notions suivies, événements), T1 (conditions de rang en données), `c:43-56, c:88-92, c:146, c:150-152`, `m:156-167` (états), `m:262-274` (niveaux), `m:253` (un niveau validé ne retombe pas).
